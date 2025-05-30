@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gerenciamento de Laboratórios</title>
+    <title>Sistema de Laboratórios de Química</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -222,6 +222,11 @@
             color: white;
         }
         
+        .btn-info {
+            background: #2980b9;
+            color: white;
+        }
+        
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-3px);
@@ -411,6 +416,11 @@
             border-left: 5px solid rgba(255, 255, 255, 0.5);
         }
         
+        .notification-info {
+            background: var(--secondary);
+            border-left: 5px solid rgba(255, 255, 255, 0.5);
+        }
+        
         .login-container {
             display: flex;
             justify-content: center;
@@ -540,6 +550,34 @@
             color: var(--secondary);
         }
         
+        .data-management {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .data-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .import-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .import-container input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -559,6 +597,10 @@
                 flex-direction: column;
                 gap: 15px;
                 align-items: flex-start;
+            }
+            
+            .data-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -605,6 +647,13 @@
             </div>
             
             <button class="login-btn" id="login-btn">Acessar Sistema</button>
+            
+            <div class="alert" style="background: rgba(243, 156, 18, 0.2); color: #f39c12; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid #f39c12;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Importante:</strong> Os dados são armazenados apenas no navegador atual. 
+                Para sincronizar entre navegadores/dispositivos, utilize as funções de 
+                <strong>Exportar</strong> e <strong>Importar</strong> dados na área administrativa.
+            </div>
         </div>
     </div>
     
@@ -775,6 +824,31 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Área de gerenciamento de dados -->
+                    <div class="data-management">
+                        <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados</h3>
+                        <p style="margin-bottom: 15px; color: #aaa;">
+                            Exporte e importe dados para sincronizar entre diferentes navegadores ou dispositivos.
+                        </p>
+                        
+                        <div class="data-actions">
+                            <button class="btn btn-info" id="export-data">
+                                <i class="fas fa-file-export"></i> Exportar Dados
+                            </button>
+                            
+                            <div class="import-container">
+                                <button class="btn btn-warning" id="import-btn">
+                                    <i class="fas fa-file-import"></i> Importar Dados
+                                </button>
+                                <input type="file" id="import-data" accept=".json">
+                            </div>
+                            
+                            <button class="btn btn-danger" id="reset-data">
+                                <i class="fas fa-trash-alt"></i> Limpar Dados
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -868,6 +942,9 @@
         const assignBtn = document.getElementById('assign-btn');
         const practiceSelect = document.getElementById('practice');
         const filterReportsBtn = document.getElementById('filter-reports');
+        const exportBtn = document.getElementById('export-data');
+        const importBtn = document.getElementById('import-data');
+        const resetBtn = document.getElementById('reset-data');
         
         // Load data from localStorage
         function loadData() {
@@ -927,6 +1004,8 @@
                     return new Date(current.date) > new Date(latest.date) ? current : latest;
                 }, tech1Activities[0]);
                 document.getElementById('tech1-last').textContent = lastActivity.date;
+            } else {
+                document.getElementById('tech1-last').textContent = 'Nenhuma';
             }
             
             if (tech2Activities.length > 0) {
@@ -934,6 +1013,8 @@
                     return new Date(current.date) > new Date(latest.date) ? current : latest;
                 }, tech2Activities[0]);
                 document.getElementById('tech2-last').textContent = lastActivity.date;
+            } else {
+                document.getElementById('tech2-last').textContent = 'Nenhuma';
             }
         }
         
@@ -1484,12 +1565,73 @@
             });
         }
         
+        // Export data
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(activities);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'dados-laboratorios.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('Dados exportados com sucesso!', 'success');
+        });
+        
+        // Import data
+        importBtn.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Basic validation
+                    if (!Array.isArray(importedData) || importedData.length === 0) {
+                        showNotification('Arquivo inválido!', 'error');
+                        return;
+                    }
+                    
+                    // Replace current data
+                    activities = importedData;
+                    saveData();
+                    
+                    // Update UI
+                    renderActivities();
+                    populatePracticeSelect();
+                    updateTechniciansStats();
+                    
+                    showNotification('Dados importados com sucesso!', 'success');
+                } catch (error) {
+                    showNotification('Erro ao importar dados: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        });
+        
+        // Reset data
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('lab_activities');
+                loadData();
+                renderActivities();
+                populatePracticeSelect();
+                updateTechniciansStats();
+                showNotification('Dados resetados com sucesso!', 'success');
+            }
+        });
+        
         // Show notification
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
             notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                  type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
                 <span>${message}</span>
             `;
             document.body.appendChild(notification);
