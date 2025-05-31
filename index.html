@@ -661,7 +661,7 @@
                         <label for="technician">Designar Técnico:</label>
                         <select id="technician">
                             <option value="">-- Selecione um técnico --</option>
-                            <option value="UID_TECNICO_JOAO_SILVA">Técnico A (João Silva)</option> <option value="UID_TECNICO_MARIA_OLIVEIRA">Técnico B (Maria Oliveira)</option> </select>
+                            <option value="UID_TECNICO_SERGIO">Técnico A (SERGIO)</option> <option value="UID_TECNICO_LUCILEIDE">Técnico B (LUCILEIDE)</option> </select>
                     </div>
                     
                     <div class="form-group">
@@ -674,36 +674,39 @@
             </div>
             
             <div class="tab-content" id="tecnicos-content">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Técnicos de Laboratório (Exemplo Estático)</h2>
-                    </div>
-                    <p style="color: #aaa; margin-bottom: 15px;">Esta seção é um exemplo estático. Idealmente, os dados dos técnicos seriam carregados do Firestore e atualizados dinamicamente.</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Especialidade</th>
-                                <th>Atividades Atribuídas</th>
-                                <th>Status (Exemplo)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>João Silva</td>
-                                <td>Química Orgânica</td>
-                                <td id="tech-joao-count">0</td> <td><span class="status status-concluida">Disponível</span></td>
-                            </tr>
-                            <tr>
-                                <td>Maria Oliveira</td>
-                                <td>Análise Instrumental</td>
-                                <td id="tech-maria-count">0</td>
-                                <td><span class="status status-designada">Em Atividade</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Técnicos de Laboratório</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Atividades Atribuídas</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sérgio</td>
+                    <td id="tech-sergio-count">0</td>
+                    <td><span class="status status-concluida">Disponível</span></td>
+                </tr>
+                <tr>
+                    <td>Lucileide</td>
+                    <td id="tech-lucileide-count">0</td>
+                    <td><span class="status status-designada">Em Atividade</span></td>
+                </tr>
+                <tr>
+                    <td>Jobim</td>
+                    <td id="tech-jobim-count">0</td>
+                    <td><span class="status status-pendente">Pendente</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
             
             <div class="tab-content" id="relatorios-content">
                 <div class="card">
@@ -835,6 +838,10 @@
             </div>
         </div>
     </div>
+                    <div class="form-group">
+                        <label for="activity-image">Anexar Imagem da Prática:</label>
+                        <input type="file" id="activity-image" accept="image/*">
+                    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -927,13 +934,21 @@
             // Idealmente: usar Custom Claims ou buscar papel no Firestore.
             // Exemplo: se e-mail contém 'admin@', é Admin. Se 'tech@', é Técnico.
             const emailLowerCase = fbCurrentUser.email.toLowerCase();
-            if (emailLowerCase.includes('admin@')) { // Adapte esta lógica!
-                userRoleType = 'Administrador';
-            } else if (emailLowerCase.includes('tech@')) { // Adapte esta lógica!
-                userRoleType = 'Técnico';
-            } else {
-                 userRoleType = 'Visitante'; 
-            }
+           if (emailLowerCase === 'sergio@lab.com') {
+    userRoleType = 'Técnico';
+    fbCurrentUser.displayName = 'Sérgio';
+} else if (emailLowerCase === 'lucileide@lab.com') {
+    userRoleType = 'Técnico';
+    fbCurrentUser.displayName = 'Lucileide';
+} else if (emailLowerCase === 'jobim@lab.com') {
+    userRoleType = 'Técnico';
+    fbCurrentUser.displayName = 'Jobim';
+} else if (emailLowerCase.includes('admin@')) {
+    userRoleType = 'Administrador';
+} else {
+    userRoleType = 'Visitante';
+}
+
             updateUIVisibilityBasedOnRole();
             loadActivitiesFromFirestore(); 
 
@@ -1209,34 +1224,48 @@
     }
     
     assignBtn.addEventListener('click', async () => {
-        const practiceId = practiceSelect.value;
-        const selectedTechnicianOption = technicianSelect.options[technicianSelect.selectedIndex];
-        const technicianName = selectedTechnicianOption.text; 
-        const technicianUidValue = selectedTechnicianOption.value; 
-        const currentInstructions = instructionsInput.value.trim();
+    const practiceId = practiceSelect.value;
+    const selectedTechnicianEmail = technicianSelect.value;
 
-        if (!practiceId || !technicianUidValue) {
-            showNotification('Selecione uma prática e um técnico.', 'warning');
-            return;
-        }
+    const technicianMap = {
+        'sergio@lab.com': 'Sérgio',
+        'lucileide@lab.com': 'Lucileide',
+        'jobim@lab.com': 'Jobim'
+    };
 
-        try {
-            await db.collection('activities').doc(practiceId).update({
-                technicianName: technicianName,
-                technicianUid: technicianUidValue, 
-                status: 'designada',
-                instructions: currentInstructions,
-                updatedAt: firebase.firestore.Timestamp.now()
-            });
-            showNotification(`Técnico ${technicianName} designado.`, 'success');
-            practiceSelect.value = '';
-            technicianSelect.value = '';
-            instructionsInput.value = '';
-        } catch (error) {
-            console.error("Erro ao designar técnico: ", error);
-            showNotification(`Erro ao designar: ${error.message}`, 'error');
-        }
-    });
+    const techName = technicianMap[selectedTechnicianEmail];
+
+    if (!practiceId || !selectedTechnicianEmail || !techName) {
+        showNotification('Selecione uma prática e um técnico.', 'warning');
+        return;
+    }
+
+    // Esta parte só funciona no Admin SDK. No front-end use uma função customizada se necessário.
+    const technicianUser = await firebase.auth().getUserByEmail?.(selectedTechnicianEmail);
+    const technicianUid = technicianUser?.uid || null;
+
+    if (!technicianUid) {
+        showNotification('UID do técnico não encontrado.', 'error');
+        return;
+    }
+
+    try {
+        await db.collection('activities').doc(practiceId).update({
+            technicianName: techName,
+            technicianUid: technicianUid,
+            status: 'designada',
+            instructions: instructionsInput.value.trim(),
+            updatedAt: firebase.firestore.Timestamp.now()
+        });
+        showNotification(`Técnico ${techName} designado.`, 'success');
+        practiceSelect.value = '';
+        technicianSelect.value = '';
+        instructionsInput.value = '';
+    } catch (error) {
+        console.error("Erro ao designar técnico: ", error);
+        showNotification(`Erro ao designar: ${error.message}`, 'error');
+    }
+});
 
     function showDetailModal(activityId) {
         currentEditingActivityId = activityId; 
