@@ -1733,43 +1733,55 @@
             }
         }
 
-        // Função de login
         loginBtn.addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            try {
-                // Faz login com Firebase
-                await auth.signInWithEmailAndPassword(email, password);
-                
-                // Define o papel do usuário baseado no email
-                if (email === "admin@lab.com") {
-                    currentUser = "admin";
-                } else if (email === "tecnico1@lab.com") {
-                    currentUser = "tec1";
-                } else if (email === "tecnico2@lab.com") {
-                    currentUser = "tec2";
-                } else {
-                    currentUser = "tec"; // padrão para outros técnicos
-                }
-                
-                // Mostra o sistema principal
-                loginScreen.style.display = "none";
-                mainSystem.style.display = "block";
-                
-                // Atualiza a interface
-                updateUIForUser();
-                
-                // Carrega os dados da nuvem
-                await loadData();
-                
-                showNotification("Login realizado com sucesso!", "success");
-                
-            } catch (error) {
-                showNotification("E-mail ou senha incorretos", "error");
-            }
-        });
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!email || !password) {
+        showNotification('Preencha e-mail e senha!', 'error');
+        return;
+    }
 
+    try {
+        // Faz login com Firebase
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        
+        // Define o papel do usuário baseado no e-mail
+        if (email === "admin@lab.com") {
+            currentUser = "admin";
+        } else if (email === "tecnico1@lab.com") {
+            currentUser = "tec1";
+        } else if (email === "tecnico2@lab.com") {
+            currentUser = "tec2";
+        } else {
+            currentUser = "tec"; // padrão para outros técnicos
+        }
+        
+        // Atualiza a interface
+        loginScreen.style.display = 'none';
+        mainSystem.style.display = 'block';
+        updateUIForUser();
+        
+        // Carrega os dados
+        await loadData();
+        
+        showNotification('Login realizado com sucesso!', 'success');
+        
+    } catch (error) {
+        // Mensagens de erro mais específicas
+        let errorMessage = "Erro no login";
+        
+        if (error.code === "auth/invalid-email") {
+            errorMessage = "E-mail inválido";
+        } else if (error.code === "auth/user-not-found") {
+            errorMessage = "Usuário não cadastrado";
+        } else if (error.code === "auth/wrong-password") {
+            errorMessage = "Senha incorreta";
+        }
+        
+        showNotification(errorMessage, 'error');
+    }
+});
         // Função de logout
         logoutBtn.addEventListener('click', () => {
             auth.signOut();
