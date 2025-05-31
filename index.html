@@ -987,6 +987,15 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
+        document.addEventListener('DOMContentLoaded', function() {
+    const hideFirebaseOfflineMessage = setInterval(() => {
+        const offlineMessage = document.querySelector('.firebase-emulator-warning');
+        if (offlineMessage) {
+            offlineMessage.style.display = 'none';
+            clearInterval(hideFirebaseOfflineMessage);
+        }
+    }, 100);
+});
     
     // Ativar persistência offline
     db.enablePersistence()
