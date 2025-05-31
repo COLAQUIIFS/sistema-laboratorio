@@ -994,57 +994,55 @@
             }
         }
         
-        // User selection
-        let selectedUser = null;
-        userOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                userOptions.forEach(o => o.classList.remove('active'));
-                option.classList.add('active');
-                selectedUser = option.getAttribute('data-role');
-            });
-        });
+       loginBtn.addEventListener('click', async () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!email || !password) {
+        showNotification('Preencha e-mail e senha!', 'error');
+        return;
+    }
+
+    try {
+        // Faz login com Firebase
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
         
-        // Login functionality
-        loginBtn.addEventListener('click', () => {
-            if (!selectedUser) {
-                showNotification('Selecione um usuário para acessar!', 'error');
-                return;
-            }
-            
-            const password = document.getElementById('password').value;
-            if (!password) {
-                showNotification('Digite a senha!', 'error');
-                return;
-            }
-            
-            // Simple authentication (in a real system this would be server-side)
-            if (password !== "lab123") {
-                showNotification('Senha incorreta! Tente novamente.', 'error');
-                return;
-            }
-            
-            // Set current user
-            currentUser = selectedUser;
-            
-            // Hide login, show main system
-            loginScreen.style.display = 'none';
-            mainSystem.style.display = 'block';
-            
-            // Update UI based on user role
-            updateUIForUser();
-            
-            showNotification('Acesso concedido! Bem-vindo ao sistema.', 'success');
-        });
+        // Define o papel do usuário baseado no e-mail
+        if (email === "admin@lab.com") {
+            currentUser = "admin";
+        } else if (email === "tecnico1@lab.com") {
+            currentUser = "tec1";
+        } else if (email === "tecnico2@lab.com") {
+            currentUser = "tec2";
+        } else {
+            currentUser = "tec"; // padrão para outros técnicos
+        }
         
-        // Logout functionality
-        logoutBtn.addEventListener('click', () => {
-            currentUser = null;
-            mainSystem.style.display = 'none';
-            loginScreen.style.display = 'flex';
-            document.getElementById('password').value = '';
-            userOptions.forEach(o => o.classList.remove('active'));
-            selectedUser = null;
-        });
+        // Atualiza a interface
+        loginScreen.style.display = 'none';
+        mainSystem.style.display = 'block';
+        updateUIForUser();
+        
+        // Carrega os dados
+        await loadData();
+        
+        showNotification('Login realizado com sucesso!', 'success');
+        
+    } catch (error) {
+        // Mensagens de erro mais específicas
+        let errorMessage = "Erro no login";
+        
+        if (error.code === "auth/invalid-email") {
+            errorMessage = "E-mail inválido";
+        } else if (error.code === "auth/user-not-found") {
+            errorMessage = "Usuário não cadastrado";
+        } else if (error.code === "auth/wrong-password") {
+            errorMessage = "Senha incorreta";
+        }
+        
+        showNotification(errorMessage, 'error');
+    }
+});
         
         // Update UI based on user role
         function updateUIForUser() {
