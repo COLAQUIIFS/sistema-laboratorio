@@ -6,11 +6,6 @@
     <title>Sistema de Laboratórios de Química</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-         <!-- Scripts do Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <style>
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -107,6 +102,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            text-transform: uppercase;
         }
         
         .role-tag {
@@ -316,7 +312,7 @@
         }
         
         .modal {
-            display: none;
+            display: none; 
             position: fixed;
             top: 0;
             left: 0;
@@ -398,7 +394,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease, fadeOut 0.5s ease 3s forwards;
+            animation: slideIn 0.3s ease, fadeOut 0.5s ease 4s forwards; /* Aumentado tempo de exibição */
         }
         
         @keyframes slideIn {
@@ -425,9 +421,13 @@
             background: var(--secondary);
             border-left: 5px solid rgba(255, 255, 255, 0.5);
         }
+         .notification-warning {
+            background: var(--warning);
+            border-left: 5px solid rgba(255,255,255,0.5);
+        }
         
         .login-container {
-            display: flex;
+            display: flex; 
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -463,42 +463,7 @@
             color: #aaa;
             margin-bottom: 30px;
         }
-        
-        .user-select {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .user-option {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border: 1px solid transparent;
-        }
-        
-        .user-option:hover {
-            background: rgba(52, 152, 219, 0.15);
-            border-color: rgba(52, 152, 219, 0.3);
-        }
-        
-        .user-option i {
-            font-size: 1.8rem;
-            color: var(--secondary);
-        }
-        
-        .user-option.active {
-            background: rgba(52, 152, 219, 0.2);
-            border-color: var(--secondary);
-        }
-        
+                
         .password-input {
             margin-bottom: 25px;
         }
@@ -565,24 +530,9 @@
             display: flex;
             gap: 15px;
             margin-top: 15px;
+            flex-wrap: wrap; /* Para melhor responsividade */
         }
-        
-        .import-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-        
-        .import-container input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
+                
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -611,13 +561,13 @@
     </style>
 </head>
 <body>
-    <!-- Tela de Login -->
-   <div class="login-container" id="login-screen">
+    <div class="login-container" id="login-screen">
         <div class="login-box">
             <div class="login-icon">
                 <i class="fas fa-flask"></i>
             </div>
             <h1 class="login-title">Sistema de Laboratórios</h1>
+            <p class="login-subtitle">Acesse com suas credenciais</p>
             
             <div class="form-group">
                 <label for="email">E-mail:</label>
@@ -633,7 +583,6 @@
         </div>
     </div>
     
-    <!-- Sistema Principal (inicialmente oculto) -->
     <div id="main-system" style="display: none;">
         <header>
             <div class="container">
@@ -646,12 +595,12 @@
                         </div>
                     </div>
                     <div class="user-info">
-                        <div class="user-avatar" id="user-avatar">A</div>
+                        <div class="user-avatar" id="user-avatar">U</div>
                         <div>
-                            <strong id="user-name">Administrador</strong>
-                            <div id="user-role" class="role-tag role-admin">Administrador</div>
+                            <strong id="user-name">Usuário</strong>
+                            <div id="user-role" class="role-tag">Visitante</div>
                         </div>
-                        <button class="btn btn-danger" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+                        <button class="btn btn-danger" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
                     </div>
                 </div>
             </div>
@@ -661,8 +610,7 @@
             <div class="tabs" id="system-tabs">
                 <div class="tab active" data-tab="atividades">Atividades</div>
                 <div class="tab" data-tab="designar">Designar Técnico</div>
-                <div class="tab" data-tab="tecnicos">Técnicos</div>
-                <div class="tab" data-tab="relatorios">Relatórios</div>
+                <div class="tab" data-tab="tecnicos">Técnicos</div> <div class="tab" data-tab="relatorios">Relatórios</div>
             </div>
             
             <div class="tab-content active" id="atividades-content">
@@ -673,6 +621,10 @@
                     </div>
                     
                     <div id="activities-container">
+                         <div id="activities-empty-state" class="empty-state" style="display: none;">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p>Nenhuma atividade encontrada.</p>
+                        </div>
                         <table>
                             <thead>
                                 <tr>
@@ -686,8 +638,7 @@
                                 </tr>
                             </thead>
                             <tbody id="activities-table">
-                                <!-- Activities will be added here dynamically -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -700,20 +651,17 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="practice">Selecionar Prática:</label>
+                        <label for="practice">Selecionar Prática (ID da Atividade):</label>
                         <select id="practice">
                             <option value="">-- Selecione uma prática --</option>
-                            <!-- Practices will be loaded dynamically -->
-                        </select>
+                            </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="technician">Designar Técnico:</label>
                         <select id="technician">
                             <option value="">-- Selecione um técnico --</option>
-                            <option value="tec1">Técnico A (João Silva)</option>
-                            <option value="tec2">Técnico B (Maria Oliveira)</option>
-                        </select>
+                            <option value="UID_TECNICO_JOAO_SILVA">Técnico A (João Silva)</option> <option value="UID_TECNICO_MARIA_OLIVEIRA">Técnico B (Maria Oliveira)</option> </select>
                     </div>
                     
                     <div class="form-group">
@@ -728,32 +676,28 @@
             <div class="tab-content" id="tecnicos-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">Técnicos de Laboratório</h2>
+                        <h2 class="card-title">Técnicos de Laboratório (Exemplo Estático)</h2>
                     </div>
-                    
+                    <p style="color: #aaa; margin-bottom: 15px;">Esta seção é um exemplo estático. Idealmente, os dados dos técnicos seriam carregados do Firestore e atualizados dinamicamente.</p>
                     <table>
                         <thead>
                             <tr>
                                 <th>Nome</th>
                                 <th>Especialidade</th>
-                                <th>Atividades Ativas</th>
-                                <th>Última Atividade</th>
-                                <th>Status</th>
+                                <th>Atividades Atribuídas</th>
+                                <th>Status (Exemplo)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>João Silva</td>
                                 <td>Química Orgânica</td>
-                                <td id="tech1-count">0</td>
-                                <td id="tech1-last">Nenhuma</td>
-                                <td><span class="status status-concluida">Disponível</span></td>
+                                <td id="tech-joao-count">0</td> <td><span class="status status-concluida">Disponível</span></td>
                             </tr>
                             <tr>
                                 <td>Maria Oliveira</td>
                                 <td>Análise Instrumental</td>
-                                <td id="tech2-count">0</td>
-                                <td id="tech2-last">Nenhuma</td>
+                                <td id="tech-maria-count">0</td>
                                 <td><span class="status status-designada">Em Atividade</span></td>
                             </tr>
                         </tbody>
@@ -769,10 +713,10 @@
                     
                     <div class="form-group">
                         <label>Filtrar por período:</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="date" id="start-date">
-                            <input type="date" id="end-date">
-                            <button class="btn btn-primary" id="filter-reports">Aplicar Filtro</button>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <input type="date" id="start-date" style="flex-grow: 1;">
+                            <input type="date" id="end-date" style="flex-grow: 1;">
+                            <button class="btn btn-primary" id="filter-reports" style="flex-shrink: 0;">Aplicar Filtro</button>
                         </div>
                     </div>
                     
@@ -780,48 +724,42 @@
                         <label>Filtrar por técnico:</label>
                         <select id="filter-technician">
                             <option value="all">Todos os técnicos</option>
-                            <option value="tec1">João Silva</option>
-                            <option value="tec2">Maria Oliveira</option>
+                            <option value="UID_TECNICO_JOAO_SILVA">João Silva</option>
+                            <option value="UID_TECNICO_MARIA_OLIVEIRA">Maria Oliveira</option>
                         </select>
                     </div>
                     
                     <div id="reports-container">
+                         <div id="reports-empty-state" class="empty-state" style="display: none;">
+                            <i class="fas fa-file-alt"></i>
+                            <p>Nenhum relatório encontrado para os filtros selecionados.</p>
+                        </div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Data</th>
-                                    <th>Prática</th>
-                                    <th>Técnico</th>
+                                    <th>Data da Observação</th>
+                                    <th>Prática (ID)</th>
+                                    <th>Técnico (Observador)</th>
                                     <th>Observações</th>
                                 </tr>
                             </thead>
                             <tbody id="reports-table">
-                                <!-- Reports will be loaded dynamically -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                     
-                    <!-- Área de gerenciamento de dados -->
                     <div class="data-management">
-                        <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados</h3>
+                        <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados (Firestore)</h3>
                         <p style="margin-bottom: 15px; color: #aaa;">
-                            Exporte e importe dados para sincronizar entre diferentes navegadores ou dispositivos.
+                            Exporte os dados atuais das atividades ou limpe todos os dados do Firestore (use com CUIDADO!).
                         </p>
                         
                         <div class="data-actions">
                             <button class="btn btn-info" id="export-data">
-                                <i class="fas fa-file-export"></i> Exportar Dados
+                                <i class="fas fa-file-export"></i> Exportar Dados (JSON)
                             </button>
-                            
-                            <div class="import-container">
-                                <button class="btn btn-warning" id="import-btn">
-                                    <i class="fas fa-file-import"></i> Importar Dados
-                                </button>
-                                <input type="file" id="import-data" accept=".json">
-                            </div>
-                            
                             <button class="btn btn-danger" id="reset-data">
-                                <i class="fas fa-trash-alt"></i> Limpar Dados
+                                <i class="fas fa-trash-alt"></i> Limpar Todas as Atividades (Firestore)
                             </button>
                         </div>
                     </div>
@@ -829,11 +767,10 @@
             </div>
         </div>
         
-        <!-- Modal for adding new activity -->
         <div class="modal" id="activity-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Nova Atividade</h3>
+                    <h3 class="modal-title" id="modal-title-activity">Nova Atividade</h3>
                     <button class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -864,7 +801,6 @@
             </div>
         </div>
         
-        <!-- Activity Detail Modal -->
         <div class="modal" id="detail-modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -873,951 +809,663 @@
                 </div>
                 <div class="modal-body">
                     <div id="activity-details">
-                        <!-- Details will be loaded here -->
+                        </div>
+                    
+                    <div id="tech-actions-section" style="display:none;">
+                         <h4>Ações do Usuário Logado</h4>
+                        <div class="form-group">
+                            <label for="activity-status-update">Mudar Status da Atividade:</label>
+                            <select id="activity-status-update">
+                                <option value="pendente">Pendente</option>
+                                <option value="designada">Designada</option>
+                                <option value="concluida">Concluída</option>
+                            </select>
+                        </div>
+                         <button class="btn btn-success" id="update-status-btn">Atualizar Status</button>
                     </div>
                     
-                    <div id="tech-actions-section">
-                        <!-- Technician actions will appear here -->
-                    </div>
-                    
-                    <div class="form-group">
+                    <div class="form-group" style="margin-top: 20px;">
                         <label for="observation">Adicionar Observação:</label>
                         <textarea id="observation" placeholder="Registre observações sobre esta atividade..."></textarea>
                     </div>
-                    
-                    <button class="btn btn-primary" id="save-observation">Salvar Observação</button>
+                     <button class="btn btn-info" id="save-observation">Salvar Observação</button>
+                    <div id="observations-list" style="margin-top: 20px;">
+                        </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
-        // Sample data for activities (will be loaded from localStorage)
-        let activities = [];
-        
-        // Current user
-        let currentUser = null;
-        
-        // DOM Elements
-        const loginScreen = document.getElementById('login-screen');
-        const mainSystem = document.getElementById('main-system');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userOptions = document.querySelectorAll('.user-option');
-        const userName = document.getElementById('user-name');
-        const userAvatar = document.getElementById('user-avatar');
-        const userRole = document.getElementById('user-role');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const addActivityBtn = document.getElementById('add-activity');
-        const activityModal = document.getElementById('activity-modal');
-        const detailModal = document.getElementById('detail-modal');
-        const closeBtns = document.querySelectorAll('.close-btn, #cancel-btn');
-        const saveActivityBtn = document.getElementById('save-activity');
-        const activitiesTable = document.getElementById('activities-table');
-        const assignBtn = document.getElementById('assign-btn');
-        const practiceSelect = document.getElementById('practice');
-        const filterReportsBtn = document.getElementById('filter-reports');
-        const exportBtn = document.getElementById('export-data');
-        const importBtn = document.getElementById('import-data');
-        const resetBtn = document.getElementById('reset-data');
-        
-        // Load data from localStorage
-        function loadData() {
-            const savedActivities = localStorage.getItem('lab_activities');
-            if (savedActivities) {
-                activities = JSON.parse(savedActivities);
-            } else {
-                // Initial sample data
-                activities = [
-                    {
-                        id: "PR001",
-                        name: "Prática 1: Titulação Ácido-Base",
-                        professor: "Dr. Silva",
-                        technician: "João Silva",
-                        technicianId: "tec1",
-                        status: "concluida",
-                        date: new Date().toLocaleDateString('pt-BR'),
-                        requirements: "Bureta, solução de HCl, solução de NaOH, indicador fenolftaleína",
-                        observations: [
-                            { text: "Tudo dentro do previsto. Soluções preparadas conforme solicitado.", author: "João Silva", date: new Date().toLocaleString('pt-BR') }
-                        ]
-                    },
-                    {
-                        id: "PR002",
-                        name: "Prática 2: Cromatografia",
-                        professor: "Dra. Oliveira",
-                        technician: "Maria Oliveira",
-                        technicianId: "tec2",
-                        status: "designada",
-                        date: new Date().toLocaleDateString('pt-BR'),
-                        requirements: "Papel de cromatografia, solventes, amostras de corantes",
-                        observations: [
-                            { text: "Material extra necessário para próxima aula", author: "Maria Oliveira", date: new Date().toLocaleString('pt-BR') }
-                        ]
-                    }
-                ];
-                saveData();
-            }
-        }
-        
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem('lab_activities', JSON.stringify(activities));
-            updateTechniciansStats();
-        }
-        
-        // Update technicians statistics
-        function updateTechniciansStats() {
-            const tech1Activities = activities.filter(a => a.technicianId === 'tec1' && a.status !== 'concluida');
-            const tech2Activities = activities.filter(a => a.technicianId === 'tec2' && a.status !== 'concluida');
-            
-            document.getElementById('tech1-count').textContent = tech1Activities.length;
-            document.getElementById('tech2-count').textContent = tech2Activities.length;
-            
-            if (tech1Activities.length > 0) {
-                const lastActivity = tech1Activities.reduce((latest, current) => {
-                    return new Date(current.date) > new Date(latest.date) ? current : latest;
-                }, tech1Activities[0]);
-                document.getElementById('tech1-last').textContent = lastActivity.date;
-            } else {
-                document.getElementById('tech1-last').textContent = 'Nenhuma';
-            }
-            
-            if (tech2Activities.length > 0) {
-                const lastActivity = tech2Activities.reduce((latest, current) => {
-                    return new Date(current.date) > new Date(latest.date) ? current : latest;
-                }, tech2Activities[0]);
-                document.getElementById('tech2-last').textContent = lastActivity.date;
-            } else {
-                document.getElementById('tech2-last').textContent = 'Nenhuma';
-            }
-        }
-        
-       loginBtn.addEventListener('click', async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    // **************************************************************************
+    // ** IMPORTANTE: Substitua pelas suas configurações reais do Firebase! **
+    // **************************************************************************
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
+  authDomain: "sistema-laboratorioifs.firebaseapp.com",
+  projectId: "sistema-laboratorioifs",
+  storageBucket: "sistema-laboratorioifs.firebasestorage.app",
+  messagingSenderId: "950276302393",
+  appId: "1:950276302393:web:745d51037ff780b1db0fe8",
+  measurementId: "G-1H8P4Z6QS6"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let activities = []; 
+    let currentEditingActivityId = null;
+    let fbCurrentUser = null;
+    let userRoleType = 'Visitante'; 
+    let unsubscribeActivities = null; 
+
+    // DOM Elements
+    const loginScreen = document.getElementById('login-screen');
+    const mainSystem = document.getElementById('main-system');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
     
-    if (!email || !password) {
-        showNotification('Preencha e-mail e senha!', 'error');
-        return;
+    const userNameDisplay = document.getElementById('user-name');
+    const userAvatarDisplay = document.getElementById('user-avatar');
+    const userRoleDisplay = document.getElementById('user-role');
+    
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const addActivityBtn = document.getElementById('add-activity');
+    const activityModal = document.getElementById('activity-modal');
+    const detailModal = document.getElementById('detail-modal');
+    const closeBtns = document.querySelectorAll('.close-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const saveActivityBtn = document.getElementById('save-activity');
+    const activitiesTableBody = document.getElementById('activities-table');
+    const activitiesEmptyState = document.getElementById('activities-empty-state');
+    
+    const assignBtn = document.getElementById('assign-btn');
+    const practiceSelect = document.getElementById('practice');
+    const technicianSelect = document.getElementById('technician'); 
+    const instructionsInput = document.getElementById('instructions');
+
+    const filterReportsBtn = document.getElementById('filter-reports');
+    const reportsTableBody = document.getElementById('reports-table');
+    const reportsEmptyState = document.getElementById('reports-empty-state');
+
+    const exportBtn = document.getElementById('export-data');
+    const resetBtn = document.getElementById('reset-data');
+
+    const modalTitleActivity = document.getElementById('modal-title-activity');
+    const newPracticeInput = document.getElementById('new-practice');
+    const professorInput = document.getElementById('professor');
+    const deadlineInput = document.getElementById('deadline');
+    const requirementsInput = document.getElementById('requirements');
+
+    const activityDetailsDiv = document.getElementById('activity-details');
+    const techActionsSection = document.getElementById('tech-actions-section');
+    const activityStatusUpdateSelect = document.getElementById('activity-status-update');
+    const updateStatusBtn = document.getElementById('update-status-btn');
+    const observationInput = document.getElementById('observation');
+    const saveObservationBtn = document.getElementById('save-observation');
+    const observationsListDiv = document.getElementById('observations-list');
+
+    // --- Autenticação Firebase ---
+    auth.onAuthStateChanged(async user => {
+        if (user) {
+            fbCurrentUser = user;
+            loginScreen.style.display = 'none';
+            mainSystem.style.display = 'block';
+            userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
+            userAvatarDisplay.textContent = (fbCurrentUser.displayName || fbCurrentUser.email)[0].toUpperCase();
+            
+            // Lógica SIMPLES para determinar o papel do usuário
+            // Idealmente: usar Custom Claims ou buscar papel no Firestore.
+            // Exemplo: se e-mail contém 'admin@', é Admin. Se 'tech@', é Técnico.
+            const emailLowerCase = fbCurrentUser.email.toLowerCase();
+            if (emailLowerCase.includes('admin@')) { // Adapte esta lógica!
+                userRoleType = 'Administrador';
+            } else if (emailLowerCase.includes('tech@')) { // Adapte esta lógica!
+                userRoleType = 'Técnico';
+            } else {
+                 userRoleType = 'Visitante'; 
+            }
+            updateUIVisibilityBasedOnRole();
+            loadActivitiesFromFirestore(); 
+
+        } else {
+            fbCurrentUser = null;
+            userRoleType = 'Visitante';
+            loginScreen.style.display = 'flex';
+            mainSystem.style.display = 'none';
+            userNameDisplay.textContent = 'Usuário';
+            userAvatarDisplay.textContent = 'U';
+            userRoleDisplay.textContent = 'Visitante';
+            userRoleDisplay.className = 'role-tag';
+            activities = [];
+            renderActivities();
+            if (unsubscribeActivities) {
+                unsubscribeActivities(); 
+                unsubscribeActivities = null;
+            }
+        }
+    });
+
+    function updateUIVisibilityBasedOnRole() {
+        if (!fbCurrentUser) return;
+
+        userRoleDisplay.textContent = userRoleType;
+        if (userRoleType === 'Administrador') {
+            userRoleDisplay.className = 'role-tag role-admin';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'flex';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'flex'; // Aba estática
+            addActivityBtn.style.display = 'inline-flex';
+        } else if (userRoleType === 'Técnico') {
+            userRoleDisplay.className = 'role-tag role-tech';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none'; 
+            addActivityBtn.style.display = 'none';
+        } else { 
+            userRoleDisplay.className = 'role-tag';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
+            addActivityBtn.style.display = 'none';
+        }
     }
 
-    try {
-        // Faz login com Firebase
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        // Define o papel do usuário baseado no e-mail
-        if (email === "admin@lab.com") {
-            currentUser = "admin";
-        } else if (email === "tecnico1@lab.com") {
-            currentUser = "tec1";
-        } else if (email === "tecnico2@lab.com") {
-            currentUser = "tec2";
-        } else {
-            currentUser = "tec"; // padrão para outros técnicos
+    loginBtn.addEventListener('click', () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        if (!email || !password) {
+            showNotification('Por favor, insira e-mail e senha.', 'error');
+            return;
         }
-        
-        // Atualiza a interface
-        loginScreen.style.display = 'none';
-        mainSystem.style.display = 'block';
-        updateUIForUser();
-        
-        // Carrega os dados
-        await loadData();
-        
-        showNotification('Login realizado com sucesso!', 'success');
-        
-    } catch (error) {
-        // Mensagens de erro mais específicas
-        let errorMessage = "Erro no login";
-        
-        if (error.code === "auth/invalid-email") {
-            errorMessage = "E-mail inválido";
-        } else if (error.code === "auth/user-not-found") {
-            errorMessage = "Usuário não cadastrado";
-        } else if (error.code === "auth/wrong-password") {
-            errorMessage = "Senha incorreta";
+        auth.signInWithEmailAndPassword(email, password)
+            .catch(error => {
+                console.error("Erro de login:", error);
+                let friendlyMessage = "Erro ao fazer login. Verifique suas credenciais.";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    friendlyMessage = "E-mail ou senha inválidos.";
+                } else if (error.code === 'auth/invalid-email') {
+                    friendlyMessage = "Formato de e-mail inválido.";
+                }
+                showNotification(friendlyMessage, 'error');
+            });
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        auth.signOut().catch(error => {
+            console.error("Erro no logout:", error);
+            showNotification(`Erro ao fazer logout: ${error.message}`, 'error');
+        });
+    });
+
+    // --- Firestore Data Handling ---
+    function loadActivitiesFromFirestore() {
+        if (unsubscribeActivities) {
+            unsubscribeActivities(); 
         }
+        // Ordena por data de criação, mais recentes primeiro
+        let query = db.collection('activities').orderBy('createdAt', 'desc');
         
-        showNotification(errorMessage, 'error');
+        unsubscribeActivities = query.onSnapshot(snapshot => {
+            activities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderActivities();
+            populatePracticeSelect();
+        }, error => {
+            console.error("Erro ao carregar atividades do Firestore: ", error);
+            showNotification('Erro ao carregar dados das atividades.', 'error');
+        });
     }
-});
-        
-        // Update UI based on user role
-        function updateUIForUser() {
-            if (currentUser === 'admin') {
-                userName.textContent = 'Administrador';
-                userAvatar.textContent = 'A';
-                userRole.textContent = 'Administrador';
-                userRole.className = 'role-tag role-admin';
-                
-                // Show all tabs
-                document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'flex');
-                
-                // Enable admin features
-                document.getElementById('add-activity').style.display = 'block';
-                document.getElementById('designar-content').style.display = 'block';
-            } 
-            else if (currentUser === 'tec1') {
-                userName.textContent = 'João Silva';
-                userAvatar.textContent = 'J';
-                userRole.textContent = 'Técnico';
-                userRole.className = 'role-tag role-tech';
-                
-                // Hide admin-only tabs
-                document.querySelectorAll('.tab').forEach(tab => {
-                    if (tab.getAttribute('data-tab') !== 'atividades') {
-                        tab.style.display = 'none';
-                    }
-                });
-                
-                // Hide admin features
-                document.getElementById('add-activity').style.display = 'none';
-                document.getElementById('designar-content').style.display = 'none';
-                
-                // Activate activities tab
-                tabs[0].click();
-            }
-            else if (currentUser === 'tec2') {
-                userName.textContent = 'Maria Oliveira';
-                userAvatar.textContent = 'M';
-                userRole.textContent = 'Técnico';
-                userRole.className = 'role-tag role-tech';
-                
-                // Hide admin-only tabs
-                document.querySelectorAll('.tab').forEach(tab => {
-                    if (tab.getAttribute('data-tab') !== 'atividades') {
-                        tab.style.display = 'none';
-                    }
-                });
-                
-                // Hide admin features
-                document.getElementById('add-activity').style.display = 'none';
-                document.getElementById('designar-content').style.display = 'none';
-                
-                // Activate activities tab
-                tabs[0].click();
-            }
-            
-            // Render activities for the current user
-            renderActivities();
-            populatePracticeSelect();
+    
+    function renderActivities() {
+        activitiesTableBody.innerHTML = '';
+        let activitiesToRender = [...activities]; // Copia para não modificar o original ao filtrar
+
+        // Filtra atividades para Técnicos: mostra as designadas a ele OU as pendentes
+        if (userRoleType === 'Técnico' && fbCurrentUser) {
+            activitiesToRender = activities.filter(act => 
+                act.technicianUid === fbCurrentUser.uid || act.status === 'pendente'
+            );
         }
-        
-        // Populate practice select dropdown
-        function populatePracticeSelect() {
-            practiceSelect.innerHTML = '<option value="">-- Selecione uma prática --</option>';
-            
-            // Get only pending activities
-            const pendingActivities = activities.filter(a => a.status === 'pendente');
-            
-            if (pendingActivities.length === 0) {
-                practiceSelect.innerHTML += '<option value="" disabled>Nenhuma prática pendente</option>';
+
+        if (activitiesToRender.length === 0) {
+            activitiesEmptyState.style.display = 'block';
+            activitiesTableBody.parentElement.style.display = 'none';
+            return;
+        }
+        activitiesEmptyState.style.display = 'none';
+        activitiesTableBody.parentElement.style.display = 'table';
+
+        activitiesToRender.forEach(activity => {
+            const row = activitiesTableBody.insertRow();
+            const displayDate = activity.date && activity.date.toDate // Checa se 'date' e 'toDate' existem
+                              ? activity.date.toDate().toLocaleDateString('pt-BR') 
+                              : (activity.date || 'N/A'); // Se 'date' for string ou nulo
+
+            row.innerHTML = `
+                <td>${activity.id.substring(0,6)}...</td>
+                <td>${activity.name}</td>
+                <td>${activity.professor}</td>
+                <td>${activity.technicianName || 'Não designado'}</td>
+                <td><span class="status status-${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
+                <td>${displayDate}</td>
+                <td>
+                    <button class="btn btn-info btn-sm view-details" data-id="${activity.id}"><i class="fas fa-eye"></i></button>
+                    ${userRoleType === 'Administrador' ? `
+                        <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm delete-activity" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
+                    ` : ''}
+                </td>
+            `;
+        });
+        addActivityEventListeners();
+    }
+
+    function populatePracticeSelect() {
+        practiceSelect.innerHTML = '<option value="">-- Selecione uma prática --</option>';
+        // Popula com atividades pendentes ou sem técnico designado
+        activities.filter(act => act.status === 'pendente' || !act.technicianUid).forEach(act => {
+            const option = document.createElement('option');
+            option.value = act.id;
+            option.textContent = `${act.name} (ID: ...${act.id.slice(-4)})`;
+            practiceSelect.appendChild(option);
+        });
+    }
+
+    function addActivityEventListeners() {
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', (e) => showDetailModal(e.currentTarget.dataset.id));
+        });
+        if (userRoleType === 'Administrador') {
+            document.querySelectorAll('.edit-activity').forEach(button => {
+                button.addEventListener('click', (e) => openActivityModal(e.currentTarget.dataset.id));
+            });
+            document.querySelectorAll('.delete-activity').forEach(button => {
+                button.addEventListener('click', (e) => deleteActivity(e.currentTarget.dataset.id));
+            });
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tab.dataset.tab + '-content').classList.add('active');
+        });
+    });
+    
+    function openActivityModal(activityIdToEdit = null) {
+        currentEditingActivityId = activityIdToEdit; 
+        if (activityIdToEdit) {
+            const activity = activities.find(act => act.id === activityIdToEdit);
+            if (activity) {
+                modalTitleActivity.textContent = "Editar Atividade";
+                newPracticeInput.value = activity.name;
+                professorInput.value = activity.professor;
+                let deadlineValue = '';
+                if (activity.date && activity.date.toDate) { // Verifica se é Timestamp
+                    deadlineValue = activity.date.toDate().toISOString().split('T')[0];
+                } else if (activity.date) { // Se for string (formato DD/MM/YYYY)
+                     const parts = activity.date.split('/');
+                     if(parts.length === 3) deadlineValue = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+                deadlineInput.value = deadlineValue;
+                requirementsInput.value = activity.requirements || '';
             } else {
-                pendingActivities.forEach(activity => {
-                    const option = document.createElement('option');
-                    option.value = activity.id;
-                    option.textContent = activity.name;
-                    practiceSelect.appendChild(option);
-                });
+                showNotification('Atividade não encontrada para edição.', 'error'); return;
             }
+        } else {
+            modalTitleActivity.textContent = "Nova Atividade";
+            newPracticeInput.value = '';
+            professorInput.value = '';
+            deadlineInput.value = '';
+            requirementsInput.value = '';
         }
-        
-        // Tab switching
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
-                tab.classList.add('active');
-                
-                // Hide all tab contents
-                tabContents.forEach(content => content.classList.remove('active'));
-                // Show the content for the clicked tab
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(`${tabId}-content`).classList.add('active');
-                
-                // If reports tab is clicked, render reports
-                if (tabId === 'relatorios') {
-                    renderReports();
-                }
-            });
-        });
-        
-        // Modal handling
-        addActivityBtn.addEventListener('click', () => {
-            activityModal.style.display = 'flex';
-        });
-        
-        closeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                activityModal.style.display = 'none';
-                detailModal.style.display = 'none';
-            });
-        });
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === activityModal) {
-                activityModal.style.display = 'none';
-            }
-            if (e.target === detailModal) {
-                detailModal.style.display = 'none';
-            }
-        });
-        
-        // Save new activity
-        saveActivityBtn.addEventListener('click', () => {
-            const newPractice = document.getElementById('new-practice').value;
-            const professor = document.getElementById('professor').value;
-            
-            if (!newPractice || !professor) {
-                showNotification('Preencha todos os campos obrigatórios!', 'error');
-                return;
-            }
-            
-            // Create new activity object
-            const newActivity = {
-                id: `PR${Date.now().toString().slice(-4)}`,
-                name: newPractice,
-                professor: professor,
-                technician: "A designar",
-                technicianId: "",
-                status: "pendente",
-                date: new Date().toLocaleDateString('pt-BR'),
-                requirements: document.getElementById('requirements').value,
-                observations: []
-            };
-            
-            // Add to activities array
-            activities.unshift(newActivity);
-            
-            // Save to localStorage
-            saveData();
-            
-            // Update table
-            renderActivities();
-            populatePracticeSelect();
-            
-            // Close modal and reset form
-            activityModal.style.display = 'none';
-            document.getElementById('new-practice').value = '';
-            document.getElementById('professor').value = '';
-            document.getElementById('requirements').value = '';
-            
-            showNotification('Atividade adicionada com sucesso!', 'success');
-        });
-        
-        // Assign activity to technician
-        assignBtn.addEventListener('click', () => {
-            const practiceId = practiceSelect.value;
-            const technicianId = document.getElementById('technician').value;
-            
-            if (!practiceId || !technicianId) {
-                showNotification('Selecione uma prática e um técnico!', 'error');
-                return;
-            }
-            
-            // Find the activity
-            const activity = activities.find(a => a.id === practiceId);
-            if (!activity) {
-                showNotification('Atividade não encontrada!', 'error');
-                return;
-            }
-            
-            // Update the activity
-            const technicianName = technicianId === 'tec1' ? 'João Silva' : 'Maria Oliveira';
-            activity.technician = technicianName;
-            activity.technicianId = technicianId;
-            activity.status = "designada";
-            
-            // Add assignment observation
-            const now = new Date();
-            activity.observations.push({
-                text: `Atividade designada para ${technicianName}`,
-                author: 'Sistema',
-                date: now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-            });
-            
-            // Save to localStorage
-            saveData();
-            
-            // Update UI
-            renderActivities();
-            populatePracticeSelect();
-            
-            // Reset form
-            practiceSelect.value = '';
-            document.getElementById('technician').value = '';
-            document.getElementById('instructions').value = '';
-            
-            showNotification(`Atividade "${activity.name}" designada para ${technicianName}`, 'success');
-        });
-        
-        // Render activities table
-        function renderActivities() {
-            activitiesTable.innerHTML = '';
-            
-            let filteredActivities = activities;
-            
-            // Filter activities for technicians
-            if (currentUser.startsWith('tec')) {
-                filteredActivities = activities.filter(a => a.technicianId === currentUser);
-            }
-            
-            if (filteredActivities.length === 0) {
-                activitiesTable.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="empty-state">
-                            <i class="fas fa-clipboard-list"></i>
-                            <h3>Nenhuma atividade encontrada</h3>
-                            <p>${currentUser === 'admin' ? 'Adicione uma nova atividade ou designe técnicos para práticas pendentes' : 'Nenhuma atividade designada para você no momento'}</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            filteredActivities.forEach(activity => {
-                const row = document.createElement('tr');
-                
-                let statusClass, statusText;
-                switch(activity.status) {
-                    case 'pendente':
-                        statusClass = 'status-pendente';
-                        statusText = 'Pendente';
-                        break;
-                    case 'designada':
-                        statusClass = 'status-designada';
-                        statusText = 'Designada';
-                        break;
-                    case 'concluida':
-                        statusClass = 'status-concluida';
-                        statusText = 'Concluída';
-                        break;
-                }
-                
-                row.innerHTML = `
-                    <td>${activity.id}</td>
-                    <td>${activity.name}</td>
-                    <td>${activity.professor}</td>
-                    <td>${activity.technician}</td>
-                    <td><span class="status ${statusClass}">${statusText}</span></td>
-                    <td>${activity.date}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm view-details" data-id="${activity.id}">Detalhes</button>
-                    </td>
-                `;
-                
-                activitiesTable.appendChild(row);
-            });
-            
-            // Add event listeners to detail buttons
-            document.querySelectorAll('.view-details').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const activityId = e.target.getAttribute('data-id');
-                    showActivityDetails(activityId);
-                });
-            });
+        activityModal.style.display = 'flex';
+    }
+
+    function closeModals() {
+        activityModal.style.display = 'none';
+        detailModal.style.display = 'none';
+        currentEditingActivityId = null; 
+    }
+
+    addActivityBtn.addEventListener('click', () => openActivityModal());
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
+    cancelBtn.addEventListener('click', closeModals);
+    window.addEventListener('click', (event) => {
+        if (event.target === activityModal) closeModals();
+        if (event.target === detailModal) closeModals();
+    });
+
+    saveActivityBtn.addEventListener('click', async () => {
+        const practiceName = newPracticeInput.value.trim();
+        const professorName = professorInput.value.trim();
+        const deadlineValue = deadlineInput.value;
+        const requirementsText = requirementsInput.value.trim();
+
+        if (!practiceName || !professorName || !deadlineValue) {
+            showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Prazo).', 'warning');
+            return;
         }
-        
-        // Show activity details
-        function showActivityDetails(activityId) {
-            const activity = activities.find(a => a.id === activityId);
-            if (!activity) return;
-            
-            let statusClass, statusText;
-            switch(activity.status) {
-                case 'pendente':
-                    statusClass = 'status-pendente';
-                    statusText = 'Pendente';
-                    break;
-                case 'designada':
-                    statusClass = 'status-designada';
-                    statusText = 'Designada';
-                    break;
-                case 'concluida':
-                    statusClass = 'status-concluida';
-                    statusText = 'Concluída';
-                    break;
-            }
-            
-            // Check if current user is the assigned technician
-            const isAssignedTech = currentUser === activity.technicianId;
-            
-            document.getElementById('activity-details').innerHTML = `
-                <div class="form-group">
-                    <label>Prática:</label>
-                    <p>${activity.name}</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Professor:</label>
-                    <p>${activity.professor}</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Técnico:</label>
-                    <p>${activity.technician}</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Status:</label>
-                    <p><span class="status ${statusClass}">${statusText}</span></p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Data:</label>
-                    <p>${activity.date}</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Requisitos/Materiais:</label>
-                    <p>${activity.requirements}</p>
-                </div>
-                
-                <div class="form-group">
-                    <label>Observações:</label>
-                    <div id="observations-list">
-                        ${activity.observations.length > 0 ? 
-                            activity.observations.map(obs => `
-                                <div class="observation-item">
-                                    <div class="observation-author">${obs.author} - ${obs.date}</div>
-                                    <div>${obs.text}</div>
-                                </div>
-                            `).join('') : 
-                            '<p>Nenhuma observação registrada.</p>'}
-                    </div>
-                </div>
-            `;
-            
-            // Show action buttons for assigned technician
-            const techActionsSection = document.getElementById('tech-actions-section');
-            techActionsSection.innerHTML = '';
-            
-            if (isAssignedTech && activity.status !== 'concluida') {
-                techActionsSection.innerHTML = `
-                    <div class="tech-actions">
-                        <button class="btn btn-success" id="complete-activity">
-                            <i class="fas fa-check-circle"></i> Confirmar Separação
-                        </button>
-                    </div>
-                `;
-                
-                // Add event listener to complete button
-                document.getElementById('complete-activity').addEventListener('click', () => {
-                    activity.status = 'concluida';
-                    
-                    // Add completion observation
-                    const now = new Date();
-                    activity.observations.push({
-                        text: "Atividade concluída e materiais separados",
-                        author: currentUser === 'tec1' ? 'João Silva' : 'Maria Oliveira',
-                        date: now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-                    });
-                    
-                    // Save to localStorage
-                    saveData();
-                    
-                    // Update UI
-                    renderActivities();
-                    detailModal.style.display = 'none';
-                    showNotification('Atividade marcada como concluída!', 'success');
-                });
-            }
-            
-            detailModal.style.display = 'flex';
-        }
-        
-        // Save observation
-        document.getElementById('save-observation').addEventListener('click', () => {
-            const observationText = document.getElementById('observation').value;
-            if (!observationText) {
-                showNotification('Digite uma observação!', 'error');
-                return;
-            }
-            
-            // Get current activity from modal
-            const activityId = document.querySelector('.view-details[data-id]')?.getAttribute('data-id');
-            if (!activityId) return;
-            
-            const activity = activities.find(a => a.id === activityId);
-            if (!activity) return;
-            
-            // Add observation
-            const now = new Date();
-            const observation = {
-                text: observationText,
-                author: currentUser === 'admin' ? 'Administrador' : 
-                       currentUser === 'tec1' ? 'João Silva' : 'Maria Oliveira',
-                date: now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-            };
-            
-            activity.observations.push(observation);
-            
-            // Save to localStorage
-            saveData();
-            
-            // Update UI
-            const observationsList = document.getElementById('observations-list');
-            observationsList.innerHTML += `
-                <div class="observation-item">
-                    <div class="observation-author">${observation.author} - ${observation.date}</div>
-                    <div>${observation.text}</div>
-                </div>
-            `;
-            
-            document.getElementById('observation').value = '';
-            showNotification('Observação salva com sucesso!', 'success');
-        });
-        
-        // Render reports
-        function renderReports() {
-            const reportsTable = document.getElementById('reports-table');
-            reportsTable.innerHTML = '';
-            
-            // Get all activities with observations
-            let reportActivities = activities.filter(a => a.observations.length > 0);
-            
-            // Apply date filter
-            const startDate = document.getElementById('start-date').valueAsDate;
-            const endDate = document.getElementById('end-date').valueAsDate;
-            
-            if (startDate && endDate) {
-                reportActivities = reportActivities.filter(a => {
-                    const activityDate = new Date(a.date);
-                    return activityDate >= startDate && activityDate <= endDate;
-                });
-            }
-            
-            // Apply technician filter
-            const technicianFilter = document.getElementById('filter-technician').value;
-            if (technicianFilter !== 'all') {
-                reportActivities = reportActivities.filter(a => a.technicianId === technicianFilter);
-            }
-            
-            if (reportActivities.length === 0) {
-                reportsTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <h3>Nenhum relatório encontrado</h3>
-                            <p>Não há observações registradas para o período e filtros selecionados</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            // Flatten observations for display
-            const reportData = [];
-            reportActivities.forEach(activity => {
-                activity.observations.forEach(obs => {
-                    reportData.push({
-                        date: obs.date,
-                        practice: activity.name,
-                        technician: activity.technician,
-                        observation: obs.text
-                    });
-                });
-            });
-            
-            // Sort by date descending
-            reportData.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Display the reports
-            reportData.forEach(report => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${report.date}</td>
-                    <td>${report.practice}</td>
-                    <td>${report.technician}</td>
-                    <td>${report.observation}</td>
-                `;
-                reportsTable.appendChild(row);
-            });
-        }
-        
-        // Export data
-        exportBtn.addEventListener('click', () => {
-            const dataStr = JSON.stringify(activities);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = 'dados-laboratorios.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showNotification('Dados exportados com sucesso!', 'success');
-        });
-        
-        // Import data
-        importBtn.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    
-                    // Basic validation
-                    if (!Array.isArray(importedData) || importedData.length === 0) {
-                        showNotification('Arquivo inválido!', 'error');
-                        return;
-                    }
-                    
-                    // Replace current data
-                    activities = importedData;
-                    saveData();
-                    
-                    // Update UI
-                    renderActivities();
-                    populatePracticeSelect();
-                    updateTechniciansStats();
-                    
-                    showNotification('Dados importados com sucesso!', 'success');
-                } catch (error) {
-                    showNotification('Erro ao importar dados: ' + error.message, 'error');
-                }
-            };
-            reader.readAsText(file);
-        });
-        
-        // Reset data
-        resetBtn.addEventListener('click', () => {
-            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-                localStorage.removeItem('lab_activities');
-                loadData();
-                renderActivities();
-                populatePracticeSelect();
-                updateTechniciansStats();
-                showNotification('Dados resetados com sucesso!', 'success');
-            }
-        });
-        
-        // Show notification
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                                  type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(notification);
-            
-            // Remove after animation
-            setTimeout(() => {
-                notification.remove();
-            }, 3500);
-        }
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load data from localStorage
-            loadData();
-            updateTechniciansStats();
-            
-            // Set today's date as default for new activity deadline
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 2);
-            document.getElementById('deadline').valueAsDate = tomorrow;
-            
-            // Set date inputs for reports
-            const now = new Date();
-            document.getElementById('start-date').valueAsDate = new Date(now.getFullYear(), now.getMonth(), 1);
-            document.getElementById('end-date').valueAsDate = now;
-            
-            // Auto-select first user option
-            if (userOptions.length > 0) {
-                userOptions[0].click();
-            }
-            
-            // Add event listener to filter reports button
-            filterReportsBtn.addEventListener('click', renderReports);
-        });
-    </script>
-    // ============== CONFIGURAÇÃO DO FIREBASE ============== //
-        // COLE SUAS CREDENCIAIS AQUI ↓
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
-            authDomain: "sistema-laboratorioifs.firebaseapp.com",
-            projectId: "sistema-laboratorioifs",
-            storageBucket: "sistema-laboratorioifs.firebasestorage.app",
-            messagingSenderId: "950276302393",
-            appId: "1:950276302393:web:745d51037ff780b1db0fe8"
+
+        const activityData = {
+            name: practiceName,
+            professor: professorName,
+            date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")), // Adiciona hora para evitar problemas de fuso no dia
+            requirements: requirementsText
         };
 
-        // Inicialize o Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        
-        // ============== VARIÁVEIS DO SISTEMA ============== //
-        let activities = [];
-        let currentUser = null;
-        
-        // ============== ELEMENTOS DO HTML ============== //
-        const loginScreen = document.getElementById('login-screen');
-        const mainSystem = document.getElementById('main-system');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        // ... (todos os outros elementos que você já tinha)
+        try {
+            if (currentEditingActivityId) { 
+                const existingActivity = activities.find(a => a.id === currentEditingActivityId);
+                activityData.observations = existingActivity ? existingActivity.observations || [] : [];
+                activityData.updatedAt = firebase.firestore.Timestamp.now();
+                // Mantém campos originais se não forem alterados explicitamente no formulário de edição
+                activityData.status = existingActivity.status;
+                activityData.technicianName = existingActivity.technicianName;
+                activityData.technicianUid = existingActivity.technicianUid;
+                activityData.instructions = existingActivity.instructions;
+                activityData.createdByUid = existingActivity.createdByUid;
+                activityData.createdAt = existingActivity.createdAt; // Preserva data de criação original
 
-        // ============== FUNÇÕES PRINCIPAIS ============== //
-        
-        // Salva dados na nuvem
-        async function saveData() {
+
+                await db.collection('activities').doc(currentEditingActivityId).update(activityData);
+                showNotification('Atividade atualizada com sucesso!', 'success');
+            } else { 
+                activityData.status = 'pendente';
+                activityData.technicianName = null;
+                activityData.technicianUid = null;
+                activityData.instructions = null;
+                activityData.observations = [];
+                activityData.createdByUid = fbCurrentUser.uid;
+                activityData.createdAt = firebase.firestore.Timestamp.now();
+                await db.collection('activities').add(activityData);
+                showNotification('Atividade adicionada com sucesso!', 'success');
+            }
+            closeModals();
+        } catch (error) {
+            console.error("Erro ao salvar atividade: ", error);
+            showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
+        }
+    });
+
+    async function deleteActivity(activityId) {
+        if (confirm('Tem certeza que deseja excluir esta atividade? Esta ação é irreversível.')) {
             try {
-                await db.collection("labData").doc("activities").set({ data: activities });
-                showNotification("Dados salvos na nuvem!", "success");
+                await db.collection('activities').doc(activityId).delete();
+                showNotification('Atividade excluída do Firestore.', 'info');
             } catch (error) {
-                showNotification("Erro ao salvar: " + error.message, "error");
+                console.error("Erro ao excluir atividade: ", error);
+                showNotification(`Erro ao excluir: ${error.message}`, 'error');
             }
         }
-
-        // Carrega dados da nuvem
-        async function loadData() {
-            try {
-                const doc = await db.collection("labData").doc("activities").get();
-                
-                if (doc.exists) {
-                    activities = doc.data().data;
-                    showNotification("Dados carregados da nuvem!", "success");
-                } else {
-                    // Dados iniciais se for a primeira vez
-                    activities = [
-                        {
-                            id: "PR001",
-                            name: "Prática 1: Titulação Ácido-Base",
-                            professor: "Dr. Silva",
-                            technician: "João Silva",
-                            technicianId: "tec1",
-                            status: "concluida",
-                            date: new Date().toLocaleDateString('pt-BR'),
-                            requirements: "Bureta, solução de HCl, solução de NaOH, indicador fenolftaleína",
-                            observations: [
-                                { text: "Tudo dentro do previsto. Soluções preparadas conforme solicitado.", author: "João Silva", date: new Date().toLocaleString('pt-BR') }
-                            ]
-                        },
-                        {
-                            id: "PR002",
-                            name: "Prática 2: Cromatografia",
-                            professor: "Dra. Oliveira",
-                            technician: "Maria Oliveira",
-                            technicianId: "tec2",
-                            status: "designada",
-                            date: new Date().toLocaleDateString('pt-BR'),
-                            requirements: "Papel de cromatografia, solventes, amostras de corantes",
-                            observations: [
-                                { text: "Material extra necessário para próxima aula", author: "Maria Oliveira", date: new Date().toLocaleString('pt-BR') }
-                            ]
-                        }
-                    ];
-                    await saveData();
-                }
-                
-                // Atualiza a interface
-                renderActivities();
-                updateTechniciansStats();
-                
-            } catch (error) {
-                showNotification("Erro ao carregar: " + error.message, "error");
-            }
-        }
-
-        loginBtn.addEventListener('click', async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    }
     
-    if (!email || !password) {
-        showNotification('Preencha e-mail e senha!', 'error');
-        return;
+    assignBtn.addEventListener('click', async () => {
+        const practiceId = practiceSelect.value;
+        const selectedTechnicianOption = technicianSelect.options[technicianSelect.selectedIndex];
+        const technicianName = selectedTechnicianOption.text; 
+        const technicianUidValue = selectedTechnicianOption.value; 
+        const currentInstructions = instructionsInput.value.trim();
+
+        if (!practiceId || !technicianUidValue) {
+            showNotification('Selecione uma prática e um técnico.', 'warning');
+            return;
+        }
+
+        try {
+            await db.collection('activities').doc(practiceId).update({
+                technicianName: technicianName,
+                technicianUid: technicianUidValue, 
+                status: 'designada',
+                instructions: currentInstructions,
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            showNotification(`Técnico ${technicianName} designado.`, 'success');
+            practiceSelect.value = '';
+            technicianSelect.value = '';
+            instructionsInput.value = '';
+        } catch (error) {
+            console.error("Erro ao designar técnico: ", error);
+            showNotification(`Erro ao designar: ${error.message}`, 'error');
+        }
+    });
+
+    function showDetailModal(activityId) {
+        currentEditingActivityId = activityId; 
+        const activity = activities.find(act => act.id === activityId);
+        if (!activity) {
+            showNotification('Atividade não encontrada.', 'error'); return;
+        }
+
+        const displayDate = activity.date && activity.date.toDate 
+                            ? activity.date.toDate().toLocaleDateString('pt-BR') 
+                            : (activity.date || 'N/A');
+
+        activityDetailsDiv.innerHTML = `
+            <p><strong>ID:</strong> ...${activity.id.slice(-6)}</p>
+            <p><strong>Prática:</strong> ${activity.name}</p>
+            <p><strong>Professor:</strong> ${activity.professor}</p>
+            <p><strong>Data Limite:</strong> ${displayDate}</p>
+            <p><strong>Técnico:</strong> ${activity.technicianName || 'Não designado'}</p>
+            <p><strong>Status:</strong> <span class="status status-${activity.status}">${activity.status}</span></p>
+            <p><strong>Requisitos:</strong> ${activity.requirements || 'Nenhum'}</p>
+            ${activity.instructions ? `<p><strong>Instruções:</strong> ${activity.instructions}</p>` : ''}
+        `;
+        
+        techActionsSection.style.display = 'none'; 
+        // Permite que Admin ou o Técnico designado alterem o status
+        if (userRoleType === 'Administrador' || (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.uid)) {
+            techActionsSection.style.display = 'block';
+            activityStatusUpdateSelect.value = activity.status;
+        }
+        renderObservations(activity);
+        detailModal.style.display = 'flex';
+    }
+    
+    updateStatusBtn.addEventListener('click', async () => {
+        if (!currentEditingActivityId) return;
+        const newStatus = activityStatusUpdateSelect.value;
+        try {
+            await db.collection('activities').doc(currentEditingActivityId).update({
+                status: newStatus,
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            showNotification('Status da atividade atualizado.', 'success');
+            const updatedActivity = activities.find(act => act.id === currentEditingActivityId); // Pega a versão mais recente do array local
+            if(updatedActivity) showDetailModal(currentEditingActivityId); 
+        } catch (error) {
+            console.error("Erro ao atualizar status: ", error);
+            showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
+        }
+    });
+
+    saveObservationBtn.addEventListener('click', async () => {
+        if (!currentEditingActivityId) return;
+        const observationText = observationInput.value.trim();
+        if (!observationText) {
+            showNotification('Digite uma observação.', 'warning'); return;
+        }
+
+        const newObservation = {
+            text: observationText,
+            authorEmail: fbCurrentUser.email,
+            authorUid: fbCurrentUser.uid,
+            timestamp: firebase.firestore.Timestamp.now()
+        };
+
+        try {
+            await db.collection('activities').doc(currentEditingActivityId).update({
+                observations: firebase.firestore.FieldValue.arrayUnion(newObservation),
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            showNotification('Observação salva.', 'success');
+            observationInput.value = '';
+            const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
+            if(updatedActivity) renderObservations(updatedActivity); 
+        } catch (error) {
+            console.error("Erro ao salvar observação: ", error);
+            showNotification(`Erro ao salvar observação: ${error.message}`, 'error');
+        }
+    });
+
+    function renderObservations(activity) { 
+        observationsListDiv.innerHTML = '<h4>Observações Salvas:</h4>';
+        if (activity && activity.observations && activity.observations.length > 0) {
+            const sortedObservations = [...activity.observations].sort((a, b) => {
+                const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
+                const timeB = b.timestamp && b.timestamp.toMillis ? b.timestamp.toMillis() : 0;
+                return timeB - timeA; // Mais recentes primeiro
+            });
+            sortedObservations.forEach(obs => {
+                const obsDate = obs.timestamp && obs.timestamp.toDate 
+                                ? obs.timestamp.toDate().toLocaleString('pt-BR') 
+                                : 'Data inválida';
+                const obsDiv = document.createElement('div');
+                obsDiv.classList.add('observation-item');
+                obsDiv.innerHTML = `
+                    <p class="observation-author">${obs.authorEmail} (${obsDate}):</p>
+                    <p>${obs.text}</p>
+                `;
+                observationsListDiv.appendChild(obsDiv);
+            });
+        } else {
+            observationsListDiv.innerHTML += '<p>Nenhuma observação registrada.</p>';
+        }
     }
 
-    try {
-        // Faz login com Firebase
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        // Define o papel do usuário baseado no e-mail
-        if (email === "admin@lab.com") {
-            currentUser = "admin";
-        } else if (email === "tecnico1@lab.com") {
-            currentUser = "tec1";
-        } else if (email === "tecnico2@lab.com") {
-            currentUser = "tec2";
-        } else {
-            currentUser = "tec"; // padrão para outros técnicos
-        }
-        
-        // Atualiza a interface
-        loginScreen.style.display = 'none';
-        mainSystem.style.display = 'block';
-        updateUIForUser();
-        
-        // Carrega os dados
-        await loadData();
-        
-        showNotification('Login realizado com sucesso!', 'success');
-        
-    } catch (error) {
-        // Mensagens de erro mais específicas
-        let errorMessage = "Erro no login";
-        
-        if (error.code === "auth/invalid-email") {
-            errorMessage = "E-mail inválido";
-        } else if (error.code === "auth/user-not-found") {
-            errorMessage = "Usuário não cadastrado";
-        } else if (error.code === "auth/wrong-password") {
-            errorMessage = "Senha incorreta";
-        }
-        
-        showNotification(errorMessage, 'error');
-    }
-});
-        // Função de logout
-        logoutBtn.addEventListener('click', () => {
-            auth.signOut();
-            mainSystem.style.display = "none";
-            loginScreen.style.display = "flex";
-            showNotification("Você saiu do sistema", "info");
+    filterReportsBtn.addEventListener('click', () => {
+        const startDateValue = document.getElementById('start-date').value;
+        const endDateValue = document.getElementById('end-date').value;
+        const techFilterUid = document.getElementById('filter-technician').value; 
+
+        reportsTableBody.innerHTML = '';
+        let filteredReportActivities = activities.filter(activity => {
+            let dateMatch = true;
+            if (startDateValue && endDateValue && activity.date && activity.date.toDate) {
+                const actDate = activity.date.toDate();
+                const startDate = new Date(startDateValue + "T00:00:00");
+                const endDate = new Date(endDateValue + "T23:59:59");
+                dateMatch = actDate >= startDate && actDate <= endDate;
+            }
+            
+            let techMatch = true;
+            if (techFilterUid !== 'all') {
+                techMatch = activity.technicianUid === techFilterUid; 
+            }
+            return dateMatch && techMatch && activity.observations && activity.observations.length > 0;
         });
 
-        // ============== ATUALIZAÇÕES NAS SUAS FUNÇÕES ============== //
-        
-        // Sempre que você for salvar uma atividade, chame saveData()
-        async function addNewActivity() {
-            // ... (seu código para criar a atividade)
-            await saveData(); // Salva na nuvem
+        if (filteredReportActivities.length === 0) {
+            reportsEmptyState.style.display = 'block';
+            reportsTableBody.parentElement.style.display = 'none';
+            return;
         }
-        
-        // Sempre que for designar um técnico
-        async function assignTechnician() {
-            // ... (seu código para designar)
-            await saveData(); // Salva na nuvem
-        }
-        
-        // Sempre que for adicionar uma observação
-        async function addObservation() {
-            // ... (seu código para adicionar observação)
-            await saveData(); // Salva na nuvem
-        }
+        reportsEmptyState.style.display = 'none';
+        reportsTableBody.parentElement.style.display = 'table';
 
-        // ============== SINCRONIZAÇÃO AUTOMÁTICA ============== //
-        // Ouvinte em tempo real - atualiza automaticamente quando houver mudanças
-        db.collection("labData").doc("activities")
-            .onSnapshot((doc) => {
-                if (doc.exists) {
-                    activities = doc.data().data;
-                    renderActivities();
-                    updateTechniciansStats();
-                    showNotification("Dados atualizados em tempo real!", "info");
+        filteredReportActivities.forEach(activity => {
+            activity.observations.forEach(obs => {
+                const obsDate = obs.timestamp && obs.timestamp.toDate 
+                                ? obs.timestamp.toDate().toLocaleString('pt-BR')
+                                : 'Data inválida';
+                const row = reportsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${obsDate}</td>
+                    <td>${activity.name} (...${activity.id.slice(-4)})</td>
+                    <td>${obs.authorEmail}</td>
+                    <td>${obs.text}</td>
+                `;
+            });
+        });
+    });
+
+    exportBtn.addEventListener('click', () => {
+        if (activities.length === 0) {
+            showNotification('Não há dados para exportar.', 'info'); return;
+        }
+        const dataToExport = activities.map(act => {
+            const newAct = {...act};
+            // Converte Timestamps para string ISO para serialização JSON
+            Object.keys(newAct).forEach(key => {
+                if (newAct[key] instanceof firebase.firestore.Timestamp) {
+                    newAct[key] = newAct[key].toDate().toISOString();
                 }
             });
+            if (newAct.observations) {
+                newAct.observations = newAct.observations.map(obs => {
+                    const newObs = {...obs};
+                    if (newObs.timestamp instanceof firebase.firestore.Timestamp) {
+                        newObs.timestamp = newObs.timestamp.toDate().toISOString();
+                    }
+                    return newObs;
+                });
+            }
+            return newAct;
+        });
+
+        const dataStr = JSON.stringify(dataToExport, null, 2); 
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        const exportFileDefaultName = `lab_data_firestore_${new Date().toISOString().slice(0,10)}.json`;
+        
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        linkElement.remove();
+        showNotification('Dados exportados para arquivo JSON.', 'success');
+    });
+    
+    resetBtn.addEventListener('click', async () => {
+        if (confirm('ATENÇÃO: Isso tentará limpar TODAS as atividades do Firestore. Esta ação é IRREVERSÍVEL e pode demorar. Deseja continuar?')) {
+            showNotification('Iniciando limpeza de dados... Isso pode levar um tempo.', 'warning');
+            try {
+                const snapshot = await db.collection('activities').limit(400).get(); // Limita para evitar sobrecarga em uma chamada
+                if (snapshot.empty) {
+                     showNotification('Nenhuma atividade encontrada para limpar.', 'info');
+                     return;
+                }
+                const batch = db.batch();
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                
+                // Se ainda houver mais documentos, o usuário precisará rodar novamente ou usar uma Cloud Function
+                if (snapshot.size === 400) {
+                    showNotification(`${snapshot.size} atividades foram limpas. Se houver mais, repita a operação.`, 'info');
+                } else {
+                    showNotification('Todas as atividades visíveis (até 400) foram limpas do Firestore.', 'success');
+                }
+            } catch (error) {
+                console.error("Erro ao limpar dados do Firestore: ", error);
+                showNotification(`Erro ao limpar dados: ${error.message}. Pode ser necessário fazer manualmente no console do Firebase.`, 'error');
+            }
+        }
+    });
+    
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.classList.add('notification', `notification-${type}`);
+        let iconClass = 'fas fa-info-circle';
+        if (type === 'success') iconClass = 'fas fa-check-circle';
+        if (type === 'error') iconClass = 'fas fa-exclamation-circle';
+        if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+        
+        notification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 4500); 
+    }
+    </script>
 </body>
 </html>
