@@ -984,15 +984,6 @@
 
     // Inicializar Firebase com persistência
     firebase.initializeApp(firebaseConfig);
-         document.addEventListener('DOMContentLoaded', function() {
-    const hideFirebaseOfflineMessage = setInterval(() => {
-        const offlineMessage = document.querySelector('.firebase-emulator-warning');
-        if (offlineMessage) {
-            offlineMessage.style.display = 'none';
-            clearInterval(hideFirebaseOfflineMessage);
-        }
-    }, 100);
-});
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
