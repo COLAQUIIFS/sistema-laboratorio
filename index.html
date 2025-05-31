@@ -76,14 +76,16 @@
             justify-content: center;
         }
         
-        .logo-text h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-        
-        .logo-text p {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .logo-text {
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+            
+            p {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
         }
         
         .user-info {
@@ -862,6 +864,17 @@
                 font-size: 1rem;
             }
         }
+
+        /* Estilos adicionados para campos obrigatórios */
+        select[required]:invalid, 
+        input[required]:invalid {
+            border-left: 3px solid var(--warning);
+        }
+
+        select:focus, 
+        select:valid {
+            border-left: 3px solid var(--success) !important;
+        }
     </style>
 </head>
 <body>
@@ -957,9 +970,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Prática</th>
                                     <th>Professor</th>
+                                    <th>Laboratório</th>
                                     <th>Técnico</th>
                                     <th>Status</th>
                                     <th>Data</th>
@@ -1120,6 +1133,19 @@
                     <div class="form-group">
                         <label for="professor">Professor Responsável:</label>
                         <input type="text" id="professor" placeholder="Nome do professor">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activity-lab">Laboratório*</label>
+                        <select id="activity-lab" required>
+                            <option value="">Selecione o laboratório</option>
+                            <option value="Laboratório 36">Laboratório 36</option>
+                            <option value="Laboratório 35">Laboratório 35</option>
+                            <option value="Laboratório 35B">Laboratório 35B</option>
+                            <option value="Laboratório 35C">Laboratório 35C</option>
+                            <option value="Laboratório 35D">Laboratório 35D</option>
+                            <option value="Laboratório 35E">Laboratório 35E</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -1306,6 +1332,7 @@
     const modalTitleActivity = document.getElementById('modal-title-activity');
     const newPracticeInput = document.getElementById('new-practice');
     const professorInput = document.getElementById('professor');
+    const activityLabInput = document.getElementById('activity-lab');
     const deadlineInput = document.getElementById('deadline');
     const requirementsInput = document.getElementById('requirements');
 
@@ -1489,9 +1516,9 @@
 
             const row = activitiesTableBody.insertRow();
             row.innerHTML = `
-                <td>${activity.id.substring(0,6)}...</td>
                 <td>${activity.name}</td>
                 <td>${activity.professor}</td>
+                <td>${activity.lab || 'Não definido'}</td>
                 <td>${activity.technicianName || 'Não designado'}</td>
                 <td><span class="status status-${activity.status}">${getStatusIcon(activity.status)} ${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
                 <td>${displayDate}</td>
@@ -1590,6 +1617,7 @@
                 modalTitleActivity.innerHTML = '<i class="fas fa-edit"></i> Editar Atividade';
                 newPracticeInput.value = activity.name;
                 professorInput.value = activity.professor;
+                activityLabInput.value = activity.lab || '';
                 let deadlineValue = '';
                 if (activity.date && activity.date.toDate) {
                     deadlineValue = activity.date.toDate().toISOString().split('T')[0];
@@ -1606,6 +1634,7 @@
             modalTitleActivity.innerHTML = '<i class="fas fa-plus"></i> Nova Atividade';
             newPracticeInput.value = '';
             professorInput.value = '';
+            activityLabInput.value = '';
             deadlineInput.value = '';
             requirementsInput.value = '';
         }
@@ -1631,17 +1660,19 @@
     saveActivityBtn.addEventListener('click', async () => {
         const practiceName = newPracticeInput.value.trim();
         const professorName = professorInput.value.trim();
+        const lab = activityLabInput.value;
         const deadlineValue = deadlineInput.value;
         const requirementsText = requirementsInput.value.trim();
 
-        if (!practiceName || !professorName || !deadlineValue) {
-            showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Prazo).', 'warning');
+        if (!practiceName || !professorName || !deadlineValue || !lab) {
+            showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Laboratório, Prazo).', 'warning');
             return;
         }
 
         const activityData = {
             name: practiceName,
             professor: professorName,
+            lab: lab,
             date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
             requirements: requirementsText,
             status: 'pendente',
@@ -1750,6 +1781,7 @@
             <p><strong>ID:</strong> ...${activity.id.slice(-6)}</p>
             <p><strong>Prática:</strong> ${activity.name}</p>
             <p><strong>Professor:</strong> ${activity.professor}</p>
+            <p><strong>Laboratório:</strong> ${activity.lab || 'Não definido'}</p>
             <p><strong>Data Limite:</strong> ${displayDate}</p>
             <p><strong>Técnico:</strong> ${activity.technicianName || 'Não designado'}</p>
             <p><strong>Status:</strong> <span class="status status-${activity.status}">${getStatusIcon(activity.status)} ${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></p>
