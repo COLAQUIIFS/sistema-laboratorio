@@ -6,6 +6,11 @@
     <title>Sistema de Laboratórios de Química</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+         <!-- Scripts do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -607,38 +612,16 @@
 </head>
 <body>
     <!-- Tela de Login -->
-    <div class="login-container" id="login-screen">
+   <div class="login-container" id="login-screen">
         <div class="login-box">
             <div class="login-icon">
                 <i class="fas fa-flask"></i>
             </div>
             <h1 class="login-title">Sistema de Laboratórios</h1>
-            <p class="login-subtitle">Controle de atividades e designação de técnicos</p>
             
-            <div class="user-select">
-                <div class="user-option" data-role="admin">
-                    <i class="fas fa-user-shield"></i>
-                    <div>
-                        <h3>Administrador</h3>
-                        <p>Acesso total ao sistema</p>
-                    </div>
-                </div>
-                
-                <div class="user-option" data-role="tec1">
-                    <i class="fas fa-user-cog"></i>
-                    <div>
-                        <h3>Técnico A - João Silva</h3>
-                        <p>Acesso às minhas atividades</p>
-                    </div>
-                </div>
-                
-                <div class="user-option" data-role="tec2">
-                    <i class="fas fa-user-cog"></i>
-                    <div>
-                        <h3>Técnico B - Maria Oliveira</h3>
-                        <p>Acesso às minhas atividades</p>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" placeholder="seu@email.com">
             </div>
             
             <div class="form-group password-input">
@@ -647,13 +630,6 @@
             </div>
             
             <button class="login-btn" id="login-btn">Acessar Sistema</button>
-            
-            <div class="alert" style="background: rgba(243, 156, 18, 0.2); color: #f39c12; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid #f39c12;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>Importante:</strong> Os dados são armazenados apenas no navegador atual. 
-                Para sincronizar entre navegadores/dispositivos, utilize as funções de 
-                <strong>Exportar</strong> e <strong>Importar</strong> dados na área administrativa.
-            </div>
         </div>
     </div>
     
@@ -1668,5 +1644,170 @@
             filterReportsBtn.addEventListener('click', renderReports);
         });
     </script>
+    // ============== CONFIGURAÇÃO DO FIREBASE ============== //
+        // COLE SUAS CREDENCIAIS AQUI ↓
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
+            authDomain: "sistema-laboratorioifs.firebaseapp.com",
+            projectId: "sistema-laboratorioifs",
+            storageBucket: "sistema-laboratorioifs.firebasestorage.app",
+            messagingSenderId: "950276302393",
+            appId: "1:950276302393:web:745d51037ff780b1db0fe8"
+        };
+
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // ============== VARIÁVEIS DO SISTEMA ============== //
+        let activities = [];
+        let currentUser = null;
+        
+        // ============== ELEMENTOS DO HTML ============== //
+        const loginScreen = document.getElementById('login-screen');
+        const mainSystem = document.getElementById('main-system');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        // ... (todos os outros elementos que você já tinha)
+
+        // ============== FUNÇÕES PRINCIPAIS ============== //
+        
+        // Salva dados na nuvem
+        async function saveData() {
+            try {
+                await db.collection("labData").doc("activities").set({ data: activities });
+                showNotification("Dados salvos na nuvem!", "success");
+            } catch (error) {
+                showNotification("Erro ao salvar: " + error.message, "error");
+            }
+        }
+
+        // Carrega dados da nuvem
+        async function loadData() {
+            try {
+                const doc = await db.collection("labData").doc("activities").get();
+                
+                if (doc.exists) {
+                    activities = doc.data().data;
+                    showNotification("Dados carregados da nuvem!", "success");
+                } else {
+                    // Dados iniciais se for a primeira vez
+                    activities = [
+                        {
+                            id: "PR001",
+                            name: "Prática 1: Titulação Ácido-Base",
+                            professor: "Dr. Silva",
+                            technician: "João Silva",
+                            technicianId: "tec1",
+                            status: "concluida",
+                            date: new Date().toLocaleDateString('pt-BR'),
+                            requirements: "Bureta, solução de HCl, solução de NaOH, indicador fenolftaleína",
+                            observations: [
+                                { text: "Tudo dentro do previsto. Soluções preparadas conforme solicitado.", author: "João Silva", date: new Date().toLocaleString('pt-BR') }
+                            ]
+                        },
+                        {
+                            id: "PR002",
+                            name: "Prática 2: Cromatografia",
+                            professor: "Dra. Oliveira",
+                            technician: "Maria Oliveira",
+                            technicianId: "tec2",
+                            status: "designada",
+                            date: new Date().toLocaleDateString('pt-BR'),
+                            requirements: "Papel de cromatografia, solventes, amostras de corantes",
+                            observations: [
+                                { text: "Material extra necessário para próxima aula", author: "Maria Oliveira", date: new Date().toLocaleString('pt-BR') }
+                            ]
+                        }
+                    ];
+                    await saveData();
+                }
+                
+                // Atualiza a interface
+                renderActivities();
+                updateTechniciansStats();
+                
+            } catch (error) {
+                showNotification("Erro ao carregar: " + error.message, "error");
+            }
+        }
+
+        // Função de login
+        loginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                // Faz login com Firebase
+                await auth.signInWithEmailAndPassword(email, password);
+                
+                // Define o papel do usuário baseado no email
+                if (email === "admin@lab.com") {
+                    currentUser = "admin";
+                } else if (email === "tecnico1@lab.com") {
+                    currentUser = "tec1";
+                } else if (email === "tecnico2@lab.com") {
+                    currentUser = "tec2";
+                } else {
+                    currentUser = "tec"; // padrão para outros técnicos
+                }
+                
+                // Mostra o sistema principal
+                loginScreen.style.display = "none";
+                mainSystem.style.display = "block";
+                
+                // Atualiza a interface
+                updateUIForUser();
+                
+                // Carrega os dados da nuvem
+                await loadData();
+                
+                showNotification("Login realizado com sucesso!", "success");
+                
+            } catch (error) {
+                showNotification("E-mail ou senha incorretos", "error");
+            }
+        });
+
+        // Função de logout
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut();
+            mainSystem.style.display = "none";
+            loginScreen.style.display = "flex";
+            showNotification("Você saiu do sistema", "info");
+        });
+
+        // ============== ATUALIZAÇÕES NAS SUAS FUNÇÕES ============== //
+        
+        // Sempre que você for salvar uma atividade, chame saveData()
+        async function addNewActivity() {
+            // ... (seu código para criar a atividade)
+            await saveData(); // Salva na nuvem
+        }
+        
+        // Sempre que for designar um técnico
+        async function assignTechnician() {
+            // ... (seu código para designar)
+            await saveData(); // Salva na nuvem
+        }
+        
+        // Sempre que for adicionar uma observação
+        async function addObservation() {
+            // ... (seu código para adicionar observação)
+            await saveData(); // Salva na nuvem
+        }
+
+        // ============== SINCRONIZAÇÃO AUTOMÁTICA ============== //
+        // Ouvinte em tempo real - atualiza automaticamente quando houver mudanças
+        db.collection("labData").doc("activities")
+            .onSnapshot((doc) => {
+                if (doc.exists) {
+                    activities = doc.data().data;
+                    renderActivities();
+                    updateTechniciansStats();
+                    showNotification("Dados atualizados em tempo real!", "info");
+                }
+            });
 </body>
 </html>
