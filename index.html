@@ -534,88 +534,14 @@
             flex-wrap: wrap;
         }
         
-        /* Estilos para o upload de imagens */
-        #image-upload {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border: 1px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
-            color: white;
-            width: 100%;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        
-        #image-upload:hover {
-            border-color: var(--secondary);
-            background: rgba(52, 152, 219, 0.1);
-        }
-        
-        #image-upload::file-selector-button {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-right: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        #image-upload::file-selector-button:hover {
-            background: #2980b9;
-        }
-        
-        #image-preview {
+        .image-preview {
             max-width: 100%;
             max-height: 200px;
             margin-top: 10px;
-            border-radius: 6px;
-            display: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .image-preview-container {
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .sync-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: var(--warning);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .sync-button:hover {
-            background: #e67e22;
-            transform: scale(1.1);
-        }
-        
-        .sync-button .fa-spin {
+            border-radius: 4px;
             display: none;
         }
-        
-        .sync-button.syncing .fa-sync {
-            display: none;
-        }
-        
-        .sync-button.syncing .fa-spin {
-            display: block;
-        }
-        
+                
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -639,14 +565,6 @@
             
             .data-actions {
                 flex-direction: column;
-            }
-            
-            .sync-button {
-                bottom: 70px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
             }
         }
     </style>
@@ -701,7 +619,7 @@
             <div class="tabs" id="system-tabs">
                 <div class="tab active" data-tab="atividades">Atividades</div>
                 <div class="tab" data-tab="designar">Designar Técnico</div>
-                <div class="tab" data-tab="tecnicos">Técnicos</div>
+                <div class="tab" data-tab="tecnicos">Técnicos</div> 
                 <div class="tab" data-tab="relatorios">Relatórios</div>
             </div>
             
@@ -713,7 +631,7 @@
                     </div>
                     
                     <div id="activities-container">
-                        <div id="activities-empty-state" class="empty-state" style="display: none;">
+                         <div id="activities-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-clipboard-list"></i>
                             <p>Nenhuma atividade encontrada.</p>
                         </div>
@@ -730,8 +648,7 @@
                                 </tr>
                             </thead>
                             <tbody id="activities-table">
-                                <!-- Atividades serão carregadas aqui -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -744,20 +661,18 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="practice">Selecionar Prática:</label>
+                        <label for="practice">Selecionar Prática (ID da Atividade):</label>
                         <select id="practice">
                             <option value="">-- Selecione uma prática --</option>
-                            <!-- Opções serão preenchidas dinamicamente -->
-                        </select>
+                            </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="technician">Designar Técnico:</label>
                         <select id="technician">
                             <option value="">-- Selecione um técnico --</option>
-                            <option value="sergio@lab.com">Sérgio</option>
-                            <option value="lucileide@lab.com">Lucileide</option>
-                            <option value="jobim@lab.com">Jobim</option>
+                            <option value="UID_TECNICO_SERGIO">Técnico A (SERGIO)</option> 
+                            <option value="UID_TECNICO_LUCILEIDE">Técnico B (LUCILEIDE)</option> 
                         </select>
                     </div>
                     
@@ -775,10 +690,12 @@
                     <div class="card-header">
                         <h2 class="card-title">Técnicos de Laboratório</h2>
                     </div>
+                    <p style="color: #aaa; margin-bottom: 15px;">Lista de técnicos disponíveis para designação de atividades.</p>
                     <table>
                         <thead>
                             <tr>
                                 <th>Nome</th>
+                                <th>Especialidade</th>
                                 <th>Atividades Atribuídas</th>
                                 <th>Status</th>
                             </tr>
@@ -786,18 +703,15 @@
                         <tbody>
                             <tr>
                                 <td>Sérgio</td>
-                                <td id="tech-sergio-count">0</td>
+                                <td>Química Geral</td>
+                                <td id="tech-sergio-count">0</td> 
                                 <td><span class="status status-concluida">Disponível</span></td>
                             </tr>
                             <tr>
                                 <td>Lucileide</td>
+                                <td>Química Orgânica</td>
                                 <td id="tech-lucileide-count">0</td>
-                                <td><span class="status status-concluida">Disponível</span></td>
-                            </tr>
-                            <tr>
-                                <td>Jobim</td>
-                                <td id="tech-jobim-count">0</td>
-                                <td><span class="status status-concluida">Disponível</span></td>
+                                <td><span class="status status-designada">Em Atividade</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -823,14 +737,13 @@
                         <label>Filtrar por técnico:</label>
                         <select id="filter-technician">
                             <option value="all">Todos os técnicos</option>
-                            <option value="sergio@lab.com">Sérgio</option>
-                            <option value="lucileide@lab.com">Lucileide</option>
-                            <option value="jobim@lab.com">Jobim</option>
+                            <option value="UID_TECNICO_SERGIO">Sérgio</option>
+                            <option value="UID_TECNICO_LUCILEIDE">Lucileide</option>
                         </select>
                     </div>
                     
                     <div id="reports-container">
-                        <div id="reports-empty-state" class="empty-state" style="display: none;">
+                         <div id="reports-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-file-alt"></i>
                             <p>Nenhum relatório encontrado para os filtros selecionados.</p>
                         </div>
@@ -841,18 +754,18 @@
                                     <th>Prática (ID)</th>
                                     <th>Técnico (Observador)</th>
                                     <th>Observações</th>
+                                    <th>Imagem</th>
                                 </tr>
                             </thead>
                             <tbody id="reports-table">
-                                <!-- Relatórios serão carregados aqui -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                     
                     <div class="data-management">
                         <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados</h3>
                         <p style="margin-bottom: 15px; color: #aaa;">
-                            Exporte os dados atuais das atividades ou limpe todos os dados do Firestore (use com CUIDADO!).
+                            Exporte os dados atuais das atividades ou limpe todos os dados (use com CUIDADO!).
                         </p>
                         
                         <div class="data-actions">
@@ -898,6 +811,7 @@
                 <div class="modal-footer">
                     <button class="btn" id="cancel-btn">Cancelar</button>
                     <button class="btn btn-primary" id="save-activity">Salvar Atividade</button>
+                    <button class="btn" id="close-after-save-btn" style="display:none;">Fechar</button>
                 </div>
             </div>
         </div>
@@ -910,123 +824,50 @@
                 </div>
                 <div class="modal-body">
                     <div id="activity-details">
-                        <!-- Detalhes da atividade serão carregados aqui -->
-                    </div>
+                        </div>
                     
                     <div id="tech-actions-section" style="display:none;">
-                        <h4>Ações do Técnico</h4>
-                        <div class="form-group">
-                            <label for="activity-status-update">Mudar Status da Atividade:</label>
-                            <select id="activity-status-update">
-                                <option value="pendente">Pendente</option>
-                                <option value="designada">Designada</option>
-                                <option value="concluida">Concluída</option>
-                            </select>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="image-upload">Anexar Foto da Prática:</label>
-                            <input type="file" id="image-upload" accept="image/*">
-                        </div>
-                        
-                        <div id="image-preview-container" class="image-preview-container">
-                            <img id="image-preview" style="display: none;">
-                        </div>
-                        
-                        <button class="btn btn-success" id="update-status-btn">Atualizar Status</button>
-                    </div>
                     
                     <div class="form-group" style="margin-top: 20px;">
                         <label for="observation">Adicionar Observação:</label>
                         <textarea id="observation" placeholder="Registre observações sobre esta atividade..."></textarea>
                     </div>
-                    <button class="btn btn-info" id="save-observation">Salvar Observação</button>
-                    
+                     <button class="btn btn-info" id="save-observation">Salvar Observação</button>
                     <div id="observations-list" style="margin-top: 20px;">
-                        <!-- Observações serão carregadas aqui -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Botão de sincronização manual -->
-        <button id="sync-button" class="sync-button" title="Forçar Sincronização">
-            <i class="fas fa-sync"></i>
-            <i class="fas fa-spinner fa-spin"></i>
-        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
         authDomain: "sistema-laboratorioifs.firebaseapp.com",
         projectId: "sistema-laboratorioifs",
-        storageBucket: "sistema-laboratorioifs.appspot.com",
+        storageBucket: "sistema-laboratorioifs.firebasestorage.app",
         messagingSenderId: "950276302393",
         appId: "1:950276302393:web:745d51037ff780b1db0fe8",
         measurementId: "G-1H8P4Z6QS6"
     };
 
-    // Inicializar Firebase com persistência
+    // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
-    
-    // Ativar persistência offline
-    db.enablePersistence()
-      .catch((err) => {
-        console.error("Erro na persistência offline:", err);
-        if (err.code == 'failed-precondition') {
-          showNotification('Apenas uma aba pode usar o modo offline', 'warning');
-        } else if (err.code == 'unimplemented') {
-          showNotification('Navegador não suporta persistência offline', 'warning');
-        }
-      });
 
-    // Variáveis globais
-    let activities = [];
+    let activities = []; 
     let currentEditingActivityId = null;
     let fbCurrentUser = null;
-    let userRoleType = 'Visitante';
-    let unsubscribeActivities = null;
-
-    // Monitorar conexão
-    function monitorConnection() {
-      const connectionRef = firebase.database().ref('.info/connected');
-      connectionRef.on('value', snap => {
-        if (snap.val() === true) {
-          console.log('Conectado ao servidor');
-        } else {
-          showNotification('Você está offline - dados serão sincronizados quando reconectar', 'warning');
-        }
-      });
-    }
-
-    // Forçar sincronização
-    async function forceSync() {
-      const syncButton = document.getElementById('sync-button');
-      syncButton.classList.add('syncing');
-      
-      try {
-        showNotification('Sincronizando dados...', 'info');
-        await db.waitForPendingWrites();
-        showNotification('Dados sincronizados com sucesso!', 'success');
-        loadActivitiesFromFirestore(); // Recarregar dados
-      } catch (error) {
-        console.error("Erro na sincronização:", error);
-        showNotification('Erro ao sincronizar dados', 'error');
-      } finally {
-        syncButton.classList.remove('syncing');
-      }
-    }
+    let userRoleType = 'Visitante'; 
+    let unsubscribeActivities = null; 
 
     // DOM Elements
     const loginScreen = document.getElementById('login-screen');
@@ -1035,7 +876,6 @@
     const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
-    const syncButton = document.getElementById('sync-button');
     
     const userNameDisplay = document.getElementById('user-name');
     const userAvatarDisplay = document.getElementById('user-avatar');
@@ -1072,72 +912,62 @@
 
     const activityDetailsDiv = document.getElementById('activity-details');
     const techActionsSection = document.getElementById('tech-actions-section');
-    const activityStatusUpdateSelect = document.getElementById('activity-status-update');
-    const updateStatusBtn = document.getElementById('update-status-btn');
     const observationInput = document.getElementById('observation');
     const saveObservationBtn = document.getElementById('save-observation');
     const observationsListDiv = document.getElementById('observations-list');
-    const imageUploadInput = document.getElementById('image-upload');
-    const imagePreview = document.getElementById('image-preview');
 
-    // Event Listeners
-    syncButton.addEventListener('click', forceSync);
-    
-    // Preview da imagem antes do upload
-    imageUploadInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            imagePreview.src = event.target.result;
-            imagePreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
+    // Configurar persistência de autenticação
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+            // Monitorar estado de autenticação
+            auth.onAuthStateChanged(async user => {
+                if (user) {
+                    fbCurrentUser = user;
+                    loginScreen.style.display = 'none';
+                    mainSystem.style.display = 'block';
+                    userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
+                    userAvatarDisplay.textContent = (fbCurrentUser.displayName || fbCurrentUser.email)[0].toUpperCase();
+                    
+                    // Determinar papel do usuário
+                    const emailLowerCase = fbCurrentUser.email.toLowerCase();
+                    if (emailLowerCase.includes('admin@')) {
+                        userRoleType = 'Administrador';
+                    } else if (emailLowerCase.includes('tech@')) {
+                        userRoleType = 'Técnico';
+                    } else {
+                        userRoleType = 'Visitante'; 
+                    }
+                    
+                    updateUIVisibilityBasedOnRole();
+                    loadActivitiesFromFirestore();
+                    
+                    // Verificar conexão Firestore
+                    db.enableNetwork().then(() => {
+                        const offlineElements = document.querySelectorAll('.firebase-emulator-warning, .is-offline');
+                        offlineElements.forEach(el => el.style.display = 'none');
+                    });
 
-    // Autenticação
-    auth.onAuthStateChanged(async user => {
-        if (user) {
-            fbCurrentUser = user;
-            loginScreen.style.display = 'none';
-            mainSystem.style.display = 'block';
-            userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
-            userAvatarDisplay.textContent = (fbCurrentUser.displayName || fbCurrentUser.email)[0].toUpperCase();
-            
-            // Determinar papel do usuário
-            const emailLowerCase = fbCurrentUser.email.toLowerCase();
-            if (emailLowerCase.includes('admin@') || emailLowerCase === 'admin@lab.com') {
-                userRoleType = 'Administrador';
-            } else if (emailLowerCase === 'sergio@lab.com' || 
-                      emailLowerCase === 'lucileide@lab.com' || 
-                      emailLowerCase === 'jobim@lab.com') {
-                userRoleType = 'Técnico';
-            } else {
-                userRoleType = 'Visitante'; 
-            }
-            
-            updateUIVisibilityBasedOnRole();
-            monitorConnection();
-            loadActivitiesFromFirestore();
-
-        } else {
-            fbCurrentUser = null;
-            userRoleType = 'Visitante';
-            loginScreen.style.display = 'flex';
-            mainSystem.style.display = 'none';
-            userNameDisplay.textContent = 'Usuário';
-            userAvatarDisplay.textContent = 'U';
-            userRoleDisplay.textContent = 'Visitante';
-            userRoleDisplay.className = 'role-tag';
-            activities = [];
-            renderActivities();
-            if (unsubscribeActivities) {
-                unsubscribeActivities(); 
-                unsubscribeActivities = null;
-            }
-        }
-    });
+                } else {
+                    fbCurrentUser = null;
+                    userRoleType = 'Visitante';
+                    loginScreen.style.display = 'flex';
+                    mainSystem.style.display = 'none';
+                    userNameDisplay.textContent = 'Usuário';
+                    userAvatarDisplay.textContent = 'U';
+                    userRoleDisplay.textContent = 'Visitante';
+                    userRoleDisplay.className = 'role-tag';
+                    activities = [];
+                    renderActivities();
+                    if (unsubscribeActivities) {
+                        unsubscribeActivities();
+                        unsubscribeActivities = null;
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Erro ao configurar persistência:", error);
+        });
 
     function updateUIVisibilityBasedOnRole() {
         if (!fbCurrentUser) return;
@@ -1161,24 +991,27 @@
         }
     }
 
-    loginBtn.addEventListener('click', () => {
+    loginBtn.addEventListener('click', async () => {
         const email = emailInput.value;
         const password = passwordInput.value;
         if (!email || !password) {
             showNotification('Por favor, insira e-mail e senha.', 'error');
             return;
         }
-        auth.signInWithEmailAndPassword(email, password)
-            .catch(error => {
-                console.error("Erro de login:", error);
-                let friendlyMessage = "Erro ao fazer login. Verifique suas credenciais.";
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                    friendlyMessage = "E-mail ou senha inválidos.";
-                } else if (error.code === 'auth/invalid-email') {
-                    friendlyMessage = "Formato de e-mail inválido.";
-                }
-                showNotification(friendlyMessage, 'error');
-            });
+        
+        try {
+            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+            await auth.signInWithEmailAndPassword(email, password);
+        } catch (error) {
+            console.error("Erro de login:", error);
+            let friendlyMessage = "Erro ao fazer login. Verifique suas credenciais.";
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                friendlyMessage = "E-mail ou senha inválidos.";
+            } else if (error.code === 'auth/invalid-email') {
+                friendlyMessage = "Formato de e-mail inválido.";
+            }
+            showNotification(friendlyMessage, 'error');
+        }
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -1188,39 +1021,31 @@
         });
     });
 
-    // Firestore Data Handling
+    // --- Firestore Data Handling ---
     function loadActivitiesFromFirestore() {
         if (unsubscribeActivities) {
             unsubscribeActivities(); 
         }
-
-        unsubscribeActivities = db.collection('activities')
-            .orderBy('createdAt', 'desc')
-            .onSnapshot({
-                includeMetadataChanges: true
-            }, snapshot => {
-                const source = snapshot.metadata.fromCache ? "cache local" : "servidor";
-                console.log(`Dados carregados do: ${source}`);
-                
-                activities = snapshot.docs.map(doc => {
-                    return { 
-                        id: doc.id, 
-                        ...doc.data(),
-                        _fromCache: doc.metadata.fromCache
-                    };
-                });
-                
-                renderActivities();
-                populatePracticeSelect();
-                updateTechnicianCounts();
-                
-                if (snapshot.metadata.hasPendingWrites) {
-                    showNotification('Sincronizando alterações locais...', 'info');
-                }
-            }, error => {
-                console.error("Erro ao carregar atividades:", error);
-                showNotification('Erro ao carregar atividades', 'error');
-            });
+        
+        let query = db.collection('activities').orderBy('createdAt', 'desc');
+        
+        unsubscribeActivities = query.onSnapshot(snapshot => {
+            activities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderActivities();
+            populatePracticeSelect();
+            updateTechnicianCounts();
+        }, error => {
+            console.error("Erro ao carregar atividades do Firestore: ", error);
+            showNotification('Erro ao carregar dados das atividades.', 'error');
+        });
+    }
+    
+    function updateTechnicianCounts() {
+        const sergioCount = activities.filter(a => a.technicianUid === 'UID_TECNICO_SERGIO').length;
+        const lucileideCount = activities.filter(a => a.technicianUid === 'UID_TECNICO_LUCILEIDE').length;
+        
+        document.getElementById('tech-sergio-count').textContent = sergioCount;
+        document.getElementById('tech-lucileide-count').textContent = lucileideCount;
     }
     
     function renderActivities() {
@@ -1230,7 +1055,7 @@
         // Filtra atividades para Técnicos
         if (userRoleType === 'Técnico' && fbCurrentUser) {
             activitiesToRender = activities.filter(act => 
-                act.technicianUid === fbCurrentUser.email || act.status === 'pendente'
+                act.technicianUid === fbCurrentUser.uid || act.status === 'pendente'
             );
         }
 
@@ -1244,11 +1069,11 @@
         activitiesTableBody.parentElement.style.display = 'table';
 
         activitiesToRender.forEach(activity => {
+            const row = activitiesTableBody.insertRow();
             const displayDate = activity.date && activity.date.toDate 
                               ? activity.date.toDate().toLocaleDateString('pt-BR') 
                               : (activity.date || 'N/A');
 
-            const row = activitiesTableBody.insertRow();
             row.innerHTML = `
                 <td>${activity.id.substring(0,6)}...</td>
                 <td>${activity.name}</td>
@@ -1266,24 +1091,6 @@
             `;
         });
         addActivityEventListeners();
-    }
-
-    function updateTechnicianCounts() {
-        const counts = {
-            'sergio@lab.com': 0,
-            'lucileide@lab.com': 0,
-            'jobim@lab.com': 0
-        };
-
-        activities.forEach(activity => {
-            if (activity.technicianUid && counts.hasOwnProperty(activity.technicianUid)) {
-                counts[activity.technicianUid]++;
-            }
-        });
-
-        document.getElementById('tech-sergio-count').textContent = counts['sergio@lab.com'];
-        document.getElementById('tech-lucileide-count').textContent = counts['lucileide@lab.com'];
-        document.getElementById('tech-jobim-count').textContent = counts['jobim@lab.com'];
     }
 
     function populatePracticeSelect() {
@@ -1338,7 +1145,8 @@
                 deadlineInput.value = deadlineValue;
                 requirementsInput.value = activity.requirements || '';
             } else {
-                showNotification('Atividade não encontrada para edição.', 'error'); return;
+                showNotification('Atividade não encontrada para edição.', 'error'); 
+                return;
             }
         } else {
             modalTitleActivity.textContent = "Nova Atividade";
@@ -1348,19 +1156,26 @@
             requirementsInput.value = '';
         }
         activityModal.style.display = 'flex';
+        document.getElementById('close-after-save-btn').style.display = 'none';
+        document.getElementById('cancel-btn').style.display = 'inline-block';
     }
 
     function closeModals() {
         activityModal.style.display = 'none';
         detailModal.style.display = 'none';
         currentEditingActivityId = null; 
-        imagePreview.style.display = 'none';
-        imageUploadInput.value = '';
+    }
+
+    function showCloseButton() {
+        document.getElementById('close-after-save-btn').style.display = 'inline-block';
+        document.getElementById('cancel-btn').style.display = 'none';
     }
 
     addActivityBtn.addEventListener('click', () => openActivityModal());
     closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
     cancelBtn.addEventListener('click', closeModals);
+    document.getElementById('close-after-save-btn').addEventListener('click', closeModals);
+    
     window.addEventListener('click', (event) => {
         if (event.target === activityModal) closeModals();
         if (event.target === detailModal) closeModals();
@@ -1382,14 +1197,7 @@
             professor: professorName,
             date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
             requirements: requirementsText,
-            status: 'pendente',
-            technicianName: null,
-            technicianUid: null,
-            instructions: null,
-            observations: [],
-            createdAt: firebase.firestore.Timestamp.now(),
-            createdByUid: fbCurrentUser.uid,
-            imageUrl: null
+            updatedAt: firebase.firestore.Timestamp.now()
         };
 
         try {
@@ -1400,26 +1208,31 @@
                 activityData.technicianName = existingActivity.technicianName;
                 activityData.technicianUid = existingActivity.technicianUid;
                 activityData.instructions = existingActivity.instructions;
+                activityData.createdByUid = existingActivity.createdByUid;
                 activityData.createdAt = existingActivity.createdAt;
-                activityData.imageUrl = existingActivity.imageUrl || null;
 
                 await db.collection('activities').doc(currentEditingActivityId).update(activityData);
                 showNotification('Atividade atualizada com sucesso!', 'success');
+                showCloseButton();
             } else { 
-                const docRef = await db.collection('activities').add(activityData);
-                console.log("Documento criado com ID:", docRef.id);
-                
-                // Verificar sincronização
-                const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
-                if (doc.exists) {
-                    showNotification('Atividade criada e sincronizada!', 'success');
-                } else {
-                    showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
-                }
+                activityData.status = 'pendente';
+                activityData.technicianName = null;
+                activityData.technicianUid = null;
+                activityData.instructions = null;
+                activityData.observations = [];
+                activityData.createdByUid = fbCurrentUser.uid;
+                activityData.createdAt = firebase.firestore.Timestamp.now();
+
+                await db.collection('activities').add(activityData);
+                showNotification('Atividade adicionada com sucesso!', 'success');
+                newPracticeInput.value = '';
+                professorInput.value = '';
+                deadlineInput.value = '';
+                requirementsInput.value = '';
+                showCloseButton();
             }
-            closeModals();
         } catch (error) {
-            console.error("Erro ao salvar atividade:", error);
+            console.error("Erro ao salvar atividade: ", error);
             showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
         }
     });
@@ -1430,7 +1243,7 @@
                 await db.collection('activities').doc(activityId).delete();
                 showNotification('Atividade excluída com sucesso.', 'info');
             } catch (error) {
-                console.error("Erro ao excluir atividade:", error);
+                console.error("Erro ao excluir atividade: ", error);
                 showNotification(`Erro ao excluir: ${error.message}`, 'error');
             }
         }
@@ -1438,8 +1251,9 @@
     
     assignBtn.addEventListener('click', async () => {
         const practiceId = practiceSelect.value;
-        const technicianUidValue = technicianSelect.value;
-        const technicianName = technicianSelect.options[technicianSelect.selectedIndex].text;
+        const selectedTechnicianOption = technicianSelect.options[technicianSelect.selectedIndex];
+        const technicianName = selectedTechnicianOption.text; 
+        const technicianUidValue = selectedTechnicianOption.value; 
         const currentInstructions = instructionsInput.value.trim();
 
         if (!practiceId || !technicianUidValue) {
@@ -1448,27 +1262,19 @@
         }
 
         try {
-            const docRef = db.collection('activities').doc(practiceId);
-            await docRef.update({
+            await db.collection('activities').doc(practiceId).update({
                 technicianName: technicianName,
-                technicianUid: technicianUidValue,
+                technicianUid: technicianUidValue, 
                 status: 'designada',
                 instructions: currentInstructions,
                 updatedAt: firebase.firestore.Timestamp.now()
             });
-            
-            // Verificar sincronização
-            const doc = await docRef.get({ source: 'server' });
-            if (doc.exists) {
-                showNotification(`Técnico ${technicianName} designado e sincronizado!`, 'success');
-                practiceSelect.value = '';
-                technicianSelect.value = '';
-                instructionsInput.value = '';
-            } else {
-                showNotification('Designação salva localmente (sincronização pendente)', 'warning');
-            }
+            showNotification(`Técnico ${technicianName} designado com sucesso!`, 'success');
+            practiceSelect.value = '';
+            technicianSelect.value = '';
+            instructionsInput.value = '';
         } catch (error) {
-            console.error("Erro ao designar técnico:", error);
+            console.error("Erro ao designar técnico: ", error);
             showNotification(`Erro ao designar: ${error.message}`, 'error');
         }
     });
@@ -1477,7 +1283,8 @@
         currentEditingActivityId = activityId; 
         const activity = activities.find(act => act.id === activityId);
         if (!activity) {
-            showNotification('Atividade não encontrada.', 'error'); return;
+            showNotification('Atividade não encontrada.', 'error'); 
+            return;
         }
 
         const displayDate = activity.date && activity.date.toDate 
@@ -1493,106 +1300,94 @@
             <p><strong>Status:</strong> <span class="status status-${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></p>
             <p><strong>Requisitos:</strong> ${activity.requirements || 'Nenhum'}</p>
             ${activity.instructions ? `<p><strong>Instruções:</strong> ${activity.instructions}</p>` : ''}
-            ${activity.imageUrl ? `
-                <div style="margin-top: 15px;">
-                    <strong>Imagem da Prática:</strong>
-                    <div style="margin-top: 10px;">
-                        <img src="${activity.imageUrl}" alt="Imagem da prática" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                    </div>
-                </div>
-            ` : ''}
+            ${activity.finalObservation ? `<p><strong>Observação Final:</strong> ${activity.finalObservation}</p>` : ''}
+            ${activity.imageUrl ? `<p><strong>Imagem:</strong> <a href="${activity.imageUrl}" target="_blank">Ver imagem</a></p>` : ''}
         `;
         
         techActionsSection.style.display = 'none';
-        if (userRoleType === 'Administrador' || (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.email)) {
+        
+        // Ações para técnicos
+        if (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.uid) {
             techActionsSection.style.display = 'block';
-            activityStatusUpdateSelect.value = activity.status;
+            techActionsSection.innerHTML = `
+                <h4>Ações do Técnico</h4>
+                <div class="form-group">
+                    <label for="activity-image">Anexar Imagem:</label>
+                    <input type="file" id="activity-image" accept="image/*">
+                    <img id="image-preview" class="image-preview">
+                </div>
+                <div class="form-group">
+                    <label for="final-observation">Observação Final:</label>
+                    <textarea id="final-observation" placeholder="Descreva o trabalho realizado...">${activity.finalObservation || ''}</textarea>
+                </div>
+                <button class="btn btn-success" id="complete-activity-btn">
+                    <i class="fas fa-check-circle"></i> Concluir Atividade
+                </button>
+            `;
+            
+            // Preview de imagem
+            document.getElementById('activity-image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('image-preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('complete-activity-btn').addEventListener('click', async () => {
+                const finalObservation = document.getElementById('final-observation').value.trim();
+                const imageFile = document.getElementById('activity-image').files[0];
+                
+                if (!finalObservation) {
+                    showNotification('Por favor, adicione uma observação final.', 'warning');
+                    return;
+                }
+                
+                try {
+                    let imageUrl = null;
+                    if (imageFile) {
+                        const storageRef = storage.ref();
+                        const fileRef = storageRef.child(`activity_images/${activityId}/${imageFile.name}`);
+                        await fileRef.put(imageFile);
+                        imageUrl = await fileRef.getDownloadURL();
+                    }
+                    
+                    const updateData = {
+                        status: 'concluida',
+                        finalObservation: finalObservation,
+                        completedAt: firebase.firestore.Timestamp.now(),
+                        updatedAt: firebase.firestore.Timestamp.now()
+                    };
+                    
+                    if (imageUrl) {
+                        updateData.imageUrl = imageUrl;
+                    }
+                    
+                    await db.collection('activities').doc(activityId).update(updateData);
+                    showNotification('Atividade concluída com sucesso!', 'success');
+                    closeModals();
+                } catch (error) {
+                    console.error("Erro ao concluir atividade:", error);
+                    showNotification(`Erro ao concluir: ${error.message}`, 'error');
+                }
+            });
         }
         
         renderObservations(activity);
         detailModal.style.display = 'flex';
     }
     
-    updateStatusBtn.addEventListener('click', async () => {
-        if (!currentEditingActivityId) return;
-        const newStatus = activityStatusUpdateSelect.value;
-        const imageFile = imageUploadInput.files[0];
-        
-        try {
-            updateStatusBtn.disabled = true;
-            updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            
-            const updateData = {
-                status: newStatus,
-                updatedAt: firebase.firestore.Timestamp.now()
-            };
-            
-            if (imageFile) {
-                showNotification('Enviando imagem, por favor aguarde...', 'info');
-                
-                // Cria referência no Storage
-                const storageRef = storage.ref();
-                const fileExt = imageFile.name.split('.').pop();
-                const fileName = `activity_${currentEditingActivityId}_${Date.now()}.${fileExt}`;
-                const fileRef = storageRef.child(`activity_images/${fileName}`);
-                
-                // Faz upload do arquivo
-                const uploadTask = fileRef.put(imageFile);
-                
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log('Upload progress: ' + progress + '%');
-                    },
-                    (error) => {
-                        console.error("Erro no upload:", error);
-                        showNotification('Erro ao enviar imagem: ' + error.message, 'error');
-                        updateStatusBtn.disabled = false;
-                        updateStatusBtn.innerHTML = 'Atualizar Status';
-                    },
-                    async () => {
-                        // Upload completo, pega a URL
-                        const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                        updateData.imageUrl = imageUrl;
-                        
-                        // Atualiza o Firestore
-                        await db.collection('activities').doc(currentEditingActivityId).update(updateData);
-                        
-                        // Limpa o campo de upload
-                        imageUploadInput.value = '';
-                        imagePreview.style.display = 'none';
-                        
-                        showNotification('Status e imagem atualizados com sucesso!', 'success');
-                        const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
-                        if(updatedActivity) showDetailModal(currentEditingActivityId);
-                        
-                        updateStatusBtn.disabled = false;
-                        updateStatusBtn.innerHTML = 'Atualizar Status';
-                    }
-                );
-                
-                return; // Sai da função enquanto o upload está em progresso
-            } else {
-                // Sem imagem, apenas atualiza status
-                await db.collection('activities').doc(currentEditingActivityId).update(updateData);
-                showNotification('Status da atividade atualizado.', 'success');
-                const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
-                if(updatedActivity) showDetailModal(currentEditingActivityId); 
-            }
-        } catch (error) {
-            console.error("Erro ao atualizar status:", error);
-            showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
-        } finally {
-            updateStatusBtn.disabled = false;
-            updateStatusBtn.innerHTML = 'Atualizar Status';
-        }
-    });
-
     saveObservationBtn.addEventListener('click', async () => {
         if (!currentEditingActivityId) return;
         const observationText = observationInput.value.trim();
         if (!observationText) {
-            showNotification('Digite uma observação.', 'warning'); return;
+            showNotification('Digite uma observação.', 'warning'); 
+            return;
         }
 
         const newObservation = {
@@ -1612,13 +1407,13 @@
             const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
             if(updatedActivity) renderObservations(updatedActivity); 
         } catch (error) {
-            console.error("Erro ao salvar observação:", error);
+            console.error("Erro ao salvar observação: ", error);
             showNotification(`Erro ao salvar observação: ${error.message}`, 'error');
         }
     });
 
     function renderObservations(activity) { 
-        observationsListDiv.innerHTML = '<h4>Observações:</h4>';
+        observationsListDiv.innerHTML = '<h4>Observações Salvas:</h4>';
         if (activity && activity.observations && activity.observations.length > 0) {
             const sortedObservations = [...activity.observations].sort((a, b) => {
                 const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
@@ -1685,6 +1480,7 @@
                     <td>${activity.name} (...${activity.id.slice(-4)})</td>
                     <td>${obs.authorEmail}</td>
                     <td>${obs.text}</td>
+                    <td>${activity.imageUrl ? `<a href="${activity.imageUrl}" target="_blank">Ver imagem</a>` : 'Nenhuma'}</td>
                 `;
             });
         });
@@ -1692,16 +1488,18 @@
 
     exportBtn.addEventListener('click', () => {
         if (activities.length === 0) {
-            showNotification('Não há dados para exportar.', 'info'); return;
+            showNotification('Não há dados para exportar.', 'info'); 
+            return;
         }
+        
         const dataToExport = activities.map(act => {
             const newAct = {...act};
-            // Converte Timestamps para string ISO para serialização JSON
             Object.keys(newAct).forEach(key => {
                 if (newAct[key] instanceof firebase.firestore.Timestamp) {
                     newAct[key] = newAct[key].toDate().toISOString();
                 }
             });
+            
             if (newAct.observations) {
                 newAct.observations = newAct.observations.map(obs => {
                     const newObs = {...obs};
@@ -1714,9 +1512,9 @@
             return newAct;
         });
 
-        const dataStr = JSON.stringify(dataToExport, null, 2); 
+        const dataStr = JSON.stringify(dataToExport, null, 2);
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-        const exportFileDefaultName = `lab_data_firestore_${new Date().toISOString().slice(0,10)}.json`;
+        const exportFileDefaultName = `lab_data_${new Date().toISOString().slice(0,10)}.json`;
         
         let linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
@@ -1727,28 +1525,25 @@
     });
     
     resetBtn.addEventListener('click', async () => {
-        if (confirm('ATENÇÃO: Isso tentará limpar TODAS as atividades do Firestore. Esta ação é IRREVERSÍVEL e pode demorar. Deseja continuar?')) {
-            showNotification('Iniciando limpeza de dados... Isso pode levar um tempo.', 'warning');
+        if (confirm('ATENÇÃO: Isso tentará limpar TODAS as atividades. Esta ação é IRREVERSÍVEL. Deseja continuar?')) {
+            showNotification('Iniciando limpeza de dados...', 'warning');
             try {
                 const snapshot = await db.collection('activities').limit(400).get();
                 if (snapshot.empty) {
                      showNotification('Nenhuma atividade encontrada para limpar.', 'info');
                      return;
                 }
+                
                 const batch = db.batch();
                 snapshot.docs.forEach(doc => {
                     batch.delete(doc.ref);
                 });
-                await batch.commit();
                 
-                if (snapshot.size === 400) {
-                    showNotification(`${snapshot.size} atividades foram limpas. Se houver mais, repita a operação.`, 'info');
-                } else {
-                    showNotification('Todas as atividades foram limpas do Firestore.', 'success');
-                }
+                await batch.commit();
+                showNotification(`${snapshot.size} atividades foram removidas.`, 'success');
             } catch (error) {
-                console.error("Erro ao limpar dados do Firestore:", error);
-                showNotification(`Erro ao limpar dados: ${error.message}.`, 'error');
+                console.error("Erro ao limpar dados:", error);
+                showNotification(`Erro ao limpar dados: ${error.message}`, 'error');
             }
         }
     });
@@ -1766,7 +1561,7 @@
         
         setTimeout(() => {
             notification.remove();
-        }, 4500); 
+        }, 4500);
     }
     </script>
 </body>
