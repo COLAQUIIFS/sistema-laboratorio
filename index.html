@@ -394,7 +394,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease, fadeOut 0.5s ease 4s forwards; /* Aumentado tempo de exibição */
+            animation: slideIn 0.3s ease, fadeOut 0.5s ease 4s forwards;
         }
         
         @keyframes slideIn {
@@ -421,7 +421,8 @@
             background: var(--secondary);
             border-left: 5px solid rgba(255, 255, 255, 0.5);
         }
-         .notification-warning {
+        
+        .notification-warning {
             background: var(--warning);
             border-left: 5px solid rgba(255,255,255,0.5);
         }
@@ -530,9 +531,55 @@
             display: flex;
             gap: 15px;
             margin-top: 15px;
-            flex-wrap: wrap; /* Para melhor responsividade */
+            flex-wrap: wrap;
         }
-                
+        
+        /* Estilos para o upload de imagens */
+        #image-upload {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        #image-upload:hover {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        #image-upload::file-selector-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #image-upload::file-selector-button:hover {
+            background: #2980b9;
+        }
+        
+        #image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 6px;
+            display: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .image-preview-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -610,7 +657,8 @@
             <div class="tabs" id="system-tabs">
                 <div class="tab active" data-tab="atividades">Atividades</div>
                 <div class="tab" data-tab="designar">Designar Técnico</div>
-                <div class="tab" data-tab="tecnicos">Técnicos</div> <div class="tab" data-tab="relatorios">Relatórios</div>
+                <div class="tab" data-tab="tecnicos">Técnicos</div>
+                <div class="tab" data-tab="relatorios">Relatórios</div>
             </div>
             
             <div class="tab-content active" id="atividades-content">
@@ -621,7 +669,7 @@
                     </div>
                     
                     <div id="activities-container">
-                         <div id="activities-empty-state" class="empty-state" style="display: none;">
+                        <div id="activities-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-clipboard-list"></i>
                             <p>Nenhuma atividade encontrada.</p>
                         </div>
@@ -638,7 +686,8 @@
                                 </tr>
                             </thead>
                             <tbody id="activities-table">
-                                </tbody>
+                                <!-- Atividades serão carregadas aqui -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -651,17 +700,21 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="practice">Selecionar Prática (ID da Atividade):</label>
+                        <label for="practice">Selecionar Prática:</label>
                         <select id="practice">
                             <option value="">-- Selecione uma prática --</option>
-                            </select>
+                            <!-- Opções serão preenchidas dinamicamente -->
+                        </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="technician">Designar Técnico:</label>
                         <select id="technician">
                             <option value="">-- Selecione um técnico --</option>
-                            <option value="UID_TECNICO_SERGIO">Técnico A (SERGIO)</option> <option value="UID_TECNICO_LUCILEIDE">Técnico B (LUCILEIDE)</option> </select>
+                            <option value="sergio@lab.com">Sérgio</option>
+                            <option value="lucileide@lab.com">Lucileide</option>
+                            <option value="jobim@lab.com">Jobim</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -674,39 +727,38 @@
             </div>
             
             <div class="tab-content" id="tecnicos-content">
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">Técnicos de Laboratório</h2>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Atividades Atribuídas</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Sérgio</td>
-                    <td id="tech-sergio-count">0</td>
-                    <td><span class="status status-concluida">Disponível</span></td>
-                </tr>
-                <tr>
-                    <td>Lucileide</td>
-                    <td id="tech-lucileide-count">0</td>
-                    <td><span class="status status-designada">Em Atividade</span></td>
-                </tr>
-                <tr>
-                    <td>Jobim</td>
-                    <td id="tech-jobim-count">0</td>
-                    <td><span class="status status-pendente">Pendente</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Técnicos de Laboratório</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Atividades Atribuídas</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sérgio</td>
+                                <td id="tech-sergio-count">0</td>
+                                <td><span class="status status-concluida">Disponível</span></td>
+                            </tr>
+                            <tr>
+                                <td>Lucileide</td>
+                                <td id="tech-lucileide-count">0</td>
+                                <td><span class="status status-concluida">Disponível</span></td>
+                            </tr>
+                            <tr>
+                                <td>Jobim</td>
+                                <td id="tech-jobim-count">0</td>
+                                <td><span class="status status-concluida">Disponível</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
             <div class="tab-content" id="relatorios-content">
                 <div class="card">
@@ -727,13 +779,14 @@
                         <label>Filtrar por técnico:</label>
                         <select id="filter-technician">
                             <option value="all">Todos os técnicos</option>
-                            <option value="UID_TECNICO_JOAO_SILVA">João Silva</option>
-                            <option value="UID_TECNICO_MARIA_OLIVEIRA">Maria Oliveira</option>
+                            <option value="sergio@lab.com">Sérgio</option>
+                            <option value="lucileide@lab.com">Lucileide</option>
+                            <option value="jobim@lab.com">Jobim</option>
                         </select>
                     </div>
                     
                     <div id="reports-container">
-                         <div id="reports-empty-state" class="empty-state" style="display: none;">
+                        <div id="reports-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-file-alt"></i>
                             <p>Nenhum relatório encontrado para os filtros selecionados.</p>
                         </div>
@@ -747,12 +800,13 @@
                                 </tr>
                             </thead>
                             <tbody id="reports-table">
-                                </tbody>
+                                <!-- Relatórios serão carregados aqui -->
+                            </tbody>
                         </table>
                     </div>
                     
                     <div class="data-management">
-                        <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados (Firestore)</h3>
+                        <h3 style="margin-bottom: 15px; color: var(--secondary);">Gerenciamento de Dados</h3>
                         <p style="margin-bottom: 15px; color: #aaa;">
                             Exporte os dados atuais das atividades ou limpe todos os dados do Firestore (use com CUIDADO!).
                         </p>
@@ -762,7 +816,7 @@
                                 <i class="fas fa-file-export"></i> Exportar Dados (JSON)
                             </button>
                             <button class="btn btn-danger" id="reset-data">
-                                <i class="fas fa-trash-alt"></i> Limpar Todas as Atividades (Firestore)
+                                <i class="fas fa-trash-alt"></i> Limpar Todas as Atividades
                             </button>
                         </div>
                     </div>
@@ -812,10 +866,11 @@
                 </div>
                 <div class="modal-body">
                     <div id="activity-details">
-                        </div>
+                        <!-- Detalhes da atividade serão carregados aqui -->
+                    </div>
                     
                     <div id="tech-actions-section" style="display:none;">
-                         <h4>Ações do Usuário Logado</h4>
+                        <h4>Ações do Técnico</h4>
                         <div class="form-group">
                             <label for="activity-status-update">Mudar Status da Atividade:</label>
                             <select id="activity-status-update">
@@ -824,47 +879,55 @@
                                 <option value="concluida">Concluída</option>
                             </select>
                         </div>
-                         <button class="btn btn-success" id="update-status-btn">Atualizar Status</button>
+                        
+                        <div class="form-group">
+                            <label for="image-upload">Anexar Foto da Prática:</label>
+                            <input type="file" id="image-upload" accept="image/*">
+                        </div>
+                        
+                        <div id="image-preview-container" class="image-preview-container">
+                            <img id="image-preview" style="display: none;">
+                        </div>
+                        
+                        <button class="btn btn-success" id="update-status-btn">Atualizar Status</button>
                     </div>
                     
                     <div class="form-group" style="margin-top: 20px;">
                         <label for="observation">Adicionar Observação:</label>
                         <textarea id="observation" placeholder="Registre observações sobre esta atividade..."></textarea>
                     </div>
-                     <button class="btn btn-info" id="save-observation">Salvar Observação</button>
+                    <button class="btn btn-info" id="save-observation">Salvar Observação</button>
+                    
                     <div id="observations-list" style="margin-top: 20px;">
-                        </div>
+                        <!-- Observações serão carregadas aqui -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-                    <div class="form-group">
-                        <label for="activity-image">Anexar Imagem da Prática:</label>
-                        <input type="file" id="activity-image" accept="image/*">
-                    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <script>
-    // **************************************************************************
-    // ** IMPORTANTE: Substitua pelas suas configurações reais do Firebase! **
-    // **************************************************************************
+    // Configuração do Firebase - substitua com suas credenciais
     const firebaseConfig = {
         apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
-  authDomain: "sistema-laboratorioifs.firebaseapp.com",
-  projectId: "sistema-laboratorioifs",
-  storageBucket: "sistema-laboratorioifs.firebasestorage.app",
-  messagingSenderId: "950276302393",
-  appId: "1:950276302393:web:745d51037ff780b1db0fe8",
-  measurementId: "G-1H8P4Z6QS6"
+        authDomain: "sistema-laboratorioifs.firebaseapp.com",
+        projectId: "sistema-laboratorioifs",
+        storageBucket: "sistema-laboratorioifs.appspot.com",
+        messagingSenderId: "950276302393",
+        appId: "1:950276302393:web:745d51037ff780b1db0fe8",
+        measurementId: "G-1H8P4Z6QS6"
     };
 
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
     let activities = []; 
     let currentEditingActivityId = null;
@@ -920,6 +983,8 @@
     const observationInput = document.getElementById('observation');
     const saveObservationBtn = document.getElementById('save-observation');
     const observationsListDiv = document.getElementById('observations-list');
+    const imageUploadInput = document.getElementById('image-upload');
+    const imagePreview = document.getElementById('image-preview');
 
     // --- Autenticação Firebase ---
     auth.onAuthStateChanged(async user => {
@@ -930,25 +995,19 @@
             userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
             userAvatarDisplay.textContent = (fbCurrentUser.displayName || fbCurrentUser.email)[0].toUpperCase();
             
-            // Lógica SIMPLES para determinar o papel do usuário
-            // Idealmente: usar Custom Claims ou buscar papel no Firestore.
-            // Exemplo: se e-mail contém 'admin@', é Admin. Se 'tech@', é Técnico.
+            // Determinar o papel do usuário baseado no email
             const emailLowerCase = fbCurrentUser.email.toLowerCase();
-           if (emailLowerCase === 'sergio@lab.com') {
-    userRoleType = 'Técnico';
-    fbCurrentUser.displayName = 'Sérgio';
-} else if (emailLowerCase === 'lucileide@lab.com') {
-    userRoleType = 'Técnico';
-    fbCurrentUser.displayName = 'Lucileide';
-} else if (emailLowerCase === 'jobim@lab.com') {
-    userRoleType = 'Técnico';
-    fbCurrentUser.displayName = 'Jobim';
-} else if (emailLowerCase.includes('admin@')) {
-    userRoleType = 'Administrador';
-} else {
-    userRoleType = 'Visitante';
-}
-
+            if (emailLowerCase.includes('admin@') || emailLowerCase === 'admin@lab.com') {
+                userRoleType = 'Administrador';
+            } else if (emailLowerCase.includes('tech@') || 
+                      emailLowerCase === 'sergio@lab.com' || 
+                      emailLowerCase === 'lucileide@lab.com' || 
+                      emailLowerCase === 'jobim@lab.com') {
+                userRoleType = 'Técnico';
+            } else {
+                userRoleType = 'Visitante'; 
+            }
+            
             updateUIVisibilityBasedOnRole();
             loadActivitiesFromFirestore(); 
 
@@ -977,7 +1036,7 @@
         if (userRoleType === 'Administrador') {
             userRoleDisplay.className = 'role-tag role-admin';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'flex';
-            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'flex'; // Aba estática
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'flex';
             addActivityBtn.style.display = 'inline-flex';
         } else if (userRoleType === 'Técnico') {
             userRoleDisplay.className = 'role-tag role-tech';
@@ -1024,13 +1083,14 @@
         if (unsubscribeActivities) {
             unsubscribeActivities(); 
         }
-        // Ordena por data de criação, mais recentes primeiro
+        
         let query = db.collection('activities').orderBy('createdAt', 'desc');
         
         unsubscribeActivities = query.onSnapshot(snapshot => {
             activities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderActivities();
             populatePracticeSelect();
+            updateTechnicianCounts();
         }, error => {
             console.error("Erro ao carregar atividades do Firestore: ", error);
             showNotification('Erro ao carregar dados das atividades.', 'error');
@@ -1039,12 +1099,12 @@
     
     function renderActivities() {
         activitiesTableBody.innerHTML = '';
-        let activitiesToRender = [...activities]; // Copia para não modificar o original ao filtrar
+        let activitiesToRender = [...activities];
 
-        // Filtra atividades para Técnicos: mostra as designadas a ele OU as pendentes
+        // Filtra atividades para Técnicos
         if (userRoleType === 'Técnico' && fbCurrentUser) {
             activitiesToRender = activities.filter(act => 
-                act.technicianUid === fbCurrentUser.uid || act.status === 'pendente'
+                act.technicianUid === fbCurrentUser.email || act.status === 'pendente'
             );
         }
 
@@ -1053,15 +1113,16 @@
             activitiesTableBody.parentElement.style.display = 'none';
             return;
         }
+        
         activitiesEmptyState.style.display = 'none';
         activitiesTableBody.parentElement.style.display = 'table';
 
         activitiesToRender.forEach(activity => {
-            const row = activitiesTableBody.insertRow();
-            const displayDate = activity.date && activity.date.toDate // Checa se 'date' e 'toDate' existem
+            const displayDate = activity.date && activity.date.toDate 
                               ? activity.date.toDate().toLocaleDateString('pt-BR') 
-                              : (activity.date || 'N/A'); // Se 'date' for string ou nulo
+                              : (activity.date || 'N/A');
 
+            const row = activitiesTableBody.insertRow();
             row.innerHTML = `
                 <td>${activity.id.substring(0,6)}...</td>
                 <td>${activity.name}</td>
@@ -1081,9 +1142,26 @@
         addActivityEventListeners();
     }
 
+    function updateTechnicianCounts() {
+        const counts = {
+            'sergio@lab.com': 0,
+            'lucileide@lab.com': 0,
+            'jobim@lab.com': 0
+        };
+
+        activities.forEach(activity => {
+            if (activity.technicianUid && counts.hasOwnProperty(activity.technicianUid)) {
+                counts[activity.technicianUid]++;
+            }
+        });
+
+        document.getElementById('tech-sergio-count').textContent = counts['sergio@lab.com'];
+        document.getElementById('tech-lucileide-count').textContent = counts['lucileide@lab.com'];
+        document.getElementById('tech-jobim-count').textContent = counts['jobim@lab.com'];
+    }
+
     function populatePracticeSelect() {
         practiceSelect.innerHTML = '<option value="">-- Selecione uma prática --</option>';
-        // Popula com atividades pendentes ou sem técnico designado
         activities.filter(act => act.status === 'pendente' || !act.technicianUid).forEach(act => {
             const option = document.createElement('option');
             option.value = act.id;
@@ -1096,6 +1174,7 @@
         document.querySelectorAll('.view-details').forEach(button => {
             button.addEventListener('click', (e) => showDetailModal(e.currentTarget.dataset.id));
         });
+        
         if (userRoleType === 'Administrador') {
             document.querySelectorAll('.edit-activity').forEach(button => {
                 button.addEventListener('click', (e) => openActivityModal(e.currentTarget.dataset.id));
@@ -1124,9 +1203,9 @@
                 newPracticeInput.value = activity.name;
                 professorInput.value = activity.professor;
                 let deadlineValue = '';
-                if (activity.date && activity.date.toDate) { // Verifica se é Timestamp
+                if (activity.date && activity.date.toDate) {
                     deadlineValue = activity.date.toDate().toISOString().split('T')[0];
-                } else if (activity.date) { // Se for string (formato DD/MM/YYYY)
+                } else if (activity.date) {
                      const parts = activity.date.split('/');
                      if(parts.length === 3) deadlineValue = `${parts[2]}-${parts[1]}-${parts[0]}`;
                 }
@@ -1149,6 +1228,8 @@
         activityModal.style.display = 'none';
         detailModal.style.display = 'none';
         currentEditingActivityId = null; 
+        imagePreview.style.display = 'none';
+        imageUploadInput.value = '';
     }
 
     addActivityBtn.addEventListener('click', () => openActivityModal());
@@ -1173,23 +1254,22 @@
         const activityData = {
             name: practiceName,
             professor: professorName,
-            date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")), // Adiciona hora para evitar problemas de fuso no dia
+            date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
             requirements: requirementsText
         };
 
         try {
             if (currentEditingActivityId) { 
                 const existingActivity = activities.find(a => a.id === currentEditingActivityId);
-                activityData.observations = existingActivity ? existingActivity.observations || [] : [];
+                activityData.observations = existingActivity.observations || [];
                 activityData.updatedAt = firebase.firestore.Timestamp.now();
-                // Mantém campos originais se não forem alterados explicitamente no formulário de edição
                 activityData.status = existingActivity.status;
                 activityData.technicianName = existingActivity.technicianName;
                 activityData.technicianUid = existingActivity.technicianUid;
                 activityData.instructions = existingActivity.instructions;
                 activityData.createdByUid = existingActivity.createdByUid;
-                activityData.createdAt = existingActivity.createdAt; // Preserva data de criação original
-
+                activityData.createdAt = existingActivity.createdAt;
+                activityData.imageUrl = existingActivity.imageUrl || null;
 
                 await db.collection('activities').doc(currentEditingActivityId).update(activityData);
                 showNotification('Atividade atualizada com sucesso!', 'success');
@@ -1201,6 +1281,8 @@
                 activityData.observations = [];
                 activityData.createdByUid = fbCurrentUser.uid;
                 activityData.createdAt = firebase.firestore.Timestamp.now();
+                activityData.imageUrl = null;
+                
                 await db.collection('activities').add(activityData);
                 showNotification('Atividade adicionada com sucesso!', 'success');
             }
@@ -1215,7 +1297,7 @@
         if (confirm('Tem certeza que deseja excluir esta atividade? Esta ação é irreversível.')) {
             try {
                 await db.collection('activities').doc(activityId).delete();
-                showNotification('Atividade excluída do Firestore.', 'info');
+                showNotification('Atividade excluída com sucesso.', 'info');
             } catch (error) {
                 console.error("Erro ao excluir atividade: ", error);
                 showNotification(`Erro ao excluir: ${error.message}`, 'error');
@@ -1224,48 +1306,34 @@
     }
     
     assignBtn.addEventListener('click', async () => {
-    const practiceId = practiceSelect.value;
-    const selectedTechnicianEmail = technicianSelect.value;
+        const practiceId = practiceSelect.value;
+        const technicianUidValue = technicianSelect.value;
+        const technicianName = technicianSelect.options[technicianSelect.selectedIndex].text;
+        const currentInstructions = instructionsInput.value.trim();
 
-    const technicianMap = {
-        'sergio@lab.com': 'Sérgio',
-        'lucileide@lab.com': 'Lucileide',
-        'jobim@lab.com': 'Jobim'
-    };
+        if (!practiceId || !technicianUidValue) {
+            showNotification('Selecione uma prática e um técnico.', 'warning');
+            return;
+        }
 
-    const techName = technicianMap[selectedTechnicianEmail];
-
-    if (!practiceId || !selectedTechnicianEmail || !techName) {
-        showNotification('Selecione uma prática e um técnico.', 'warning');
-        return;
-    }
-
-    // Esta parte só funciona no Admin SDK. No front-end use uma função customizada se necessário.
-    const technicianUser = await firebase.auth().getUserByEmail?.(selectedTechnicianEmail);
-    const technicianUid = technicianUser?.uid || null;
-
-    if (!technicianUid) {
-        showNotification('UID do técnico não encontrado.', 'error');
-        return;
-    }
-
-    try {
-        await db.collection('activities').doc(practiceId).update({
-            technicianName: techName,
-            technicianUid: technicianUid,
-            status: 'designada',
-            instructions: instructionsInput.value.trim(),
-            updatedAt: firebase.firestore.Timestamp.now()
-        });
-        showNotification(`Técnico ${techName} designado.`, 'success');
-        practiceSelect.value = '';
-        technicianSelect.value = '';
-        instructionsInput.value = '';
-    } catch (error) {
-        console.error("Erro ao designar técnico: ", error);
-        showNotification(`Erro ao designar: ${error.message}`, 'error');
-    }
-});
+        try {
+            await db.collection('activities').doc(practiceId).update({
+                technicianName: technicianName,
+                technicianUid: technicianUidValue,
+                status: 'designada',
+                instructions: currentInstructions,
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            
+            showNotification(`Técnico ${technicianName} designado com sucesso!`, 'success');
+            practiceSelect.value = '';
+            technicianSelect.value = '';
+            instructionsInput.value = '';
+        } catch (error) {
+            console.error("Erro ao designar técnico: ", error);
+            showNotification(`Erro ao designar: ${error.message}`, 'error');
+        }
+    });
 
     function showDetailModal(activityId) {
         currentEditingActivityId = activityId; 
@@ -1287,14 +1355,22 @@
             <p><strong>Status:</strong> <span class="status status-${activity.status}">${activity.status}</span></p>
             <p><strong>Requisitos:</strong> ${activity.requirements || 'Nenhum'}</p>
             ${activity.instructions ? `<p><strong>Instruções:</strong> ${activity.instructions}</p>` : ''}
+            ${activity.imageUrl ? `
+                <div style="margin-top: 15px;">
+                    <strong>Imagem da Prática:</strong>
+                    <div style="margin-top: 10px;">
+                        <img src="${activity.imageUrl}" alt="Imagem da prática" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+                </div>
+            ` : ''}
         `;
         
-        techActionsSection.style.display = 'none'; 
-        // Permite que Admin ou o Técnico designado alterem o status
-        if (userRoleType === 'Administrador' || (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.uid)) {
+        techActionsSection.style.display = 'none';
+        if (userRoleType === 'Administrador' || (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.email)) {
             techActionsSection.style.display = 'block';
             activityStatusUpdateSelect.value = activity.status;
         }
+        
         renderObservations(activity);
         detailModal.style.display = 'flex';
     }
@@ -1302,18 +1378,90 @@
     updateStatusBtn.addEventListener('click', async () => {
         if (!currentEditingActivityId) return;
         const newStatus = activityStatusUpdateSelect.value;
+        const imageFile = imageUploadInput.files[0];
+        
         try {
-            await db.collection('activities').doc(currentEditingActivityId).update({
+            updateStatusBtn.disabled = true;
+            updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            
+            const updateData = {
                 status: newStatus,
                 updatedAt: firebase.firestore.Timestamp.now()
-            });
-            showNotification('Status da atividade atualizado.', 'success');
-            const updatedActivity = activities.find(act => act.id === currentEditingActivityId); // Pega a versão mais recente do array local
-            if(updatedActivity) showDetailModal(currentEditingActivityId); 
+            };
+            
+            if (imageFile) {
+                showNotification('Enviando imagem, por favor aguarde...', 'info');
+                
+                // Cria referência no Storage
+                const storageRef = storage.ref();
+                const fileExt = imageFile.name.split('.').pop();
+                const fileName = `activity_${currentEditingActivityId}_${Date.now()}.${fileExt}`;
+                const fileRef = storageRef.child(`activity_images/${fileName}`);
+                
+                // Faz upload do arquivo
+                const uploadTask = fileRef.put(imageFile);
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Opcional: mostrar progresso
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload progress: ' + progress + '%');
+                    },
+                    (error) => {
+                        console.error("Erro no upload:", error);
+                        showNotification('Erro ao enviar imagem: ' + error.message, 'error');
+                        updateStatusBtn.disabled = false;
+                        updateStatusBtn.innerHTML = 'Atualizar Status';
+                    },
+                    async () => {
+                        // Upload completo, pega a URL
+                        const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                        updateData.imageUrl = imageUrl;
+                        
+                        // Atualiza o Firestore
+                        await db.collection('activities').doc(currentEditingActivityId).update(updateData);
+                        
+                        // Limpa o campo de upload
+                        imageUploadInput.value = '';
+                        imagePreview.style.display = 'none';
+                        
+                        showNotification('Status e imagem atualizados com sucesso!', 'success');
+                        const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
+                        if(updatedActivity) showDetailModal(currentEditingActivityId);
+                        
+                        updateStatusBtn.disabled = false;
+                        updateStatusBtn.innerHTML = 'Atualizar Status';
+                    }
+                );
+                
+                return; // Sai da função enquanto o upload está em progresso
+            } else {
+                // Sem imagem, apenas atualiza status
+                await db.collection('activities').doc(currentEditingActivityId).update(updateData);
+                showNotification('Status da atividade atualizado.', 'success');
+                const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
+                if(updatedActivity) showDetailModal(currentEditingActivityId); 
+            }
         } catch (error) {
             console.error("Erro ao atualizar status: ", error);
             showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
+        } finally {
+            updateStatusBtn.disabled = false;
+            updateStatusBtn.innerHTML = 'Atualizar Status';
         }
+    });
+
+    // Preview da imagem antes do upload
+    imageUploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            imagePreview.src = event.target.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
     });
 
     saveObservationBtn.addEventListener('click', async () => {
@@ -1335,7 +1483,7 @@
                 observations: firebase.firestore.FieldValue.arrayUnion(newObservation),
                 updatedAt: firebase.firestore.Timestamp.now()
             });
-            showNotification('Observação salva.', 'success');
+            showNotification('Observação salva com sucesso!', 'success');
             observationInput.value = '';
             const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
             if(updatedActivity) renderObservations(updatedActivity); 
@@ -1346,13 +1494,14 @@
     });
 
     function renderObservations(activity) { 
-        observationsListDiv.innerHTML = '<h4>Observações Salvas:</h4>';
+        observationsListDiv.innerHTML = '<h4>Observações:</h4>';
         if (activity && activity.observations && activity.observations.length > 0) {
             const sortedObservations = [...activity.observations].sort((a, b) => {
                 const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
                 const timeB = b.timestamp && b.timestamp.toMillis ? b.timestamp.toMillis() : 0;
-                return timeB - timeA; // Mais recentes primeiro
+                return timeB - timeA;
             });
+            
             sortedObservations.forEach(obs => {
                 const obsDate = obs.timestamp && obs.timestamp.toDate 
                                 ? obs.timestamp.toDate().toLocaleString('pt-BR') 
@@ -1397,6 +1546,7 @@
             reportsTableBody.parentElement.style.display = 'none';
             return;
         }
+        
         reportsEmptyState.style.display = 'none';
         reportsTableBody.parentElement.style.display = 'table';
 
@@ -1456,7 +1606,7 @@
         if (confirm('ATENÇÃO: Isso tentará limpar TODAS as atividades do Firestore. Esta ação é IRREVERSÍVEL e pode demorar. Deseja continuar?')) {
             showNotification('Iniciando limpeza de dados... Isso pode levar um tempo.', 'warning');
             try {
-                const snapshot = await db.collection('activities').limit(400).get(); // Limita para evitar sobrecarga em uma chamada
+                const snapshot = await db.collection('activities').limit(400).get();
                 if (snapshot.empty) {
                      showNotification('Nenhuma atividade encontrada para limpar.', 'info');
                      return;
@@ -1467,15 +1617,14 @@
                 });
                 await batch.commit();
                 
-                // Se ainda houver mais documentos, o usuário precisará rodar novamente ou usar uma Cloud Function
                 if (snapshot.size === 400) {
                     showNotification(`${snapshot.size} atividades foram limpas. Se houver mais, repita a operação.`, 'info');
                 } else {
-                    showNotification('Todas as atividades visíveis (até 400) foram limpas do Firestore.', 'success');
+                    showNotification('Todas as atividades foram limpas do Firestore.', 'success');
                 }
             } catch (error) {
                 console.error("Erro ao limpar dados do Firestore: ", error);
-                showNotification(`Erro ao limpar dados: ${error.message}. Pode ser necessário fazer manualmente no console do Firebase.`, 'error');
+                showNotification(`Erro ao limpar dados: ${error.message}.`, 'error');
             }
         }
     });
