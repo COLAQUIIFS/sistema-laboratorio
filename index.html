@@ -580,6 +580,42 @@
             text-align: center;
         }
         
+        .sync-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: var(--warning);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sync-button:hover {
+            background: #e67e22;
+            transform: scale(1.1);
+        }
+        
+        .sync-button .fa-spin {
+            display: none;
+        }
+        
+        .sync-button.syncing .fa-sync {
+            display: none;
+        }
+        
+        .sync-button.syncing .fa-spin {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -603,6 +639,14 @@
             
             .data-actions {
                 flex-direction: column;
+            }
+            
+            .sync-button {
+                bottom: 70px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -904,15 +948,22 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Botão de sincronização manual -->
+        <button id="sync-button" class="sync-button" title="Forçar Sincronização">
+            <i class="fas fa-sync"></i>
+            <i class="fas fa-spinner fa-spin"></i>
+        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-    // Configuração do Firebase - substitua com suas credenciais
+    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
         authDomain: "sistema-laboratorioifs.firebaseapp.com",
@@ -923,17 +974,59 @@
         measurementId: "G-1H8P4Z6QS6"
     };
 
-    // Inicializar Firebase
+    // Inicializar Firebase com persistência
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
+    
+    // Ativar persistência offline
+    db.enablePersistence()
+      .catch((err) => {
+        console.error("Erro na persistência offline:", err);
+        if (err.code == 'failed-precondition') {
+          showNotification('Apenas uma aba pode usar o modo offline', 'warning');
+        } else if (err.code == 'unimplemented') {
+          showNotification('Navegador não suporta persistência offline', 'warning');
+        }
+      });
 
-    let activities = []; 
+    // Variáveis globais
+    let activities = [];
     let currentEditingActivityId = null;
     let fbCurrentUser = null;
-    let userRoleType = 'Visitante'; 
-    let unsubscribeActivities = null; 
+    let userRoleType = 'Visitante';
+    let unsubscribeActivities = null;
+
+    // Monitorar conexão
+    function monitorConnection() {
+      const connectionRef = firebase.database().ref('.info/connected');
+      connectionRef.on('value', snap => {
+        if (snap.val() === true) {
+          console.log('Conectado ao servidor');
+        } else {
+          showNotification('Você está offline - dados serão sincronizados quando reconectar', 'warning');
+        }
+      });
+    }
+
+    // Forçar sincronização
+    async function forceSync() {
+      const syncButton = document.getElementById('sync-button');
+      syncButton.classList.add('syncing');
+      
+      try {
+        showNotification('Sincronizando dados...', 'info');
+        await db.waitForPendingWrites();
+        showNotification('Dados sincronizados com sucesso!', 'success');
+        loadActivitiesFromFirestore(); // Recarregar dados
+      } catch (error) {
+        console.error("Erro na sincronização:", error);
+        showNotification('Erro ao sincronizar dados', 'error');
+      } finally {
+        syncButton.classList.remove('syncing');
+      }
+    }
 
     // DOM Elements
     const loginScreen = document.getElementById('login-screen');
@@ -942,6 +1035,7 @@
     const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const syncButton = document.getElementById('sync-button');
     
     const userNameDisplay = document.getElementById('user-name');
     const userAvatarDisplay = document.getElementById('user-avatar');
@@ -986,7 +1080,23 @@
     const imageUploadInput = document.getElementById('image-upload');
     const imagePreview = document.getElementById('image-preview');
 
-    // --- Autenticação Firebase ---
+    // Event Listeners
+    syncButton.addEventListener('click', forceSync);
+    
+    // Preview da imagem antes do upload
+    imageUploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            imagePreview.src = event.target.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Autenticação
     auth.onAuthStateChanged(async user => {
         if (user) {
             fbCurrentUser = user;
@@ -995,12 +1105,11 @@
             userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
             userAvatarDisplay.textContent = (fbCurrentUser.displayName || fbCurrentUser.email)[0].toUpperCase();
             
-            // Determinar o papel do usuário baseado no email
+            // Determinar papel do usuário
             const emailLowerCase = fbCurrentUser.email.toLowerCase();
             if (emailLowerCase.includes('admin@') || emailLowerCase === 'admin@lab.com') {
                 userRoleType = 'Administrador';
-            } else if (emailLowerCase.includes('tech@') || 
-                      emailLowerCase === 'sergio@lab.com' || 
+            } else if (emailLowerCase === 'sergio@lab.com' || 
                       emailLowerCase === 'lucileide@lab.com' || 
                       emailLowerCase === 'jobim@lab.com') {
                 userRoleType = 'Técnico';
@@ -1009,7 +1118,8 @@
             }
             
             updateUIVisibilityBasedOnRole();
-            loadActivitiesFromFirestore(); 
+            monitorConnection();
+            loadActivitiesFromFirestore();
 
         } else {
             fbCurrentUser = null;
@@ -1078,23 +1188,39 @@
         });
     });
 
-    // --- Firestore Data Handling ---
+    // Firestore Data Handling
     function loadActivitiesFromFirestore() {
         if (unsubscribeActivities) {
             unsubscribeActivities(); 
         }
-        
-        let query = db.collection('activities').orderBy('createdAt', 'desc');
-        
-        unsubscribeActivities = query.onSnapshot(snapshot => {
-            activities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderActivities();
-            populatePracticeSelect();
-            updateTechnicianCounts();
-        }, error => {
-            console.error("Erro ao carregar atividades do Firestore: ", error);
-            showNotification('Erro ao carregar dados das atividades.', 'error');
-        });
+
+        unsubscribeActivities = db.collection('activities')
+            .orderBy('createdAt', 'desc')
+            .onSnapshot({
+                includeMetadataChanges: true
+            }, snapshot => {
+                const source = snapshot.metadata.fromCache ? "cache local" : "servidor";
+                console.log(`Dados carregados do: ${source}`);
+                
+                activities = snapshot.docs.map(doc => {
+                    return { 
+                        id: doc.id, 
+                        ...doc.data(),
+                        _fromCache: doc.metadata.fromCache
+                    };
+                });
+                
+                renderActivities();
+                populatePracticeSelect();
+                updateTechnicianCounts();
+                
+                if (snapshot.metadata.hasPendingWrites) {
+                    showNotification('Sincronizando alterações locais...', 'info');
+                }
+            }, error => {
+                console.error("Erro ao carregar atividades:", error);
+                showNotification('Erro ao carregar atividades', 'error');
+            });
     }
     
     function renderActivities() {
@@ -1255,40 +1381,45 @@
             name: practiceName,
             professor: professorName,
             date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
-            requirements: requirementsText
+            requirements: requirementsText,
+            status: 'pendente',
+            technicianName: null,
+            technicianUid: null,
+            instructions: null,
+            observations: [],
+            createdAt: firebase.firestore.Timestamp.now(),
+            createdByUid: fbCurrentUser.uid,
+            imageUrl: null
         };
 
         try {
             if (currentEditingActivityId) { 
                 const existingActivity = activities.find(a => a.id === currentEditingActivityId);
                 activityData.observations = existingActivity.observations || [];
-                activityData.updatedAt = firebase.firestore.Timestamp.now();
                 activityData.status = existingActivity.status;
                 activityData.technicianName = existingActivity.technicianName;
                 activityData.technicianUid = existingActivity.technicianUid;
                 activityData.instructions = existingActivity.instructions;
-                activityData.createdByUid = existingActivity.createdByUid;
                 activityData.createdAt = existingActivity.createdAt;
                 activityData.imageUrl = existingActivity.imageUrl || null;
 
                 await db.collection('activities').doc(currentEditingActivityId).update(activityData);
                 showNotification('Atividade atualizada com sucesso!', 'success');
             } else { 
-                activityData.status = 'pendente';
-                activityData.technicianName = null;
-                activityData.technicianUid = null;
-                activityData.instructions = null;
-                activityData.observations = [];
-                activityData.createdByUid = fbCurrentUser.uid;
-                activityData.createdAt = firebase.firestore.Timestamp.now();
-                activityData.imageUrl = null;
+                const docRef = await db.collection('activities').add(activityData);
+                console.log("Documento criado com ID:", docRef.id);
                 
-                await db.collection('activities').add(activityData);
-                showNotification('Atividade adicionada com sucesso!', 'success');
+                // Verificar sincronização
+                const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
+                if (doc.exists) {
+                    showNotification('Atividade criada e sincronizada!', 'success');
+                } else {
+                    showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
+                }
             }
             closeModals();
         } catch (error) {
-            console.error("Erro ao salvar atividade: ", error);
+            console.error("Erro ao salvar atividade:", error);
             showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
         }
     });
@@ -1299,7 +1430,7 @@
                 await db.collection('activities').doc(activityId).delete();
                 showNotification('Atividade excluída com sucesso.', 'info');
             } catch (error) {
-                console.error("Erro ao excluir atividade: ", error);
+                console.error("Erro ao excluir atividade:", error);
                 showNotification(`Erro ao excluir: ${error.message}`, 'error');
             }
         }
@@ -1317,7 +1448,8 @@
         }
 
         try {
-            await db.collection('activities').doc(practiceId).update({
+            const docRef = db.collection('activities').doc(practiceId);
+            await docRef.update({
                 technicianName: technicianName,
                 technicianUid: technicianUidValue,
                 status: 'designada',
@@ -1325,12 +1457,18 @@
                 updatedAt: firebase.firestore.Timestamp.now()
             });
             
-            showNotification(`Técnico ${technicianName} designado com sucesso!`, 'success');
-            practiceSelect.value = '';
-            technicianSelect.value = '';
-            instructionsInput.value = '';
+            // Verificar sincronização
+            const doc = await docRef.get({ source: 'server' });
+            if (doc.exists) {
+                showNotification(`Técnico ${technicianName} designado e sincronizado!`, 'success');
+                practiceSelect.value = '';
+                technicianSelect.value = '';
+                instructionsInput.value = '';
+            } else {
+                showNotification('Designação salva localmente (sincronização pendente)', 'warning');
+            }
         } catch (error) {
-            console.error("Erro ao designar técnico: ", error);
+            console.error("Erro ao designar técnico:", error);
             showNotification(`Erro ao designar: ${error.message}`, 'error');
         }
     });
@@ -1352,7 +1490,7 @@
             <p><strong>Professor:</strong> ${activity.professor}</p>
             <p><strong>Data Limite:</strong> ${displayDate}</p>
             <p><strong>Técnico:</strong> ${activity.technicianName || 'Não designado'}</p>
-            <p><strong>Status:</strong> <span class="status status-${activity.status}">${activity.status}</span></p>
+            <p><strong>Status:</strong> <span class="status status-${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></p>
             <p><strong>Requisitos:</strong> ${activity.requirements || 'Nenhum'}</p>
             ${activity.instructions ? `<p><strong>Instruções:</strong> ${activity.instructions}</p>` : ''}
             ${activity.imageUrl ? `
@@ -1403,7 +1541,6 @@
                 
                 uploadTask.on('state_changed',
                     (snapshot) => {
-                        // Opcional: mostrar progresso
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         console.log('Upload progress: ' + progress + '%');
                     },
@@ -1443,25 +1580,12 @@
                 if(updatedActivity) showDetailModal(currentEditingActivityId); 
             }
         } catch (error) {
-            console.error("Erro ao atualizar status: ", error);
+            console.error("Erro ao atualizar status:", error);
             showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
         } finally {
             updateStatusBtn.disabled = false;
             updateStatusBtn.innerHTML = 'Atualizar Status';
         }
-    });
-
-    // Preview da imagem antes do upload
-    imageUploadInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            imagePreview.src = event.target.result;
-            imagePreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
     });
 
     saveObservationBtn.addEventListener('click', async () => {
@@ -1488,7 +1612,7 @@
             const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
             if(updatedActivity) renderObservations(updatedActivity); 
         } catch (error) {
-            console.error("Erro ao salvar observação: ", error);
+            console.error("Erro ao salvar observação:", error);
             showNotification(`Erro ao salvar observação: ${error.message}`, 'error');
         }
     });
@@ -1623,7 +1747,7 @@
                     showNotification('Todas as atividades foram limpas do Firestore.', 'success');
                 }
             } catch (error) {
-                console.error("Erro ao limpar dados do Firestore: ", error);
+                console.error("Erro ao limpar dados do Firestore:", error);
                 showNotification(`Erro ao limpar dados: ${error.message}.`, 'error');
             }
         }
