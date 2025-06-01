@@ -76,16 +76,14 @@
             justify-content: center;
         }
         
-        .logo-text {
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 5px;
-            }
-            
-            p {
-                font-size: 0.9rem;
-                opacity: 0.8;
-            }
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         
         .user-info {
@@ -391,6 +389,11 @@
         .status-concluida {
             background: rgba(39, 174, 96, 0.15);
             color: var(--success);
+        }
+
+        .status-em-andamento {
+            background: rgba(155, 89, 182, 0.15);
+            color: var(--admin);
         }
 
         /* Badges */
@@ -875,6 +878,84 @@
         select:valid {
             border-left: 3px solid var(--success) !important;
         }
+
+        /* Estilos para ocorrências */
+        .occurrence-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--warning);
+            transition: all 0.3s;
+        }
+
+        .occurrence-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .occurrence-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .occurrence-title {
+            font-weight: 600;
+            color: var(--light);
+            font-size: 1.1rem;
+        }
+
+        .occurrence-date {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .occurrence-lab {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(52, 152, 219, 0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .occurrence-content {
+            margin-bottom: 10px;
+        }
+
+        .occurrence-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .occurrence-author {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .occurrence-solution {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid var(--success);
+        }
+
+        .solution-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .solution-title {
+            font-weight: 600;
+            color: var(--success);
+        }
     </style>
 </head>
 <body>
@@ -946,6 +1027,10 @@
                     <div class="tab" data-tab="tecnicos">
                         <i class="fas fa-users-cog"></i>
                         <span>Técnicos</span>
+                    </div>
+                    <div class="tab" data-tab="ocorrencias">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Ocorrências</span>
                     </div>
                     <div class="tab" data-tab="relatorios">
                         <i class="fas fa-chart-bar"></i>
@@ -1051,6 +1136,26 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="ocorrencias-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> Ocorrências nos Laboratórios</h2>
+                        <button class="btn btn-warning" id="add-occurrence"><i class="fas fa-plus"></i> Nova Ocorrência</button>
+                    </div>
+                    
+                    <div id="occurrences-container">
+                        <div id="occurrences-empty-state" class="empty-state" style="display: none;">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p>Nenhuma ocorrência registrada.</p>
+                        </div>
+                        
+                        <div id="occurrences-list">
+                            <!-- Ocorrências serão carregadas aqui -->
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1165,6 +1270,86 @@
             </div>
         </div>
         
+        <div class="modal" id="occurrence-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Nova Ocorrência</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="occurrence-lab">Laboratório*</label>
+                        <select id="occurrence-lab" required>
+                            <option value="">Selecione o laboratório</option>
+                            <option value="Laboratório 36">Laboratório 36</option>
+                            <option value="Laboratório 35">Laboratório 35</option>
+                            <option value="Laboratório 35B">Laboratório 35B</option>
+                            <option value="Laboratório 35C">Laboratório 35C</option>
+                            <option value="Laboratório 35D">Laboratório 35D</option>
+                            <option value="Laboratório 35E">Laboratório 35E</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occurrence-title">Título*</label>
+                        <input type="text" id="occurrence-title" placeholder="Descreva brevemente a ocorrência" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occurrence-description">Descrição Detalhada*</label>
+                        <textarea id="occurrence-description" placeholder="Descreva com detalhes a ocorrência observada..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="cancel-occurrence-btn">Cancelar</button>
+                    <button class="btn btn-warning" id="save-occurrence">Registrar Ocorrência</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="occurrence-detail-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Detalhes da Ocorrência</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="occurrence-details">
+                        <!-- Detalhes da ocorrência serão carregados aqui -->
+                    </div>
+                    
+                    <div id="occurrence-solution-section" style="margin-top: 20px;">
+                        <h4><i class="fas fa-check-circle"></i> Resolução</h4>
+                        <div id="solution-view">
+                            <!-- Solução existente será exibida aqui -->
+                        </div>
+                        
+                        <div id="solution-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="solution-status">Status*</label>
+                                <select id="solution-status" required>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="em-andamento">Em Andamento</option>
+                                    <option value="resolvido">Resolvido</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="solution-description">Descrição da Solução*</label>
+                                <textarea id="solution-description" placeholder="Descreva como a ocorrência foi resolvida..." required></textarea>
+                            </div>
+                            
+                            <button class="btn btn-success" id="save-solution">Salvar Solução</button>
+                        </div>
+                        
+                        <div id="solution-actions" style="margin-top: 15px;">
+                            <!-- Botões de ação serão exibidos aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="modal" id="detail-modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1256,10 +1441,13 @@
 
     // Variáveis globais
     let activities = [];
+    let occurrences = [];
     let currentEditingActivityId = null;
+    let currentEditingOccurrenceId = null;
     let fbCurrentUser = null;
     let userRoleType = 'Visitante';
     let unsubscribeActivities = null;
+    let unsubscribeOccurrences = null;
 
     // Monitorar conexão
     function monitorConnection() {
@@ -1285,6 +1473,7 @@
         await db.waitForPendingWrites();
         showNotification('Dados sincronizados com sucesso!', 'success');
         loadActivitiesFromFirestore(); // Recarregar dados
+        loadOccurrencesFromFirestore();
       } catch (error) {
         console.error("Erro na sincronização:", error);
         showNotification('Erro ao sincronizar dados', 'error');
@@ -1309,13 +1498,21 @@
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
     const addActivityBtn = document.getElementById('add-activity');
+    const addOccurrenceBtn = document.getElementById('add-occurrence');
     const activityModal = document.getElementById('activity-modal');
+    const occurrenceModal = document.getElementById('occurrence-modal');
+    const occurrenceDetailModal = document.getElementById('occurrence-detail-modal');
     const detailModal = document.getElementById('detail-modal');
     const closeBtns = document.querySelectorAll('.close-btn');
     const cancelBtn = document.getElementById('cancel-btn');
+    const cancelOccurrenceBtn = document.getElementById('cancel-occurrence-btn');
     const saveActivityBtn = document.getElementById('save-activity');
+    const saveOccurrenceBtn = document.getElementById('save-occurrence');
+    const saveSolutionBtn = document.getElementById('save-solution');
     const activitiesTableBody = document.getElementById('activities-table');
     const activitiesEmptyState = document.getElementById('activities-empty-state');
+    const occurrencesList = document.getElementById('occurrences-list');
+    const occurrencesEmptyState = document.getElementById('occurrences-empty-state');
     
     const assignBtn = document.getElementById('assign-btn');
     const practiceSelect = document.getElementById('practice');
@@ -1335,6 +1532,16 @@
     const activityLabInput = document.getElementById('activity-lab');
     const deadlineInput = document.getElementById('deadline');
     const requirementsInput = document.getElementById('requirements');
+
+    const occurrenceLabInput = document.getElementById('occurrence-lab');
+    const occurrenceTitleInput = document.getElementById('occurrence-title');
+    const occurrenceDescriptionInput = document.getElementById('occurrence-description');
+
+    const solutionStatusInput = document.getElementById('solution-status');
+    const solutionDescriptionInput = document.getElementById('solution-description');
+    const solutionForm = document.getElementById('solution-form');
+    const solutionView = document.getElementById('solution-view');
+    const solutionActions = document.getElementById('solution-actions');
 
     const activityDetailsDiv = document.getElementById('activity-details');
     const techActionsSection = document.getElementById('tech-actions-section');
@@ -1386,6 +1593,7 @@
             updateUIVisibilityBasedOnRole();
             monitorConnection();
             loadActivitiesFromFirestore();
+            loadOccurrencesFromFirestore();
 
         } else {
             fbCurrentUser = null;
@@ -1397,10 +1605,16 @@
             userRoleDisplay.textContent = 'Visitante';
             userRoleDisplay.className = 'role-tag';
             activities = [];
+            occurrences = [];
             renderActivities();
+            renderOccurrences();
             if (unsubscribeActivities) {
                 unsubscribeActivities(); 
                 unsubscribeActivities = null;
+            }
+            if (unsubscribeOccurrences) {
+                unsubscribeOccurrences();
+                unsubscribeOccurrences = null;
             }
         }
     });
@@ -1413,17 +1627,23 @@
             userRoleDisplay.className = 'role-tag role-admin';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'flex';
             document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'flex';
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
             addActivityBtn.style.display = 'inline-flex';
+            addOccurrenceBtn.style.display = 'inline-flex';
         } else if (userRoleType === 'Técnico') {
             userRoleDisplay.className = 'role-tag role-tech';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
             document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none'; 
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
             addActivityBtn.style.display = 'none';
+            addOccurrenceBtn.style.display = 'inline-flex';
         } else { 
             userRoleDisplay.className = 'role-tag';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
             document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'none';
             addActivityBtn.style.display = 'none';
+            addOccurrenceBtn.style.display = 'none';
         }
     }
 
@@ -1488,6 +1708,38 @@
                 showNotification('Erro ao carregar atividades', 'error');
             });
     }
+
+    function loadOccurrencesFromFirestore() {
+        if (unsubscribeOccurrences) {
+            unsubscribeOccurrences();
+        }
+
+        unsubscribeOccurrences = db.collection('occurrences')
+            .orderBy('createdAt', 'desc')
+            .onSnapshot({
+                includeMetadataChanges: true
+            }, snapshot => {
+                const source = snapshot.metadata.fromCache ? "cache local" : "servidor";
+                console.log(`Ocorrências carregadas do: ${source}`);
+                
+                occurrences = snapshot.docs.map(doc => {
+                    return {
+                        id: doc.id,
+                        ...doc.data(),
+                        _fromCache: doc.metadata.fromCache
+                    };
+                });
+                
+                renderOccurrences();
+                
+                if (snapshot.metadata.hasPendingWrites) {
+                    showNotification('Sincronizando ocorrências...', 'info');
+                }
+            }, error => {
+                console.error("Erro ao carregar ocorrências:", error);
+                showNotification('Erro ao carregar ocorrências', 'error');
+            });
+    }
     
     function renderActivities() {
         activitiesTableBody.innerHTML = '';
@@ -1534,11 +1786,77 @@
         addActivityEventListeners();
     }
 
+    function renderOccurrences() {
+        occurrencesList.innerHTML = '';
+        
+        if (occurrences.length === 0) {
+            occurrencesEmptyState.style.display = 'block';
+            return;
+        }
+        
+        occurrencesEmptyState.style.display = 'none';
+        
+        occurrences.forEach(occurrence => {
+            const occurrenceDate = occurrence.createdAt && occurrence.createdAt.toDate 
+                                ? occurrence.createdAt.toDate().toLocaleString('pt-BR')
+                                : 'Data inválida';
+            
+            const occurrenceDiv = document.createElement('div');
+            occurrenceDiv.className = 'occurrence-item';
+            occurrenceDiv.innerHTML = `
+                <div class="occurrence-header">
+                    <div class="occurrence-title">${occurrence.title}</div>
+                    <div class="occurrence-date">${occurrenceDate}</div>
+                </div>
+                <div class="occurrence-lab">${occurrence.lab}</div>
+                <div class="occurrence-content">${occurrence.description}</div>
+                <div class="occurrence-footer">
+                    <div class="occurrence-author">Registrado por: ${occurrence.authorEmail}</div>
+                    <span class="status status-${occurrence.status || 'pendente'}">
+                        ${getOccurrenceStatusIcon(occurrence.status || 'pendente')} 
+                        ${(occurrence.status || 'pendente').charAt(0).toUpperCase() + (occurrence.status || 'pendente').slice(1)}
+                    </span>
+                </div>
+            `;
+            
+            if (occurrence.solution) {
+                const solutionDiv = document.createElement('div');
+                solutionDiv.className = 'occurrence-solution';
+                solutionDiv.innerHTML = `
+                    <div class="solution-header">
+                        <div class="solution-title">Solução</div>
+                        <div class="solution-date">${occurrence.solution.date && occurrence.solution.date.toDate 
+                            ? occurrence.solution.date.toDate().toLocaleString('pt-BR') 
+                            : 'Data inválida'}</div>
+                    </div>
+                    <div class="solution-content">${occurrence.solution.description}</div>
+                    <div class="solution-author">Resolvido por: ${occurrence.solution.authorEmail}</div>
+                `;
+                occurrenceDiv.appendChild(solutionDiv);
+            }
+            
+            occurrenceDiv.addEventListener('click', () => {
+                showOccurrenceDetailModal(occurrence.id);
+            });
+            
+            occurrencesList.appendChild(occurrenceDiv);
+        });
+    }
+
     function getStatusIcon(status) {
         switch(status) {
             case 'pendente': return '<i class="fas fa-clock"></i>';
             case 'designada': return '<i class="fas fa-user-check"></i>';
             case 'concluida': return '<i class="fas fa-check-circle"></i>';
+            default: return '<i class="fas fa-info-circle"></i>';
+        }
+    }
+
+    function getOccurrenceStatusIcon(status) {
+        switch(status) {
+            case 'pendente': return '<i class="fas fa-clock"></i>';
+            case 'em-andamento': return '<i class="fas fa-tools"></i>';
+            case 'resolvido': return '<i class="fas fa-check-circle"></i>';
             default: return '<i class="fas fa-info-circle"></i>';
         }
     }
@@ -1641,20 +1959,36 @@
         activityModal.style.display = 'flex';
     }
 
+    function openOccurrenceModal() {
+        occurrenceLabInput.value = '';
+        occurrenceTitleInput.value = '';
+        occurrenceDescriptionInput.value = '';
+        occurrenceModal.style.display = 'flex';
+    }
+
     function closeModals() {
         activityModal.style.display = 'none';
+        occurrenceModal.style.display = 'none';
+        occurrenceDetailModal.style.display = 'none';
         detailModal.style.display = 'none';
         currentEditingActivityId = null; 
+        currentEditingOccurrenceId = null;
         imagePreview.style.display = 'none';
         imageUploadInput.value = '';
     }
 
     addActivityBtn.addEventListener('click', () => openActivityModal());
+    addOccurrenceBtn.addEventListener('click', () => openOccurrenceModal());
     closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
     cancelBtn.addEventListener('click', closeModals);
+    cancelOccurrenceBtn.addEventListener('click', closeModals);
     window.addEventListener('click', (event) => {
-        if (event.target === activityModal) closeModals();
-        if (event.target === detailModal) closeModals();
+        if (event.target === activityModal || 
+            event.target === occurrenceModal || 
+            event.target === occurrenceDetailModal || 
+            event.target === detailModal) {
+            closeModals();
+        }
     });
 
     saveActivityBtn.addEventListener('click', async () => {
@@ -1714,6 +2048,36 @@
         } catch (error) {
             console.error("Erro ao salvar atividade:", error);
             showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
+        }
+    });
+
+    saveOccurrenceBtn.addEventListener('click', async () => {
+        const lab = occurrenceLabInput.value;
+        const title = occurrenceTitleInput.value.trim();
+        const description = occurrenceDescriptionInput.value.trim();
+
+        if (!lab || !title || !description) {
+            showNotification('Preencha todos os campos obrigatórios.', 'warning');
+            return;
+        }
+
+        const occurrenceData = {
+            lab: lab,
+            title: title,
+            description: description,
+            status: 'pendente',
+            authorEmail: fbCurrentUser.email,
+            authorUid: fbCurrentUser.uid,
+            createdAt: firebase.firestore.Timestamp.now()
+        };
+
+        try {
+            await db.collection('occurrences').add(occurrenceData);
+            showNotification('Ocorrência registrada com sucesso!', 'success');
+            closeModals();
+        } catch (error) {
+            console.error("Erro ao salvar ocorrência:", error);
+            showNotification(`Erro ao registrar ocorrência: ${error.message}`, 'error');
         }
     });
 
@@ -1805,6 +2169,190 @@
         
         renderObservations(activity);
         detailModal.style.display = 'flex';
+    }
+
+    function showOccurrenceDetailModal(occurrenceId) {
+        currentEditingOccurrenceId = occurrenceId;
+        const occurrence = occurrences.find(occ => occ.id === occurrenceId);
+        if (!occurrence) {
+            showNotification('Ocorrência não encontrada.', 'error');
+            return;
+        }
+
+        const occurrenceDate = occurrence.createdAt && occurrence.createdAt.toDate 
+                            ? occurrence.createdAt.toDate().toLocaleString('pt-BR')
+                            : 'Data inválida';
+
+        let detailsHTML = `
+            <div class="occurrence-header">
+                <div class="occurrence-title">${occurrence.title}</div>
+                <div class="occurrence-date">${occurrenceDate}</div>
+            </div>
+            <div class="occurrence-lab">${occurrence.lab}</div>
+            <div class="occurrence-content">${occurrence.description}</div>
+            <div class="occurrence-footer">
+                <div class="occurrence-author">Registrado por: ${occurrence.authorEmail}</div>
+                <span class="status status-${occurrence.status || 'pendente'}">
+                    ${getOccurrenceStatusIcon(occurrence.status || 'pendente')} 
+                    ${(occurrence.status || 'pendente').charAt(0).toUpperCase() + (occurrence.status || 'pendente').slice(1)}
+                </span>
+            </div>
+        `;
+
+        document.getElementById('occurrence-details').innerHTML = detailsHTML;
+
+        // Limpar e configurar a seção de solução
+        solutionView.innerHTML = '';
+        solutionForm.style.display = 'none';
+        solutionActions.innerHTML = '';
+
+        if (occurrence.solution) {
+            const solutionDate = occurrence.solution.date && occurrence.solution.date.toDate 
+                              ? occurrence.solution.date.toDate().toLocaleString('pt-BR')
+                              : 'Data inválida';
+            
+            solutionView.innerHTML = `
+                <div class="occurrence-solution">
+                    <div class="solution-header">
+                        <div class="solution-title">Solução</div>
+                        <div class="solution-date">${solutionDate}</div>
+                    </div>
+                    <div class="solution-content">${occurrence.solution.description}</div>
+                    <div class="solution-author">Resolvido por: ${occurrence.solution.authorEmail}</div>
+                </div>
+            `;
+        }
+
+        // Mostrar botões de ação para administradores
+        if (userRoleType === 'Administrador') {
+            if (!occurrence.solution) {
+                solutionActions.innerHTML = `
+                    <button class="btn btn-success" id="add-solution-btn">
+                        <i class="fas fa-plus"></i> Adicionar Solução
+                    </button>
+                `;
+                document.getElementById('add-solution-btn').addEventListener('click', () => {
+                    solutionView.style.display = 'none';
+                    solutionForm.style.display = 'block';
+                    solutionStatusInput.value = 'resolvido';
+                    solutionDescriptionInput.value = '';
+                    solutionActions.innerHTML = `
+                        <button class="btn" id="cancel-solution-btn">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    `;
+                    document.getElementById('cancel-solution-btn').addEventListener('click', () => {
+                        solutionView.style.display = 'block';
+                        solutionForm.style.display = 'none';
+                        solutionActions.innerHTML = `
+                            <button class="btn btn-success" id="add-solution-btn">
+                                <i class="fas fa-plus"></i> Adicionar Solução
+                            </button>
+                        `;
+                        document.getElementById('add-solution-btn').addEventListener('click', () => {
+                            solutionView.style.display = 'none';
+                            solutionForm.style.display = 'block';
+                            solutionStatusInput.value = 'resolvido';
+                            solutionDescriptionInput.value = '';
+                            solutionActions.innerHTML = `
+                                <button class="btn" id="cancel-solution-btn">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            `;
+                            document.getElementById('cancel-solution-btn').addEventListener('click', () => {
+                                solutionView.style.display = 'block';
+                                solutionForm.style.display = 'none';
+                                solutionActions.innerHTML = `
+                                    <button class="btn btn-success" id="add-solution-btn">
+                                        <i class="fas fa-plus"></i> Adicionar Solução
+                                    </button>
+                                `;
+                                document.getElementById('add-solution-btn').addEventListener('click', () => {
+                                    solutionView.style.display = 'none';
+                                    solutionForm.style.display = 'block';
+                                    solutionStatusInput.value = 'resolvido';
+                                    solutionDescriptionInput.value = '';
+                                    solutionActions.innerHTML = `
+                                        <button class="btn" id="cancel-solution-btn">
+                                            <i class="fas fa-times"></i> Cancelar
+                                        </button>
+                                    `;
+                                });
+                            });
+                        });
+                    });
+                });
+            } else {
+                solutionActions.innerHTML = `
+                    <button class="btn btn-warning" id="edit-solution-btn">
+                        <i class="fas fa-edit"></i> Editar Solução
+                    </button>
+                `;
+                document.getElementById('edit-solution-btn').addEventListener('click', () => {
+                    solutionView.style.display = 'none';
+                    solutionForm.style.display = 'block';
+                    solutionStatusInput.value = occurrence.status || 'resolvido';
+                    solutionDescriptionInput.value = occurrence.solution.description;
+                    solutionActions.innerHTML = `
+                        <button class="btn" id="cancel-solution-btn">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    `;
+                    document.getElementById('cancel-solution-btn').addEventListener('click', () => {
+                        solutionView.style.display = 'block';
+                        solutionForm.style.display = 'none';
+                        solutionActions.innerHTML = `
+                            <button class="btn btn-warning" id="edit-solution-btn">
+                                <i class="fas fa-edit"></i> Editar Solução
+                            </button>
+                        `;
+                        document.getElementById('edit-solution-btn').addEventListener('click', () => {
+                            solutionView.style.display = 'none';
+                            solutionForm.style.display = 'block';
+                            solutionStatusInput.value = occurrence.status || 'resolvido';
+                            solutionDescriptionInput.value = occurrence.solution.description;
+                            solutionActions.innerHTML = `
+                                <button class="btn" id="cancel-solution-btn">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            `;
+                        });
+                    });
+                });
+            }
+        }
+
+        saveSolutionBtn.addEventListener('click', async () => {
+            const status = solutionStatusInput.value;
+            const description = solutionDescriptionInput.value.trim();
+
+            if (!status || !description) {
+                showNotification('Preencha todos os campos obrigatórios.', 'warning');
+                return;
+            }
+
+            const solutionData = {
+                status: status,
+                solution: {
+                    description: description,
+                    authorEmail: fbCurrentUser.email,
+                    authorUid: fbCurrentUser.uid,
+                    date: firebase.firestore.Timestamp.now()
+                }
+            };
+
+            try {
+                await db.collection('occurrences').doc(currentEditingOccurrenceId).update(solutionData);
+                showNotification('Solução registrada com sucesso!', 'success');
+                loadOccurrencesFromFirestore();
+                closeModals();
+            } catch (error) {
+                console.error("Erro ao salvar solução:", error);
+                showNotification(`Erro ao registrar solução: ${error.message}`, 'error');
+            }
+        });
+
+        occurrenceDetailModal.style.display = 'flex';
     }
     
     updateStatusBtn.addEventListener('click', async () => {
