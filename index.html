@@ -1461,7 +1461,7 @@
         
         // Se há imagem para upload
         if (file) {
-            showNotification('Enviando imagem, por favor aguarde...', 'info');
+            showNotification('Enviando imagem para o Google Drive, por favor aguarde...', 'info');
             
             // Converte a imagem para base64
             const base64Image = await new Promise((resolve, reject) => {
@@ -1476,16 +1476,18 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    key: 'COLAQUI2025',
+                    key: 'COLAQUI2025', // Sua chave de segurança
                     imageBase64: base64Image,
                     mimeType: file.type,
-                    fileName: file.name
+                    fileName: file.name,
+                    activityId: currentEditingActivityId
                 })
             });
             
             const result = await response.json();
             if (result.fileUrl) {
                 imageUrl = result.fileUrl;
+                showNotification('Imagem enviada com sucesso!', 'success');
             } else {
                 throw new Error(result.error || 'Erro ao enviar imagem');
             }
@@ -1517,6 +1519,8 @@
     } finally {
         updateStatusBtn.disabled = false;
         updateStatusBtn.innerHTML = 'Atualizar Status';
+        imageUploadInput.value = '';
+        imagePreview.style.display = 'none';
     }
 });
 </script>
