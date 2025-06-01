@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Reserva dos Laboratórios de Química</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -887,6 +889,7 @@
             margin-bottom: 15px;
             border-left: 4px solid var(--warning);
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .occurrence-item:hover {
@@ -955,6 +958,18 @@
         .solution-title {
             font-weight: 600;
             color: var(--success);
+        }
+
+        /* Estilos para os botões de exportação */
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .export-btn {
+            padding: 8px 12px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -1143,7 +1158,21 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> Ocorrências nos Laboratórios</h2>
-                        <button class="btn btn-warning" id="add-occurrence"><i class="fas fa-plus"></i> Nova Ocorrência</button>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <button class="btn btn-warning" id="add-occurrence"><i class="fas fa-plus"></i> Nova Ocorrência</button>
+                            <!-- Filtro por status -->
+                            <select id="filter-status" class="btn btn-sm" style="background: var(--dark); color: white;">
+                                <option value="all">Todas</option>
+                                <option value="pendente">Pendentes</option>
+                                <option value="em-andamento">Em Andamento</option>
+                                <option value="resolvido">Resolvidas</option>
+                            </select>
+                            <!-- Botões de exportação -->
+                            <div class="export-buttons">
+                                <button class="btn btn-success export-btn" id="export-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+                                <button class="btn btn-success export-btn" id="export-excel"><i class="fas fa-file-excel"></i> Excel</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div id="occurrences-container">
@@ -1786,17 +1815,25 @@
         addActivityEventListeners();
     }
 
-    function renderOccurrences() {
+    function renderOccurrences(filterStatus = 'all') {
+        const occurrencesList = document.getElementById('occurrences-list');
         occurrencesList.innerHTML = '';
+        let filteredOccurrences = occurrences;
         
-        if (occurrences.length === 0) {
-            occurrencesEmptyState.style.display = 'block';
+        if (filterStatus !== 'all') {
+            filteredOccurrences = occurrences.filter(occ => 
+                (occ.status || 'pendente') === filterStatus
+            );
+        }
+
+        if (filteredOccurrences.length === 0) {
+            document.getElementById('occurrences-empty-state').style.display = 'block';
             return;
         }
         
-        occurrencesEmptyState.style.display = 'none';
-        
-        occurrences.forEach(occurrence => {
+        document.getElementById('occurrences-empty-state').style.display = 'none';
+
+        filteredOccurrences.forEach(occurrence => {
             const occurrenceDate = occurrence.createdAt && occurrence.createdAt.toDate 
                                 ? occurrence.createdAt.toDate().toLocaleString('pt-BR')
                                 : 'Data inválida';
@@ -2230,7 +2267,11 @@
                     <button class="btn btn-success" id="add-solution-btn">
                         <i class="fas fa-plus"></i> Adicionar Solução
                     </button>
+                    <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                        <i class="fas fa-trash"></i> Excluir Ocorrência
+                    </button>
                 `;
+                
                 document.getElementById('add-solution-btn').addEventListener('click', () => {
                     solutionView.style.display = 'none';
                     solutionForm.style.display = 'block';
@@ -2248,38 +2289,10 @@
                             <button class="btn btn-success" id="add-solution-btn">
                                 <i class="fas fa-plus"></i> Adicionar Solução
                             </button>
+                            <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                                <i class="fas fa-trash"></i> Excluir Ocorrência
+                            </button>
                         `;
-                        document.getElementById('add-solution-btn').addEventListener('click', () => {
-                            solutionView.style.display = 'none';
-                            solutionForm.style.display = 'block';
-                            solutionStatusInput.value = 'resolvido';
-                            solutionDescriptionInput.value = '';
-                            solutionActions.innerHTML = `
-                                <button class="btn" id="cancel-solution-btn">
-                                    <i class="fas fa-times"></i> Cancelar
-                                </button>
-                            `;
-                            document.getElementById('cancel-solution-btn').addEventListener('click', () => {
-                                solutionView.style.display = 'block';
-                                solutionForm.style.display = 'none';
-                                solutionActions.innerHTML = `
-                                    <button class="btn btn-success" id="add-solution-btn">
-                                        <i class="fas fa-plus"></i> Adicionar Solução
-                                    </button>
-                                `;
-                                document.getElementById('add-solution-btn').addEventListener('click', () => {
-                                    solutionView.style.display = 'none';
-                                    solutionForm.style.display = 'block';
-                                    solutionStatusInput.value = 'resolvido';
-                                    solutionDescriptionInput.value = '';
-                                    solutionActions.innerHTML = `
-                                        <button class="btn" id="cancel-solution-btn">
-                                            <i class="fas fa-times"></i> Cancelar
-                                        </button>
-                                    `;
-                                });
-                            });
-                        });
                     });
                 });
             } else {
@@ -2287,7 +2300,11 @@
                     <button class="btn btn-warning" id="edit-solution-btn">
                         <i class="fas fa-edit"></i> Editar Solução
                     </button>
+                    <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                        <i class="fas fa-trash"></i> Excluir Ocorrência
+                    </button>
                 `;
+                
                 document.getElementById('edit-solution-btn').addEventListener('click', () => {
                     solutionView.style.display = 'none';
                     solutionForm.style.display = 'block';
@@ -2298,29 +2315,24 @@
                             <i class="fas fa-times"></i> Cancelar
                         </button>
                     `;
-                    document.getElementById('cancel-solution-btn').addEventListener('click', () => {
-                        solutionView.style.display = 'block';
-                        solutionForm.style.display = 'none';
-                        solutionActions.innerHTML = `
-                            <button class="btn btn-warning" id="edit-solution-btn">
-                                <i class="fas fa-edit"></i> Editar Solução
-                            </button>
-                        `;
-                        document.getElementById('edit-solution-btn').addEventListener('click', () => {
-                            solutionView.style.display = 'none';
-                            solutionForm.style.display = 'block';
-                            solutionStatusInput.value = occurrence.status || 'resolvido';
-                            solutionDescriptionInput.value = occurrence.solution.description;
-                            solutionActions.innerHTML = `
-                                <button class="btn" id="cancel-solution-btn">
-                                    <i class="fas fa-times"></i> Cancelar
-                                </button>
-                            `;
-                        });
-                    });
                 });
             }
         }
+
+        // Adicionar evento para deletar ocorrência
+        document.getElementById('delete-occurrence-btn')?.addEventListener('click', async () => {
+            if (confirm('Tem certeza que deseja excluir esta ocorrência permanentemente?')) {
+                try {
+                    await db.collection('occurrences').doc(currentEditingOccurrenceId).delete();
+                    showNotification('Ocorrência excluída com sucesso!', 'success');
+                    closeModals();
+                    loadOccurrencesFromFirestore();
+                } catch (error) {
+                    console.error("Erro ao excluir ocorrência:", error);
+                    showNotification(`Erro ao excluir ocorrência: ${error.message}`, 'error');
+                }
+            }
+        });
 
         saveSolutionBtn.addEventListener('click', async () => {
             const status = solutionStatusInput.value;
@@ -2593,6 +2605,92 @@
                 showNotification(`Erro ao limpar dados: ${error.message}.`, 'error');
             }
         }
+    });
+
+    // Filtro por status de ocorrências
+    document.getElementById('filter-status').addEventListener('change', (e) => {
+        const status = e.target.value;
+        renderOccurrences(status);
+    });
+
+    // Exportar ocorrências para PDF
+    document.getElementById('export-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Cabeçalho
+        doc.setFontSize(18);
+        doc.text("Relatório de Ocorrências", 105, 15, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 105, 22, { align: 'center' });
+        
+        // Conteúdo
+        let yPos = 40;
+        occurrences.forEach((occ, index) => {
+            if (yPos > 280) {
+                doc.addPage();
+                yPos = 20;
+            }
+            
+            doc.setFontSize(14);
+            doc.text(`Ocorrência ${index + 1}: ${occ.title}`, 14, yPos);
+            doc.setFontSize(12);
+            yPos += 8;
+            doc.text(`Laboratório: ${occ.lab}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Status: ${occ.status || 'pendente'}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Registrada por: ${occ.authorEmail}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Data: ${occ.createdAt.toDate().toLocaleString('pt-BR')}`, 14, yPos);
+            yPos += 8;
+            
+            // Descrição com quebra de linha
+            const splitDesc = doc.splitTextToSize(occ.description, 180);
+            doc.text('Descrição:', 14, yPos);
+            yPos += 8;
+            doc.text(splitDesc, 20, yPos);
+            yPos += splitDesc.length * 7;
+            
+            // Solução (se existir)
+            if (occ.solution) {
+                doc.text('Solução:', 14, yPos);
+                yPos += 8;
+                const splitSolution = doc.splitTextToSize(occ.solution.description, 180);
+                doc.text(splitSolution, 20, yPos);
+                yPos += splitSolution.length * 7;
+                doc.text(`Resolvido por: ${occ.solution.authorEmail}`, 14, yPos);
+                yPos += 8;
+                doc.text(`Data da solução: ${occ.solution.date.toDate().toLocaleString('pt-BR')}`, 14, yPos);
+                yPos += 8;
+            }
+            
+            yPos += 15;
+            doc.line(14, yPos, 196, yPos);
+            yPos += 10;
+        });
+        
+        doc.save(`ocorrencias_${new Date().toISOString().slice(0,10)}.pdf`);
+    });
+
+    // Exportar ocorrências para Excel
+    document.getElementById('export-excel').addEventListener('click', () => {
+        const data = occurrences.map(occ => ({
+            "Laboratório": occ.lab,
+            "Título": occ.title,
+            "Status": occ.status || 'pendente',
+            "Descrição": occ.description,
+            "Registrado por": occ.authorEmail,
+            "Data registro": occ.createdAt.toDate().toLocaleString('pt-BR'),
+            "Solução": occ.solution ? occ.solution.description : 'N/A',
+            "Resolvido por": occ.solution ? occ.solution.authorEmail : 'N/A',
+            "Data solução": occ.solution ? occ.solution.date.toDate().toLocaleString('pt-BR') : 'N/A'
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Ocorrências");
+        XLSX.writeFile(wb, `ocorrencias_${new Date().toISOString().slice(0,10)}.xlsx`);
     });
     
     function showNotification(message, type = 'info') {
