@@ -1447,89 +1447,73 @@
     const newStatus = activityStatusUpdateSelect.value;
     const observationText = observationInput.value.trim();
     const file = imageUploadInput.files[0];
-    
-    if (!newStatus) {
-        showNotification('Selecione um status válido.', 'warning');
-        return;
-    }
+    let imageUrl = null;
 
-    try {
-        updateStatusBtn.disabled = true;
-        updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-        
-        let imageUrl = null;
-        
-        // Se há imagem para upload
-        if (file) {
-            showNotification('Enviando imagem, por favor aguarde...', 'info');
-            
-            // Passo 1: Converter a imagem para texto (base64)
-            const base64Image = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-            
-            // Passo 2: Preparar os dados para enviar
-            const payload = {
-                key: 'COLAQUI2025', // Esta é a senha que você definiu
-                imageBase64: base64Image,
-                mimeType: file.type,
-                fileName: file.name
-            };
-            
-            // Passo 3: Enviar para o Google Apps Script
-            const response = await fetch('https://script.google.com/macros/s/AKfycbwp-S7a5hlgGqc3VEZPKUDkV2AKI6wh282l7POpwQGlx6fhwoajvR5AWLpQcDzauiFAvA/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-                mode: 'no-cors' // Isso ajuda a evitar bloqueios
-            });
-            
-            // Verificar se deu certo
-            if (!response.ok) {
-                throw new Error('Erro na resposta do servidor');
-            }
-            
-            const result = await response.json();
-            if (result.fileUrl) {
-                imageUrl = result.fileUrl;
-            } else {
-                throw new Error(result.error || 'Erro desconhecido ao enviar imagem');
-            }
-        }
-        
-        // Passo 4: Atualizar os dados no Firebase
-        const updateData = {
-            status: newStatus,
-            updatedAt: firebase.firestore.Timestamp.now()
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async function () {
+        const base64Data = reader.result.split(',')[1];
+
+        const payload = {
+          key: 'COLAQUI2025',
+          imageBase64: base64Data,
+          mimeType: file.type,
+          fileName: file.name
         };
-        
-        if (imageUrl) updateData.imageUrl = imageUrl;
-        if (observationText) {
-            updateData.observations = firebase.firestore.FieldValue.arrayUnion({
-                text: observationText,
-                author: fbCurrentUser.email,
-                date: firebase.firestore.Timestamp.now()
-            });
+
+        try {
+          const response = await fetch('https://script.google.com/macros/s/AKfycbwp-S7a5hlgGqc3VEZPKUDkV2AKI6wh282l7POpwQGlx6fhwoajvR5AWLpQcDzauiFAvA/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const result = await response.json();
+          if (result.fileUrl) {
+            imageUrl = result.fileUrl;
+            await salvarStatusComImagem(imageUrl, newStatus, observationText);
+          } else {
+            showNotification('Erro ao enviar imagem: ' + result.error, 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          showNotification('Erro na comunicação com servidor de upload', 'error');
         }
-        
-        await db.collection('activities').doc(currentEditingActivityId).update(updateData);
-        
-        showNotification('Atividade atualizada com sucesso!', 'success');
-        closeModals();
-        
-    } catch (error) {
-        console.error("Erro ao atualizar status:", error);
-        showNotification(`Erro: ${error.message}`, 'error');
-    } finally {
-        updateStatusBtn.disabled = false;
-        updateStatusBtn.innerHTML = 'Atualizar Status';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      await salvarStatusComImagem(null, newStatus, observationText);
     }
-});
+  });
+
+  async function salvarStatusComImagem(imageUrl, status, observacao) {
+    try {
+      const docRef = db.collection('activities').doc(currentEditingActivityId);
+      const updateData = {
+        status: status,
+        updatedAt: firebase.firestore.Timestamp.now(),
+      };
+      if (imageUrl) updateData.imageUrl = imageUrl;
+      if (observacao) {
+        await docRef.update({
+          ...updateData,
+          observations: firebase.firestore.FieldValue.arrayUnion({
+            text: observacao,
+            author: fbCurrentUser.email,
+            date: firebase.firestore.Timestamp.now()
+          })
+        });
+      } else {
+        await docRef.update(updateData);
+      }
+      showNotification('Atividade atualizada com sucesso!', 'success');
+      closeModals();
+    } catch (err) {
+      console.error('Erro ao atualizar atividade:', err);
+      showNotification('Erro ao salvar atualização', 'error');
+    }
+  }
+</script>
 
                     
         <!-- Botão de sincronização manual -->
