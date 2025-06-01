@@ -1431,78 +1431,99 @@
 
 <script>
   // Preview da imagem
-  imageUploadInput.addEventListener('change', async function(e) {
+  imageUploadInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
-    if (!file || !currentEditingActivityId) return;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      imagePreview.src = event.target.result;
+      imagePreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
 
-    try {
-        showNotification('Enviando imagem, por favor aguarde...', 'info');
-        
-        // Upload para Imgur
-        const formData = new FormData();
-        formData.append('image', file);
-
-        const response = await fetch('https://api.imgur.com/3/image', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Client-ID cc5a53313a2ddca' // SEU CLIENT ID
-            },
-            body: formData
-        });
-
-        const result = await response.json();
-        
-        if (result.success) {
-            const imageUrl = result.data.link;
-            
-            // Atualizar Firebase com nova imagem
-            await db.collection('activities').doc(currentEditingActivityId).update({
-                imageUrl: imageUrl,
-                updatedAt: firebase.firestore.Timestamp.now()
-            });
-            
-            // Atualizar preview
-            imagePreview.src = imageUrl;
-            imagePreview.style.display = 'block';
-            showNotification('Imagem enviada com sucesso!', 'success');
-            
-            // Atualizar detalhes da atividade
-            const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
-            if(updatedActivity) showDetailModal(currentEditingActivityId);
-        } else {
-            throw new Error(result.data.error || 'Erro no upload para o Imgur');
-        }
-    } catch (error) {
-        console.error("Erro no upload:", error);
-        showNotification(`Erro: ${error.message}`, 'error');
-    }
-});
-
-// Botão de atualização de status (apenas para status)
+  // Atualizar status com upload
+  <script>
 updateStatusBtn.addEventListener('click', async () => {
     if (!currentEditingActivityId) return;
     const newStatus = activityStatusUpdateSelect.value;
+    const imageFile = imageUploadInput.files[0];
+    const observationText = observationInput.value.trim();
     
     try {
         updateStatusBtn.disabled = true;
-        updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Atualizando...';
+        updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
         
-        await db.collection('activities').doc(currentEditingActivityId).update({
+        const updateData = {
             status: newStatus,
             updatedAt: firebase.firestore.Timestamp.now()
-        });
+        };
         
-        showNotification('Status da atividade atualizado.', 'success');
+        // Upload da imagem para Imgur se existir
+        if (imageFile) {
+            showNotification('Enviando imagem para o Imgur, aguarde...', 'info');
+            const imageUrl = await uploadImageToImgur(imageFile);
+            updateData.imageUrl = imageUrl;
+        }
+        
+        // Adicionar observação se existir
+        if (observationText) {
+            updateData.observations = firebase.firestore.FieldValue.arrayUnion({
+                text: observationText,
+                authorEmail: fbCurrentUser.email,
+                authorUid: fbCurrentUser.uid,
+                timestamp: firebase.firestore.Timestamp.now()
+            });
+        }
+        
+        // Atualizar no Firestore
+        await db.collection('activities').doc(currentEditingActivityId).update(updateData);
+        
+        showNotification('Atividade atualizada com sucesso!', 'success');
+        // Limpar campos
+        imageUploadInput.value = '';
+        imagePreview.style.display = 'none';
+        observationInput.value = '';
+        
+        // Recarregar detalhes
         const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
         if(updatedActivity) showDetailModal(currentEditingActivityId);
+        
     } catch (error) {
-        console.error("Erro ao atualizar status:", error);
-        showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
+        console.error("Erro ao atualizar atividade:", error);
+        showNotification(`Erro: ${error.message}`, 'error');
     } finally {
         updateStatusBtn.disabled = false;
         updateStatusBtn.innerHTML = 'Atualizar Status';
     }
 });
+</script>
+                    <script>
+async function uploadImageToImgur(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    try {
+        const response = await fetch('https://api.imgur.com/3/image', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Client-ID b5ecc490f109c20' // SEU CLIENT ID
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            return data.data.link;
+        } else {
+            throw new Error(data.data.error || 'Falha no upload para o Imgur');
+        }
+    } catch (error) {
+        console.error('Erro no upload para o Imgur:', error);
+        throw error;
+    }
+}
+</script>
 </script>
 
                     
@@ -1535,8 +1556,7 @@ updateStatusBtn.addEventListener('click', async () => {
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const storage = firebase.storage();
-       
+        
     // Ativar persistência offline
     db.enablePersistence()
       .catch((err) => {
