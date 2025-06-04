@@ -1703,7 +1703,14 @@
     const observationsListDiv = document.getElementById('observations-list');
 
     // Event Listeners
-    syncButton.addEventListener('click', forceSync);
+    loginBtn.addEventListener('click', () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        auth.signInWithEmailAndPassword(email, password)
+            .catch(error => {
+                // ... (tratamento de erro)
+            });
+    });
     
     // Autenticação
     auth.onAuthStateChanged(async user => {
@@ -2265,99 +2272,69 @@ function showAcknowledgmentModal(callback) {
     });
 }
     // ETAPA 4: Professor cadastra como 'solicitada'
-    saveActivityBtn.addEventListener('click', async () => {
-    const practiceName = newPracticeInput.value.trim();
-    const professorName = professorInput.value.trim();
-    const lab = activityLabInput.value;
-    const deadlineValue = deadlineInput.value;
-    const requirementsText = requirementsInput.value.trim();
-
-    if (!practiceName || !professorName || !deadlineValue || !lab) {
-        showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Laboratório, Prazo).', 'warning');
-        return;
-    }
-
-    // VALIDAÇÃO DE DATA (NOVO)
-    const deadlineDate = new Date(deadlineValue + "T00:00:00");
-    const today = new Date();
-    
-    // 1. Não permite datas passadas
-    if (deadlineDate < today) {
-        showNotification('A data deve ser futura.', 'warning');
-        return;
-    }
-    
-    // 2. Para docentes: Verifica antecedência mínima de 48h úteis
-    let requiresAcknowledgment = false;
-    if (userRoleType === 'Professor') {
-        const businessHours = calculateBusinessHours(today, deadlineDate);
+    document.getElementById('save-activity').addEventListener('click', async () => {
+        const practiceName = document.getElementById('new-practice').value.trim();
+        const professorName = document.getElementById('professor').value.trim();
+        const lab = document.getElementById('activity-lab').value;
+        const deadlineValue = document.getElementById('deadline').value;
         
-        if (businessHours < 48) {
-            requiresAcknowledgment = true;
+        if (!practiceName || !professorName || !deadlineValue || !lab) {
+            showNotification('Preencha todos os campos!', 'warning');
+            return;
         }
-    }
 
-    const activityData = {
-        name: practiceName,
-        professor: professorName,
-        lab: lab,
-        date: firebase.firestore.Timestamp.fromDate(deadlineDate),
-        requirements: requirementsText,
-        // ETAPA 4: Status 'solicitada' para professores
-        status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
-        technicianName: null,
-        technicianUid: null,
-        instructions: null,
-        observations: [],
-        createdAt: firebase.firestore.Timestamp.now(),
-        createdByUid: fbCurrentUser.uid,
-        createdByEmail: fbCurrentUser.email,
-        imageUrl: null
-    };
+        const deadlineDate = new Date(deadlineValue);
+        const today = new Date();
+        
+        // Validação de data
+        if (deadlineDate < today) {
+            showNotification('A data deve ser futura!', 'warning');
+            return;
+        }
+        
+        let requiresAcknowledgment = false;
+        if (userRoleType === 'Professor') {
+            const businessHours = calculateBusinessHours(today, deadlineDate);
+            if (businessHours < 48) {
+                requiresAcknowledgment = true;
+            }
+        }
 
-    try {
-        if (requiresAcknowledgment) {
-            // Mostra modal de confirmação e aguarda decisão
-            showAcknowledgmentModal(async () => {
+        const activityData = {
+            name: practiceName,
+            professor: professorName,
+            lab: lab,
+            date: firebase.firestore.Timestamp.fromDate(deadlineDate),
+            status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
+            createdAt: firebase.firestore.Timestamp.now(),
+            createdByUid: fbCurrentUser.uid,
+            createdByEmail: fbCurrentUser.email
+        };
+
+        try {
+            if (requiresAcknowledgment) {
+                showAcknowledgmentModal(async () => {
+                    await saveActivity(activityData);
+                });
+            } else {
                 await saveActivity(activityData);
-            });
-        } else {
-            await saveActivity(activityData);
+            }
+        } catch (error) {
+            showNotification('Erro ao salvar: ' + error.message, 'error');
         }
-    } catch (error) {
-        console.error("Erro ao salvar atividade:", error);
-        showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
-    }
-});
+    });
 
-// Função auxiliar para salvar atividade (extraída do código existente)
-async function saveActivity(activityData) {
-    if (currentEditingActivityId) { 
-        const existingActivity = activities.find(a => a.id === currentEditingActivityId);
-        activityData.observations = existingActivity.observations || [];
-        activityData.status = existingActivity.status;
-        activityData.technicianName = existingActivity.technicianName;
-        activityData.technicianUid = existingActivity.technicianUid;
-        activityData.instructions = existingActivity.instructions;
-        activityData.createdAt = existingActivity.createdAt;
-        activityData.imageUrl = existingActivity.imageUrl || null;
-
-        await db.collection('activities').doc(currentEditingActivityId).update(activityData);
-        showNotification('Atividade atualizada com sucesso!', 'success');
-    } else { 
-        const docRef = await db.collection('activities').add(activityData);
-        console.log("Documento criado com ID:", docRef.id);
-        
-        // Verificar sincronização
-        const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
-        if (doc.exists) {
-            showNotification('Atividade criada e sincronizada!', 'success');
-        } else {
-            showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
+// Função para salvar atividade (CORRIGIDA)
+    async function saveActivity(activityData) {
+        if (currentEditingActivityId) { 
+            await db.collection('activities').doc(currentEditingActivityId).update(activityData);
+            showNotification('Atividade atualizada!', 'success');
+        } else { 
+            const docRef = await db.collection('activities').add(activityData);
+            showNotification('Atividade criada!', 'success');
         }
+        closeModals();
     }
-    closeModals();
-}
         } catch (error) {
             console.error("Erro ao salvar atividade:", error);
             showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
