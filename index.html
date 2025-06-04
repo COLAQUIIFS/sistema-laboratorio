@@ -1061,6 +1061,16 @@
         .comprovante-link:hover {
             text-decoration: underline;
         }
+        /* Estilo adicional para o modal de confirmação */
+#acknowledgment-modal .modal-content {
+    max-width: 600px;
+    background: rgba(33, 47, 60, 0.98);
+}
+
+#acknowledgment-modal .modal-body p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
     </style>
 </head>
 <body>
@@ -2186,64 +2196,168 @@
             closeModals();
         }
     });
+// Adicionar estas funções após as funções existentes
+function isBusinessDay(date) {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // 0 = Domingo, 6 = Sábado
+}
 
+function calculateBusinessHours(start, end) {
+    let businessHours = 0;
+    const current = new Date(start);
+    
+    while (current < end) {
+        const currentHour = current.getHours() + current.getMinutes()/60;
+        
+        // Verifica se está dentro do horário comercial (6:30 às 19:00)
+        if (isBusinessDay(current) && currentHour >= 6.5 && currentHour < 19) {
+            businessHours += 0.1; // Aumenta 6 minutos (0.1 horas) a cada iteração
+        }
+        
+        current.setMinutes(current.getMinutes() + 6); // Incrementa 6 minutos
+    }
+    
+    return businessHours;
+}
+
+function showAcknowledgmentModal(callback) {
+    const modalContent = `
+        <div class="modal" id="acknowledgment-modal" style="display: flex;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirmação Necessária</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Declaro estar ciente de que esta solicitação de reserva está sendo feita fora do prazo mínimo de 48 horas de antecedência.</p>
+                    <p>Compreendo que, devido a isso, um ou mais itens ou recursos solicitados poderão não estar disponíveis no momento da aula, estando sujeitos à disponibilidade no setor.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="cancel-ack-btn">Cancelar</button>
+                    <button class="btn btn-primary" id="confirm-ack-btn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Adiciona o modal ao corpo do documento
+    document.body.insertAdjacentHTML('beforeend', modalContent);
+    
+    const closeModal = () => {
+        document.getElementById('acknowledgment-modal').remove();
+    };
+    
+    // Configura os eventos dos botões
+    document.getElementById('cancel-ack-btn').addEventListener('click', closeModal);
+    document.getElementById('confirm-ack-btn').addEventListener('click', () => {
+        closeModal();
+        callback();
+    });
+    
+    // Fechar ao clicar no botão de fechar
+    document.querySelector('#acknowledgment-modal .close-btn').addEventListener('click', closeModal);
+    
+    // Fechar ao clicar fora do modal
+    document.getElementById('acknowledgment-modal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('acknowledgment-modal')) {
+            closeModal();
+        }
+    });
+}
     // ETAPA 4: Professor cadastra como 'solicitada'
     saveActivityBtn.addEventListener('click', async () => {
-        const practiceName = newPracticeInput.value.trim();
-        const professorName = professorInput.value.trim();
-        const lab = activityLabInput.value;
-        const deadlineValue = deadlineInput.value;
-        const requirementsText = requirementsInput.value.trim();
+    const practiceName = newPracticeInput.value.trim();
+    const professorName = professorInput.value.trim();
+    const lab = activityLabInput.value;
+    const deadlineValue = deadlineInput.value;
+    const requirementsText = requirementsInput.value.trim();
 
-        if (!practiceName || !professorName || !deadlineValue || !lab) {
-            showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Laboratório, Prazo).', 'warning');
-            return;
+    if (!practiceName || !professorName || !deadlineValue || !lab) {
+        showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Laboratório, Prazo).', 'warning');
+        return;
+    }
+
+    // VALIDAÇÃO DE DATA (NOVO)
+    const deadlineDate = new Date(deadlineValue + "T00:00:00");
+    const today = new Date();
+    
+    // 1. Não permite datas passadas
+    if (deadlineDate < today) {
+        showNotification('A data deve ser futura.', 'warning');
+        return;
+    }
+    
+    // 2. Para docentes: Verifica antecedência mínima de 48h úteis
+    let requiresAcknowledgment = false;
+    if (userRoleType === 'Professor') {
+        const businessHours = calculateBusinessHours(today, deadlineDate);
+        
+        if (businessHours < 48) {
+            requiresAcknowledgment = true;
         }
+    }
 
-        const activityData = {
-            name: practiceName,
-            professor: professorName,
-            lab: lab,
-            date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
-            requirements: requirementsText,
-            // ETAPA 4: Status 'solicitada' para professores
-            status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
-            technicianName: null,
-            technicianUid: null,
-            instructions: null,
-            observations: [],
-            createdAt: firebase.firestore.Timestamp.now(),
-            createdByUid: fbCurrentUser.uid,
-            createdByEmail: fbCurrentUser.email,
-            imageUrl: null
-        };
+    const activityData = {
+        name: practiceName,
+        professor: professorName,
+        lab: lab,
+        date: firebase.firestore.Timestamp.fromDate(deadlineDate),
+        requirements: requirementsText,
+        // ETAPA 4: Status 'solicitada' para professores
+        status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
+        technicianName: null,
+        technicianUid: null,
+        instructions: null,
+        observations: [],
+        createdAt: firebase.firestore.Timestamp.now(),
+        createdByUid: fbCurrentUser.uid,
+        createdByEmail: fbCurrentUser.email,
+        imageUrl: null
+    };
 
-        try {
-            if (currentEditingActivityId) { 
-                const existingActivity = activities.find(a => a.id === currentEditingActivityId);
-                activityData.observations = existingActivity.observations || [];
-                activityData.status = existingActivity.status;
-                activityData.technicianName = existingActivity.technicianName;
-                activityData.technicianUid = existingActivity.technicianUid;
-                activityData.instructions = existingActivity.instructions;
-                activityData.createdAt = existingActivity.createdAt;
-                activityData.imageUrl = existingActivity.imageUrl || null;
+    try {
+        if (requiresAcknowledgment) {
+            // Mostra modal de confirmação e aguarda decisão
+            showAcknowledgmentModal(async () => {
+                await saveActivity(activityData);
+            });
+        } else {
+            await saveActivity(activityData);
+        }
+    } catch (error) {
+        console.error("Erro ao salvar atividade:", error);
+        showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
+    }
+});
 
-                await db.collection('activities').doc(currentEditingActivityId).update(activityData);
-                showNotification('Atividade atualizada com sucesso!', 'success');
-            } else { 
-                const docRef = await db.collection('activities').add(activityData);
-                console.log("Documento criado com ID:", docRef.id);
-                
-                // Verificar sincronização
-                const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
-                if (doc.exists) {
-                    showNotification('Atividade criada e sincronizada!', 'success');
-                } else {
-                    showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
-                }
-            }
-            closeModals();
+// Função auxiliar para salvar atividade (extraída do código existente)
+async function saveActivity(activityData) {
+    if (currentEditingActivityId) { 
+        const existingActivity = activities.find(a => a.id === currentEditingActivityId);
+        activityData.observations = existingActivity.observations || [];
+        activityData.status = existingActivity.status;
+        activityData.technicianName = existingActivity.technicianName;
+        activityData.technicianUid = existingActivity.technicianUid;
+        activityData.instructions = existingActivity.instructions;
+        activityData.createdAt = existingActivity.createdAt;
+        activityData.imageUrl = existingActivity.imageUrl || null;
+
+        await db.collection('activities').doc(currentEditingActivityId).update(activityData);
+        showNotification('Atividade atualizada com sucesso!', 'success');
+    } else { 
+        const docRef = await db.collection('activities').add(activityData);
+        console.log("Documento criado com ID:", docRef.id);
+        
+        // Verificar sincronização
+        const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
+        if (doc.exists) {
+            showNotification('Atividade criada e sincronizada!', 'success');
+        } else {
+            showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
+        }
+    }
+    closeModals();
+}
         } catch (error) {
             console.error("Erro ao salvar atividade:", error);
             showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
