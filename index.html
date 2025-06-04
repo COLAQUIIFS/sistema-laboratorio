@@ -2272,7 +2272,7 @@ function showAcknowledgmentModal(callback) {
     });
 }
     // ETAPA 4: Professor cadastra como 'solicitada'
-    document.getElementById('save-activity').addEventListener('click', async () => {
+   document.getElementById('save-activity').addEventListener('click', async () => {
         const practiceName = document.getElementById('new-practice').value.trim();
         const professorName = document.getElementById('professor').value.trim();
         const lab = document.getElementById('activity-lab').value;
@@ -2323,7 +2323,7 @@ function showAcknowledgmentModal(callback) {
             showNotification('Erro ao salvar: ' + error.message, 'error');
         }
     });
-
+        
 // Função para salvar atividade (CORRIGIDA)
     async function saveActivity(activityData) {
         if (currentEditingActivityId) { 
