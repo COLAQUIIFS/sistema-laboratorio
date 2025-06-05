@@ -18,7 +18,6 @@
             --dark: #34495e;
             --admin: #8e44ad;
             --tech: #16a085;
-            --professor: #3498db; /* Nova cor para professor */
             --card-bg: rgba(255, 255, 255, 0.05);
             --card-border: rgba(255, 255, 255, 0.1);
         }
@@ -77,11 +76,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .logo-text {
-            display: flex;
-            flex-direction: column;
         }
         
         .logo-text h1 {
@@ -154,10 +148,6 @@
         
         .role-tech {
             background: var(--tech);
-        }
-        
-        .role-professor { /* Estilo para professor */
-            background: var(--professor);
         }
 
         .btn-logout {
@@ -391,11 +381,6 @@
         .status-pendente {
             background: rgba(243, 156, 18, 0.15);
             color: var(--warning);
-        }
-        
-        .status-solicitada { /* Novo status */
-            background: rgba(155, 89, 182, 0.15);
-            color: var(--admin);
         }
 
         .status-designada {
@@ -1064,6 +1049,15 @@
     </style>
 </head>
 <body>
+    <!-- Todo o restante do seu código HTML permanece exatamente igual -->
+    <!-- ... -->
+    
+    <script>
+    // Todo o seu código JavaScript permanece exatamente igual
+    // ...
+    </script>
+</body>
+</html>
     <div class="login-container" id="login-screen">
         <div class="login-box">
             <div class="login-icon">
@@ -1352,12 +1346,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="new-practice">Prática:</label>
-                        <input type="text" id="new-practice" placeholder="Ex: Prática 4 - Eletroquímica" required>
+                        <input type="text" id="new-practice" placeholder="Ex: Prática 4 - Eletroquímica">
                     </div>
                     
                     <div class="form-group">
                         <label for="professor">Professor Responsável:</label>
-                        <input type="text" id="professor" placeholder="Nome do professor" required>
+                        <input type="text" id="professor" placeholder="Nome do professor">
                     </div>
                     
                     <div class="form-group">
@@ -1375,7 +1369,7 @@
                     
                     <div class="form-group">
                         <label for="deadline">Prazo:</label>
-                        <input type="date" id="deadline" required>
+                        <input type="date" id="deadline">
                     </div>
                     
                     <div class="form-group">
@@ -1712,8 +1706,6 @@
                       emailLowerCase === 'lucileide@lab.com' || 
                       emailLowerCase === 'jobim@lab.com') {
                 userRoleType = 'Técnico';
-            } else if (emailLowerCase === 'professores@lab.com') { // ETAPA 2: Perfil Professor
-                userRoleType = 'Professor';
             } else {
                 userRoleType = 'Visitante'; 
             }
@@ -1747,7 +1739,6 @@
         }
     });
 
-    // ETAPA 3: Ajuste de visibilidade para perfil Professor
     function updateUIVisibilityBasedOnRole() {
         if (!fbCurrentUser) return;
 
@@ -1759,7 +1750,6 @@
             document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
             addActivityBtn.style.display = 'inline-flex';
             addOccurrenceBtn.style.display = 'inline-flex';
-            resetBtn.style.display = 'inline-flex';
         } else if (userRoleType === 'Técnico') {
             userRoleDisplay.className = 'role-tag role-tech';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
@@ -1767,25 +1757,6 @@
             document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
             addActivityBtn.style.display = 'none';
             addOccurrenceBtn.style.display = 'inline-flex';
-            resetBtn.style.display = 'none';
-        } else if (userRoleType === 'Professor') { // ETAPA 3: Configuração Professor
-            userRoleDisplay.className = 'role-tag role-professor';
-            
-            // Esconde todas as abas
-            document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
-            // Mostra apenas as abas de Atividades e Ocorrências
-            document.querySelector('.tab[data-tab="atividades"]').style.display = 'flex';
-            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
-            
-            // Mostra botões de adicionar atividade e ocorrência
-            addActivityBtn.style.display = 'inline-flex';
-            addOccurrenceBtn.style.display = 'inline-flex';
-            
-            // Esconde as outras abas
-            document.querySelector('.tab[data-tab="relatorios"]').style.display = 'none';
-            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
-            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
-            resetBtn.style.display = 'none';
         } else { 
             userRoleDisplay.className = 'role-tag';
             document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
@@ -1793,7 +1764,6 @@
             document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'none';
             addActivityBtn.style.display = 'none';
             addOccurrenceBtn.style.display = 'none';
-            resetBtn.style.display = 'none';
         }
     }
 
@@ -1917,29 +1887,6 @@
                               : (activity.date || 'N/A');
 
             const row = activitiesTableBody.insertRow();
-            
-            // ETAPA 5: Botão de aprovação para admin
-            let actionButtons = '';
-            if (userRoleType === 'Administrador') {
-                if (activity.status === 'solicitada') {
-                    actionButtons += `
-                        <button class="btn btn-success btn-sm approve-activity" data-id="${activity.id}">
-                            <i class="fas fa-check"></i> Aprovar
-                        </button>
-                    `;
-                }
-                actionButtons += `
-                    <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-danger btn-sm delete-activity" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
-                `;
-            } else if (userRoleType === 'Professor') { // ETAPA 6: Professor só edita suas atividades
-                if (activity.createdByUid === fbCurrentUser.uid) {
-                    actionButtons += `
-                        <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
-                    `;
-                }
-            }
-            
             row.innerHTML = `
                 <td>${activity.name}</td>
                 <td>${activity.professor}</td>
@@ -1954,7 +1901,13 @@
                         </a>
                     ` : 'Nenhum'}
                 </td>
-                <td>${actionButtons}</td>
+                <td>
+                    <button class="btn btn-info btn-sm view-details" data-id="${activity.id}"><i class="fas fa-eye"></i></button>
+                    ${userRoleType === 'Administrador' ? `
+                        <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm delete-activity" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
+                    ` : ''}
+                </td>
             `;
         });
         addActivityEventListeners();
@@ -2027,7 +1980,6 @@
 
     function getStatusIcon(status) {
         switch(status) {
-            case 'solicitada': return '<i class="fas fa-hourglass-half"></i>'; // Novo ícone para solicitada
             case 'pendente': return '<i class="fas fa-clock"></i>';
             case 'designada': return '<i class="fas fa-user-check"></i>';
             case 'concluida': return '<i class="fas fa-check-circle"></i>';
@@ -2077,29 +2029,14 @@
             button.addEventListener('click', (e) => showDetailModal(e.currentTarget.dataset.id));
         });
         
-        document.querySelectorAll('.edit-activity').forEach(button => {
-            button.addEventListener('click', (e) => openActivityModal(e.currentTarget.dataset.id));
-        });
-        
-        document.querySelectorAll('.delete-activity').forEach(button => {
-            button.addEventListener('click', (e) => deleteActivity(e.currentTarget.dataset.id));
-        });
-        
-        // ETAPA 5: Evento para botão de aprovação
-        document.querySelectorAll('.approve-activity').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const activityId = e.currentTarget.dataset.id;
-                db.collection('activities').doc(activityId).update({
-                    status: 'pendente',
-                    approvedAt: firebase.firestore.Timestamp.now()
-                }).then(() => {
-                    showNotification("Atividade aprovada!", 'success');
-                }).catch(err => {
-                    showNotification("Erro ao aprovar atividade.", 'error');
-                    console.error(err);
-                });
+        if (userRoleType === 'Administrador') {
+            document.querySelectorAll('.edit-activity').forEach(button => {
+                button.addEventListener('click', (e) => openActivityModal(e.currentTarget.dataset.id));
             });
-        });
+            document.querySelectorAll('.delete-activity').forEach(button => {
+                button.addEventListener('click', (e) => deleteActivity(e.currentTarget.dataset.id));
+            });
+        }
     }
 
     function updateTabIndicator() {
@@ -2187,7 +2124,6 @@
         }
     });
 
-    // ETAPA 4: Professor cadastra como 'solicitada'
     saveActivityBtn.addEventListener('click', async () => {
         const practiceName = newPracticeInput.value.trim();
         const professorName = professorInput.value.trim();
@@ -2206,15 +2142,13 @@
             lab: lab,
             date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
             requirements: requirementsText,
-            // ETAPA 4: Status 'solicitada' para professores
-            status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
+            status: 'pendente',
             technicianName: null,
             technicianUid: null,
             instructions: null,
             observations: [],
             createdAt: firebase.firestore.Timestamp.now(),
             createdByUid: fbCurrentUser.uid,
-            createdByEmail: fbCurrentUser.email,
             imageUrl: null
         };
 
