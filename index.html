@@ -18,6 +18,7 @@
             --dark: #34495e;
             --admin: #8e44ad;
             --tech: #16a085;
+            --professor: #2980b9;
             --card-bg: rgba(255, 255, 255, 0.05);
             --card-border: rgba(255, 255, 255, 0.1);
         }
@@ -148,6 +149,10 @@
         
         .role-tech {
             background: var(--tech);
+        }
+        
+        .role-professor {
+            background: var(--professor);
         }
 
         .btn-logout {
@@ -396,6 +401,11 @@
         .status-em-andamento {
             background: rgba(155, 89, 182, 0.15);
             color: var(--admin);
+        }
+        
+        .status-solicitada {
+            background: rgba(155, 89, 182, 0.15);
+            color: #9b59b6;
         }
 
         /* Badges */
@@ -1046,18 +1056,26 @@
         .comprovante-link:hover {
             text-decoration: underline;
         }
+        
+        /* Estilo para declaração */
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            margin-top: 5px;
+        }
+        
+        .checkbox-container label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
-    <!-- Todo o restante do seu código HTML permanece exatamente igual -->
-    <!-- ... -->
-    
-    <script>
-    // Todo o seu código JavaScript permanece exatamente igual
-    // ...
-    </script>
-</body>
-</html>
     <div class="login-container" id="login-screen">
         <div class="login-box">
             <div class="login-icon">
@@ -1157,7 +1175,6 @@
                                     <th>Prática</th>
                                     <th>Professor</th>
                                     <th>Laboratório</th>
-                                    <th>Técnico</th>
                                     <th>Status</th>
                                     <th>Data</th>
                                     <th>Comprovante</th>
@@ -1370,6 +1387,15 @@
                     <div class="form-group">
                         <label for="deadline">Prazo:</label>
                         <input type="date" id="deadline">
+                    </div>
+                    
+                    <div class="form-group" id="declaration-container" style="display: none;">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="late-declaration" required>
+                            <label for="late-declaration" style="color: #fff; font-size: 0.9rem;">
+                                Declaro estar ciente de que esta solicitação de reserva está sendo feita fora do prazo mínimo de 48 horas de antecedência. Compreendo que, devido a isso, um ou mais itens ou recursos solicitados poderão não estar disponíveis no momento da aula, estando sujeitos à disponibilidade no setor.
+                            </label>
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -1685,6 +1711,8 @@
     const observationInput = document.getElementById('observation');
     const saveObservationBtn = document.getElementById('save-observation');
     const observationsListDiv = document.getElementById('observations-list');
+    const declarationContainer = document.getElementById('declaration-container');
+    const lateDeclaration = document.getElementById('late-declaration');
 
     // Event Listeners
     syncButton.addEventListener('click', forceSync);
@@ -1706,6 +1734,8 @@
                       emailLowerCase === 'lucileide@lab.com' || 
                       emailLowerCase === 'jobim@lab.com') {
                 userRoleType = 'Técnico';
+            } else if (emailLowerCase.includes('professor') || emailLowerCase.endsWith('@lab.com')) {
+                userRoleType = 'Professor';
             } else {
                 userRoleType = 'Visitante'; 
             }
@@ -1756,6 +1786,14 @@
             document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none'; 
             document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
             addActivityBtn.style.display = 'none';
+            addOccurrenceBtn.style.display = 'inline-flex';
+        } else if (userRoleType === 'Professor') {
+            userRoleDisplay.className = 'role-tag role-professor';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="relatorios"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
+            addActivityBtn.style.display = 'inline-flex';
             addOccurrenceBtn.style.display = 'inline-flex';
         } else { 
             userRoleDisplay.className = 'role-tag';
@@ -1891,7 +1929,6 @@
                 <td>${activity.name}</td>
                 <td>${activity.professor}</td>
                 <td>${activity.lab || 'Não definido'}</td>
-                <td>${activity.technicianName || 'Não designado'}</td>
                 <td><span class="status status-${activity.status}">${getStatusIcon(activity.status)} ${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
                 <td>${displayDate}</td>
                 <td>
@@ -1904,6 +1941,11 @@
                 <td>
                     <button class="btn btn-info btn-sm view-details" data-id="${activity.id}"><i class="fas fa-eye"></i></button>
                     ${userRoleType === 'Administrador' ? `
+                        ${activity.status === 'solicitada' ? `
+                            <button class="btn btn-success btn-sm confirm-activity" data-id="${activity.id}">
+                                <i class="fas fa-check"></i> Confirmar
+                            </button>
+                        ` : ''}
                         <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger btn-sm delete-activity" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
                     ` : ''}
@@ -1980,6 +2022,7 @@
 
     function getStatusIcon(status) {
         switch(status) {
+            case 'solicitada': return '<i class="fas fa-hourglass-start"></i>';
             case 'pendente': return '<i class="fas fa-clock"></i>';
             case 'designada': return '<i class="fas fa-user-check"></i>';
             case 'concluida': return '<i class="fas fa-check-circle"></i>';
@@ -2036,6 +2079,9 @@
             document.querySelectorAll('.delete-activity').forEach(button => {
                 button.addEventListener('click', (e) => deleteActivity(e.currentTarget.dataset.id));
             });
+            document.querySelectorAll('.confirm-activity').forEach(button => {
+                button.addEventListener('click', (e) => confirmActivity(e.currentTarget.dataset.id));
+            });
         }
     }
 
@@ -2064,6 +2110,9 @@
     
     function openActivityModal(activityIdToEdit = null) {
         currentEditingActivityId = activityIdToEdit; 
+        declarationContainer.style.display = 'none';
+        lateDeclaration.checked = false;
+        
         if (activityIdToEdit) {
             const activity = activities.find(act => act.id === activityIdToEdit);
             if (activity) {
@@ -2124,6 +2173,35 @@
         }
     });
 
+    // Função para verificar se a data está dentro de 48 horas
+    function isLessThan48Hours(selectedDate) {
+        const now = new Date();
+        const diffMs = selectedDate - now;
+        const diffHours = diffMs / (1000 * 60 * 60);
+        return diffHours < 48;
+    }
+
+    // Evento para validar a data
+    deadlineInput.addEventListener('change', function() {
+        const selectedDate = new Date(this.value + "T00:00:00");
+        const today = new Date();
+        
+        // Validar data futura
+        if (selectedDate < today) {
+            showNotification('Selecione uma data futura válida', 'error');
+            this.value = '';
+            declarationContainer.style.display = 'none';
+            return;
+        }
+        
+        // Verificar se é menos de 48h
+        if (isLessThan48Hours(selectedDate)) {
+            declarationContainer.style.display = 'block';
+        } else {
+            declarationContainer.style.display = 'none';
+        }
+    });
+
     saveActivityBtn.addEventListener('click', async () => {
         const practiceName = newPracticeInput.value.trim();
         const professorName = professorInput.value.trim();
@@ -2136,13 +2214,20 @@
             return;
         }
 
+        // Validar declaração se necessário
+        if (declarationContainer.style.display === 'block' &&
+            !lateDeclaration.checked) {
+            showNotification('Você deve confirmar a declaração para datas com menos de 48 horas de antecedência', 'warning');
+            return;
+        }
+
         const activityData = {
             name: practiceName,
             professor: professorName,
             lab: lab,
             date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
             requirements: requirementsText,
-            status: 'pendente',
+            status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
             technicianName: null,
             technicianUid: null,
             instructions: null,
@@ -2226,6 +2311,18 @@
         }
     }
     
+    // Função para confirmar atividade (mudar status de "solicitada" para "pendente")
+    async function confirmActivity(activityId) {
+        try {
+            await db.collection('activities').doc(activityId).update({
+                status: 'pendente'
+            });
+            showNotification('Atividade confirmada e disponível para designação', 'success');
+        } catch (error) {
+            showNotification('Erro ao confirmar atividade: ' + error.message, 'error');
+        }
+    }
+    
     assignBtn.addEventListener('click', async () => {
         const practiceId = practiceSelect.value;
         const technicianUidValue = technicianSelect.value;
@@ -2264,7 +2361,7 @@
     });
 
     function showDetailModal(activityId) {
-        currentEditingActivityId = activityId; 
+        currentEditingActivityId = activityId;
         const activity = activities.find(act => act.id === activityId);
         if (!activity) {
             showNotification('Atividade não encontrada.', 'error'); return;
