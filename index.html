@@ -1004,6 +1004,7 @@
             gap: 10px;
             margin-left: auto;
         }
+
         .export-btn {
             padding: 8px 12px;
             font-size: 0.85rem;
@@ -1015,6 +1016,7 @@
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .upload-area {
             border: 2px dashed rgba(255, 255, 255, 0.3);
             border-radius: 8px;
@@ -1024,15 +1026,18 @@
             transition: all 0.3s;
             margin-bottom: 15px;
         }
+
         .upload-area:hover {
             border-color: var(--secondary);
             background: rgba(52, 152, 219, 0.1);
         }
+
         .upload-icon {
             font-size: 2.5rem;
             color: var(--secondary);
             margin-bottom: 10px;
         }
+
         .image-preview {
             max-width: 100%;
             max-height: 200px;
@@ -1040,6 +1045,7 @@
             border-radius: 8px;
             display: none;
         }
+
         .upload-btn {
             margin-top: 10px;
         }
@@ -1051,18 +1057,9 @@
             color: var(--secondary);
             text-decoration: none;
         }
+
         .comprovante-link:hover {
             text-decoration: underline;
-        }
-
-        /* Estilo adicional para o modal de confirmação */
-        #acknowledgment-modal .modal-content {
-            max-width: 600px;
-            background: rgba(33, 47, 60, 0.98);
-        }
-        #acknowledgment-modal .modal-body p {
-            margin-bottom: 15px;
-            line-height: 1.6;
         }
     </style>
 </head>
@@ -1079,14 +1076,16 @@
                 <label for="email">E-mail:</label>
                 <input type="email" id="email" placeholder="seu@email.com">
             </div>
+            
             <div class="form-group password-input">
                 <label for="password">Senha:</label>
                 <input type="password" id="password" placeholder="Digite sua senha">
             </div>
+            
             <button class="login-btn" id="login-btn">Acessar Sistema</button>
         </div>
     </div>
-
+    
     <div id="main-system" style="display: none;">
         <header>
             <div class="container">
@@ -1118,35 +1117,41 @@
                 </div>
             </div>
         </header>
-
+        
         <div class="container">
             <div class="tabs-container">
                 <div class="tabs" id="system-tabs">
                     <div class="tab active" data-tab="atividades">
-                        <i class="fas fa-tasks"></i> <span>Atividades</span>
+                        <i class="fas fa-tasks"></i>
+                        <span>Atividades</span>
                     </div>
                     <div class="tab" data-tab="designar">
-                        <i class="fas fa-user-tag"></i> <span>Designar</span>
+                        <i class="fas fa-user-tag"></i>
+                        <span>Designar</span>
                     </div>
                     <div class="tab" data-tab="tecnicos">
-                        <i class="fas fa-users-cog"></i> <span>Técnicos</span>
+                        <i class="fas fa-users-cog"></i>
+                        <span>Técnicos</span>
                     </div>
                     <div class="tab" data-tab="ocorrencias">
-                        <i class="fas fa-exclamation-triangle"></i> <span>Ocorrências</span>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Ocorrências</span>
                     </div>
                     <div class="tab" data-tab="relatorios">
-                        <i class="fas fa-chart-bar"></i> <span>Relatórios</span>
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Relatórios</span>
                     </div>
                 </div>
                 <div class="tab-indicator"></div>
             </div>
-
+            
             <div class="tab-content active" id="atividades-content">
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-tasks"></i> Atividades Recentes</h2>
                         <button class="btn btn-primary" id="add-activity"><i class="fas fa-plus"></i> Nova Atividade</button>
                     </div>
+                    
                     <div id="activities-container">
                         <div id="activities-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-clipboard-list"></i>
@@ -1166,23 +1171,27 @@
                                 </tr>
                             </thead>
                             <tbody id="activities-table">
-                                </tbody>
+                                <!-- Atividades serão carregadas aqui -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
+            
             <div class="tab-content" id="designar-content">
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-user-tag"></i> Designar Técnico</h2>
                     </div>
+                    
                     <div class="form-group">
                         <label for="practice">Selecionar Prática:</label>
                         <select id="practice">
                             <option value="">-- Selecione uma prática --</option>
-                            </select>
+                            <!-- Opções serão preenchidas dinamicamente -->
+                        </select>
                     </div>
+                    
                     <div class="form-group">
                         <label for="technician">Designar Técnico:</label>
                         <select id="technician">
@@ -1192,14 +1201,16 @@
                             <option value="jobim@lab.com">Jobim</option>
                         </select>
                     </div>
+                    
                     <div class="form-group">
                         <label for="instructions">Instruções:</label>
                         <textarea id="instructions" placeholder="Forneça instruções específicas para esta atividade..."></textarea>
                     </div>
+                    
                     <button class="btn btn-primary" id="assign-btn"><i class="fas fa-user-check"></i> Designar Atividade</button>
                 </div>
             </div>
-
+            
             <div class="tab-content" id="tecnicos-content">
                 <div class="card">
                     <div class="card-header">
@@ -1233,41 +1244,47 @@
                     </table>
                 </div>
             </div>
-
+            
             <div class="tab-content" id="ocorrencias-content">
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> Ocorrências nos Laboratórios</h2>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                             <button class="btn btn-warning" id="add-occurrence"><i class="fas fa-plus"></i> Nova Ocorrência</button>
+                            <!-- Filtro por status -->
                             <select id="filter-status" class="btn btn-sm" style="background: var(--dark); color: white;">
                                 <option value="all">Todas</option>
                                 <option value="pendente">Pendentes</option>
                                 <option value="em-andamento">Em Andamento</option>
                                 <option value="resolvido">Resolvidas</option>
                             </select>
+                            <!-- Botões de exportação -->
                             <div class="export-buttons">
                                 <button class="btn btn-success export-btn" id="export-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
                                 <button class="btn btn-success export-btn" id="export-excel"><i class="fas fa-file-excel"></i> Excel</button>
                             </div>
                         </div>
                     </div>
+                    
                     <div id="occurrences-container">
                         <div id="occurrences-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-clipboard-list"></i>
                             <p>Nenhuma ocorrência registrada.</p>
                         </div>
+                        
                         <div id="occurrences-list">
-                            </div>
+                            <!-- Ocorrências serão carregadas aqui -->
+                        </div>
                     </div>
                 </div>
             </div>
-
+            
             <div class="tab-content" id="relatorios-content">
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-chart-bar"></i> Relatórios e Observações</h2>
                     </div>
+                    
                     <div class="form-group">
                         <label>Filtrar por período:</label>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1276,6 +1293,7 @@
                             <button class="btn btn-primary" id="filter-reports" style="flex-shrink: 0;">Aplicar Filtro</button>
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <label>Filtrar por técnico:</label>
                         <select id="filter-technician">
@@ -1285,6 +1303,7 @@
                             <option value="jobim@lab.com">Jobim</option>
                         </select>
                     </div>
+                    
                     <div id="reports-container">
                         <div id="reports-empty-state" class="empty-state" style="display: none;">
                             <i class="fas fa-file-alt"></i>
@@ -1300,1762 +1319,1591 @@
                                 </tr>
                             </thead>
                             <tbody id="reports-table">
-                                </tbody>
+                                <!-- Relatórios serão carregados aqui -->
+                            </tbody>
                         </table>
                     </div>
+                    
                     <div class="data-management">
-                        <h3 style="margin-bottom: 15px; color: var(--light);"><i class="fas fa-database"></i> Gerenciamento de Dados</h3>
+                        <h3 style="margin-bottom: 15px; color: var(--secondary);"><i class="fas fa-database"></i> Gerenciamento de Dados</h3>
+                        <p style="margin-bottom: 15px; color: #aaa;">
+                            Exporte os dados atuais das atividades ou limpe todos os dados do Firestore (use com CUIDADO!).
+                        </p>
+                        
                         <div class="data-actions">
-                            <button class="btn btn-danger" id="clear-all-data"><i class="fas fa-trash-alt"></i> Limpar Todos os Dados (RESET)</button>
-                            <button class="btn btn-warning" id="export-all-json"><i class="fas fa-file-export"></i> Exportar Tudo (JSON)</button>
-                            <input type="file" id="import-json-file" accept=".json" style="display: none;">
-                            <button class="btn btn-success" id="import-all-json"><i class="fas fa-file-import"></i> Importar Dados (JSON)</button>
+                            <button class="btn btn-info" id="export-data">
+                                <i class="fas fa-file-export"></i> Exportar Dados (JSON)
+                            </button>
+                            <button class="btn btn-danger" id="reset-data">
+                                <i class="fas fa-trash-alt"></i> Limpar Todas as Atividades
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div id="activity-modal" class="modal">
+        
+        <div class="modal" id="activity-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title"><i class="fas fa-plus-circle"></i> Nova Atividade</h2>
-                    <span class="close-btn">&times;</span>
+                    <h3 class="modal-title" id="modal-title-activity"><i class="fas fa-tasks"></i> Nova Atividade</h3>
+                    <button class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="activity-form">
-                        <div class="form-group">
-                            <label for="activity-title">Título da Prática:</label>
-                            <input type="text" id="activity-title" required placeholder="Ex: Síntese de Aspirina">
+                    <div class="form-group">
+                        <label for="new-practice">Prática:</label>
+                        <input type="text" id="new-practice" placeholder="Ex: Prática 4 - Eletroquímica" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="professor">Professor Responsável:</label>
+                        <input type="text" id="professor" placeholder="Nome do professor" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activity-lab">Laboratório*</label>
+                        <select id="activity-lab" required>
+                            <option value="">Selecione o laboratório</option>
+                            <option value="Laboratório 36">Laboratório 36</option>
+                            <option value="Laboratório 35">Laboratório 35</option>
+                            <option value="Laboratório 35B">Laboratório 35B</option>
+                            <option value="Laboratório 35C">Laboratório 35C</option>
+                            <option value="Laboratório 35D">Laboratório 35D</option>
+                            <option value="Laboratório 35E">Laboratório 35E</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deadline">Prazo:</label>
+                        <input type="date" id="deadline" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requirements">Requisitos/Materiais:</label>
+                        <textarea id="requirements" placeholder="Liste os materiais necessários..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="cancel-btn">Cancelar</button>
+                    <button class="btn btn-primary" id="save-activity">Salvar Atividade</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="occurrence-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Nova Ocorrência</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="occurrence-lab">Laboratório*</label>
+                        <select id="occurrence-lab" required>
+                            <option value="">Selecione o laboratório</option>
+                            <option value="Laboratório 36">Laboratório 36</option>
+                            <option value="Laboratório 35">Laboratório 35</option>
+                            <option value="Laboratório 35B">Laboratório 35B</option>
+                            <option value="Laboratório 35C">Laboratório 35C</option>
+                            <option value="Laboratório 35D">Laboratório 35D</option>
+                            <option value="Laboratório 35E">Laboratório 35E</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occurrence-title">Título*</label>
+                        <input type="text" id="occurrence-title" placeholder="Descreva brevemente a ocorrência" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occurrence-description">Descrição Detalhada*</label>
+                        <textarea id="occurrence-description" placeholder="Descreva com detalhes a ocorrência observada..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="cancel-occurrence-btn">Cancelar</button>
+                    <button class="btn btn-warning" id="save-occurrence">Registrar Ocorrência</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="occurrence-detail-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Detalhes da Ocorrência</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="occurrence-details">
+                        <!-- Detalhes da ocorrência serão carregados aqui -->
+                    </div>
+                    
+                    <div id="occurrence-solution-section" style="margin-top: 20px;">
+                        <h4><i class="fas fa-check-circle"></i> Resolução</h4>
+                        <div id="solution-view">
+                            <!-- Solução existente será exibida aqui -->
                         </div>
-                        <div class="form-group">
-                            <label for="activity-professor">Nome do Professor:</label>
-                            <input type="text" id="activity-professor" required placeholder="Nome Completo do Professor">
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-lab">Laboratório:</label>
-                            <select id="activity-lab" required>
-                                <option value="">-- Selecione o Laboratório --</option>
-                                <option value="Laboratório 1">Laboratório 1</option>
-                                <option value="Laboratório 2">Laboratório 2</option>
-                                <option value="Laboratório 3">Laboratório 3</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-date">Data da Atividade:</label>
-                            <input type="date" id="activity-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-description">Descrição da Atividade:</label>
-                            <textarea id="activity-description" placeholder="Detalhes sobre a prática..."></textarea>
-                        </div>
-                        <div class="image-upload-container">
-                            <label for="activity-image-upload">Comprovante (Opcional):</label>
-                            <div class="upload-area" id="activity-upload-area">
-                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                <p>Arraste e solte ou clique para selecionar uma imagem</p>
-                                <input type="file" id="activity-image-upload" accept="image/*" style="display: none;">
+                        
+                        <div id="solution-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="solution-status">Status*</label>
+                                <select id="solution-status" required>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="em-andamento">Em Andamento</option>
+                                    <option value="resolvido">Resolvido</option>
+                                </select>
                             </div>
-                            <img id="activity-image-preview" src="#" alt="Pré-visualização da Imagem" class="image-preview">
-                            <button type="button" class="btn btn-danger upload-btn" id="remove-activity-image" style="display: none;"><i class="fas fa-trash"></i> Remover Imagem</button>
+                            
+                            <div class="form-group">
+                                <label for="solution-description">Descrição da Solução*</label>
+                                <textarea id="solution-description" placeholder="Descreva como a ocorrência foi resolvida..." required></textarea>
+                            </div>
+                            
+                            <button class="btn btn-success" id="save-solution">Salvar Solução</button>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal-btn">Cancelar</button>
-                    <button class="btn btn-primary" id="save-activity-btn">Salvar Atividade</button>
+                        
+                        <div id="solution-actions" style="margin-top: 15px;">
+                            <!-- Botões de ação serão exibidos aqui -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div id="view-activity-modal" class="modal">
+        
+        <div class="modal" id="detail-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title"><i class="fas fa-info-circle"></i> Detalhes da Atividade</h2>
-                    <span class="close-btn">&times;</span>
+                    <h3 class="modal-title"><i class="fas fa-info-circle"></i> Detalhes da Atividade</h3>
+                    <button class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Prática:</strong> <span id="view-activity-title"></span></p>
-                    <p><strong>Professor:</strong> <span id="view-activity-professor"></span></p>
-                    <p><strong>Laboratório:</strong> <span id="view-activity-lab"></span></p>
-                    <p><strong>Data:</strong> <span id="view-activity-date"></span></p>
-                    <p><strong>Status:</strong> <span id="view-activity-status"></span></p>
-                    <p><strong>Técnico Designado:</strong> <span id="view-activity-technician">N/A</span></p>
-                    <p><strong>Instruções do Técnico:</strong> <span id="view-activity-instructions">N/A</span></p>
-                    <p><strong>Descrição:</strong> <span id="view-activity-description"></span></p>
-                    <p><strong>Registrado por:</strong> <span id="view-activity-author"></span></p>
-                    <p><strong>Data de Registro:</strong> <span id="view-activity-createdAt"></span></p>
-                    <p><strong>Prazo para Técnico:</strong> <span id="view-activity-dueDate"></span></p>
-                    <div id="view-activity-image-container" style="margin-top: 15px; display: none;">
-                        <strong>Comprovante:</strong><br>
-                        <a id="view-activity-image-link" href="#" target="_blank" class="comprovante-link"><i class="fas fa-external-link-alt"></i> Visualizar Comprovante</a>
+                    <div id="activity-details">
+                        <!-- Detalhes da atividade serão carregados aqui -->
                     </div>
-                    <div class="tech-actions" id="tech-actions-section" style="display: none;">
-                        <h3>Ações do Técnico:</h3>
-                        <div class="form-group">
-                            <label for="tech-observation">Observações/Resolução:</label>
-                            <textarea id="tech-observation" placeholder="Adicione observações ou descreva a resolução..."></textarea>
-                        </div>
-                        <button class="btn btn-success" id="complete-activity-btn"><i class="fas fa-check-circle"></i> Concluir Atividade</button>
-                        <button class="btn btn-warning" id="add-observation-btn"><i class="fas fa-comment-dots"></i> Adicionar Observação</button>
+                    
+                    <!-- Botão Atualizar Status + Observação -->
+                    <div id="tech-actions-section" style="display:none;">
+                      <h4><i class="fas fa-tools"></i> Ações do Técnico</h4>
+
+                      <div class="form-group">
+                        <label for="activity-status-update">Mudar Status da Atividade:</label>
+                        <select id="activity-status-update">
+                          <option value="pendente">Pendente</option>
+                          <option value="designada">Designada</option>
+                          <option value="concluida">Concluída</option>
+                        </select>
+                      </div>
+
+                      <button class="btn btn-success" id="update-status-btn">Atualizar Status</button>
                     </div>
-                    <div id="observations-list" style="margin-top: 20px;">
-                        <h4>Histórico de Observações:</h4>
-                        <div id="no-observations" class="empty-state" style="display: none; padding: 10px;">
-                            <p>Nenhuma observação ainda.</p>
-                        </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                      <label for="observation">Adicionar Observação:</label>
+                      <textarea id="observation" placeholder="Registre observações sobre esta atividade..."></textarea>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal-btn">Fechar</button>
-                    <button class="btn btn-danger" id="delete-activity-btn" style="display: none;"><i class="fas fa-trash-alt"></i> Excluir</button>
+
+                    <button class="btn btn-info" id="save-observation">Salvar Observação</button>
+
+                    <div id="observations-list" style="margin-top: 20px;"></div>
+                    
+                    <!-- Botão de sincronização manual -->
+                    <button id="sync-button" class="sync-button" title="Forçar Sincronização">
+                        <i class="fas fa-sync"></i>
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </button>
                 </div>
             </div>
         </div>
-
-        <div id="occurrence-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title"><i class="fas fa-exclamation-circle"></i> Registrar Ocorrência</h2>
-                    <span class="close-btn">&times;</span>
-                </div>
-                <div class="modal-body">
-                    <form id="occurrence-form">
-                        <div class="form-group">
-                            <label for="occurrence-title">Título da Ocorrência:</label>
-                            <input type="text" id="occurrence-title" required placeholder="Ex: Lâmpada do laboratório 1 queimada">
-                        </div>
-                        <div class="form-group">
-                            <label for="occurrence-lab">Laboratório:</label>
-                            <select id="occurrence-lab" required>
-                                <option value="">-- Selecione o Laboratório --</option>
-                                <option value="Laboratório 1">Laboratório 1</option>
-                                <option value="Laboratório 2">Laboratório 2</option>
-                                <option value="Laboratório 3">Laboratório 3</option>
-                                <option value="Outro">Outro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="occurrence-description">Descrição Detalhada:</label>
-                            <textarea id="occurrence-description" required placeholder="Descreva o problema com detalhes..."></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal-btn">Cancelar</button>
-                    <button class="btn btn-warning" id="save-occurrence-btn">Registrar Ocorrência</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-occurrence-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title"><i class="fas fa-info-circle"></i> Detalhes da Ocorrência</h2>
-                    <span class="close-btn">&times;</span>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Título:</strong> <span id="view-occurrence-title"></span></p>
-                    <p><strong>Laboratório:</strong> <span id="view-occurrence-lab"></span></p>
-                    <p><strong>Status:</strong> <span id="view-occurrence-status"></span></p>
-                    <p><strong>Descrição:</strong> <span id="view-occurrence-description"></span></p>
-                    <p><strong>Registrado por:</strong> <span id="view-occurrence-author"></span></p>
-                    <p><strong>Data de Registro:</strong> <span id="view-occurrence-createdAt"></span></p>
-                    <div id="occurrence-solution-section" style="display: none; margin-top: 15px;">
-                        <p><strong>Solução:</strong> <span id="view-occurrence-solution-description"></span></p>
-                        <p><strong>Resolvido por:</strong> <span id="view-occurrence-solution-author"></span></p>
-                        <p><strong>Data da Solução:</strong> <span id="view-occurrence-solution-date"></span></p>
-                    </div>
-
-                    <div class="tech-actions" id="occurrence-tech-actions-section" style="display: none;">
-                        <h3>Ações do Técnico:</h3>
-                        <div class="form-group">
-                            <label for="occurrence-solution-text">Solução:</label>
-                            <textarea id="occurrence-solution-text" placeholder="Descreva a solução para esta ocorrência..."></textarea>
-                        </div>
-                        <button class="btn btn-success" id="resolve-occurrence-btn"><i class="fas fa-check-circle"></i> Marcar como Resolvida</button>
-                        <button class="btn btn-info" id="set-occurrence-inprogress-btn"><i class="fas fa-hourglass-half"></i> Em Andamento</button>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal-btn">Fechar</button>
-                    <button class="btn btn-danger" id="delete-occurrence-btn" style="display: none;"><i class="fas fa-trash-alt"></i> Excluir</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="acknowledgment-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirmação de Ação</h2>
-                    <span class="close-btn">&times;</span>
-                </div>
-                <div class="modal-body">
-                    <p id="acknowledgment-message">Você tem certeza que deseja realizar esta ação?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" id="cancel-acknowledgment">Cancelar</button>
-                    <button class="btn btn-danger" id="confirm-acknowledgment">Confirmar</button>
-                </div>
-            </div>
-        </div>
-
-        <button class="sync-button" id="sync-button" title="Sincronizar Dados">
-            <i class="fas fa-sync"></i>
-            <i class="fas fa-spinner fa-spin" style="display: none;"></i>
-        </button>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
-            authDomain: "sistema-laboratorioifs.firebaseapp.com",
-            projectId: "sistema-laboratorioifs",
-            storageBucket: "sistema-laboratorioifs.firebasestorage.app",
-            messagingSenderId: "950276302393",
-            appId: "1:950276302393:web:745d51037ff780b1db0fe8",
-            measurementId: "G-1H8P4Z6QS6"
-        };
+    // Configuração do Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIIe-xVu9ioC7dbK21oWAA37dmMEc0WRE",
+        authDomain: "sistema-laboratorioifs.firebaseapp.com",
+        projectId: "sistema-laboratorioifs",
+        storageBucket: "sistema-laboratorioifs.appspot.com",
+        messagingSenderId: "950276302393",
+        appId: "1:950276302393:web:745d51037ff780b1db0fe8",
+        measurementId: "G-1H8P4Z6QS6"
+    };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
+    // Inicializar Firebase com persistência
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+       
+    // Ativar persistência offline
+    db.enablePersistence()
+      .catch((err) => {
+        console.error("Erro na persistência offline:", err);
+        if (err.code == 'failed-precondition') {
+          showNotification('Apenas uma aba pode usar o modo offline', 'warning');
+        } else if (err.code == 'unimplemented') {
+          showNotification('Navegador não suporta persistência offline', 'warning');
+        }
+      });
 
-        // DOM Elements
-        const loginScreen = document.getElementById('login-screen');
-        const mainSystem = document.getElementById('main-system');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userEmailInput = document.getElementById('email');
-        const userPasswordInput = document.getElementById('password');
-        const userNameSpan = document.getElementById('user-name');
-        const userRoleSpan = document.getElementById('user-role');
-        const userStatusSpan = document.getElementById('user-status');
-        const userAvatar = document.getElementById('user-avatar');
-        const systemTabs = document.getElementById('system-tabs');
-        const tabIndicator = document.querySelector('.tab-indicator');
+    // Configuração do Imgur
+    const IMGUR_CLIENT_ID = 'b5ecc490f109c20'; // Client ID do Imgur fornecido
 
-        // Modals
-        const activityModal = document.getElementById('activity-modal');
-        const addActivityBtn = document.getElementById('add-activity');
-        const saveActivityBtn = document.getElementById('save-activity-btn');
-        const activityForm = document.getElementById('activity-form');
-        const activityTitleInput = document.getElementById('activity-title');
-        const activityProfessorInput = document.getElementById('activity-professor');
-        const activityLabSelect = document.getElementById('activity-lab');
-        const activityDateInput = document.getElementById('activity-date');
-        const activityDescriptionInput = document.getElementById('activity-description');
-        const activityImageUpload = document.getElementById('activity-image-upload');
-        const activityImagePreview = document.getElementById('activity-image-preview');
-        const activityUploadArea = document.getElementById('activity-upload-area');
-        const removeActivityImageBtn = document.getElementById('remove-activity-image');
+    // Variáveis globais
+    let activities = [];
+    let occurrences = [];
+    let currentEditingActivityId = null;
+    let currentEditingOccurrenceId = null;
+    let fbCurrentUser = null;
+    let userRoleType = 'Visitante';
+    let unsubscribeActivities = null;
+    let unsubscribeOccurrences = null;
 
-        const viewActivityModal = document.getElementById('view-activity-modal');
-        const viewActivityTitle = document.getElementById('view-activity-title');
-        const viewActivityProfessor = document.getElementById('view-activity-professor');
-        const viewActivityLab = document.getElementById('view-activity-lab');
-        const viewActivityDate = document.getElementById('view-activity-date');
-        const viewActivityStatus = document.getElementById('view-activity-status');
-        const viewActivityTechnician = document.getElementById('view-activity-technician');
-        const viewActivityInstructions = document.getElementById('view-activity-instructions');
-        const viewActivityDescription = document.getElementById('view-activity-description');
-        const viewActivityAuthor = document.getElementById('view-activity-author');
-        const viewActivityCreatedAt = document.getElementById('view-activity-createdAt');
-        const viewActivityDueDate = document.getElementById('view-activity-dueDate');
-        const viewActivityImageContainer = document.getElementById('view-activity-image-container');
-        const viewActivityImageLink = document.getElementById('view-activity-image-link');
-        const deleteActivityBtn = document.getElementById('delete-activity-btn');
+    // Monitorar conexão
+    function monitorConnection() {
+      const connectionRef = firebase.database().ref('.info/connected');
+      connectionRef.on('value', snap => {
+        if (snap.val() === true) {
+          console.log('Conectado ao servidor');
+          document.getElementById('user-status').className = 'connection-status online';
+        } else {
+          showNotification('Você está offline - dados serão sincronizados quando reconectar', 'warning');
+          document.getElementById('user-status').className = 'connection-status offline';
+        }
+      });
+    }
 
-        const techActionsSection = document.getElementById('tech-actions-section');
-        const techObservationInput = document.getElementById('tech-observation');
-        const completeActivityBtn = document.getElementById('complete-activity-btn');
-        const addObservationBtn = document.getElementById('add-observation-btn');
-        const observationsList = document.getElementById('observations-list');
-        const noObservationsMessage = document.getElementById('no-observations');
+    // Forçar sincronização
+    async function forceSync() {
+      const syncButton = document.getElementById('sync-button');
+      syncButton.classList.add('syncing');
+      
+      try {
+        showNotification('Sincronizando dados...', 'info');
+        await db.waitForPendingWrites();
+        showNotification('Dados sincronizados com sucesso!', 'success');
+        loadActivitiesFromFirestore(); // Recarregar dados
+        loadOccurrencesFromFirestore();
+      } catch (error) {
+        console.error("Erro na sincronização:", error);
+        showNotification('Erro ao sincronizar dados', 'error');
+      } finally {
+        syncButton.classList.remove('syncing');
+      }
+    }
 
-        const activitiesTable = document.getElementById('activities-table');
-        const activitiesEmptyState = document.getElementById('activities-empty-state');
+    // Função para fazer upload da imagem para o Imgur
+    async function uploadImageToImgur(file) {
+        const formData = new FormData();
+        formData.append('image', file);
 
-        const practiceSelect = document.getElementById('practice');
-        const technicianSelect = document.getElementById('technician');
-        const instructionsTextarea = document.getElementById('instructions');
-        const assignBtn = document.getElementById('assign-btn');
+        try {
+            const response = await fetch('https://api.imgur.com/3/image', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+                },
+                body: formData
+            });
 
-        const techSergioCount = document.getElementById('tech-sergio-count');
-        const techLucileideCount = document.getElementById('tech-lucileide-count');
-        const techJobimCount = document.getElementById('tech-jobim-count');
+            const data = await response.json();
+            if (data.success) {
+                return data.data.link;
+            } else {
+                throw new Error(data.data.error || 'Falha no upload da imagem');
+            }
+        } catch (error) {
+            console.error('Erro ao fazer upload da imagem:', error);
+            throw error;
+        }
+    }
 
-        const addOccurrenceBtn = document.getElementById('add-occurrence');
-        const occurrenceModal = document.getElementById('occurrence-modal');
-        const saveOccurrenceBtn = document.getElementById('save-occurrence-btn');
-        const occurrenceForm = document.getElementById('occurrence-form');
-        const occurrenceTitleInput = document.getElementById('occurrence-title');
-        const occurrenceLabSelect = document.getElementById('occurrence-lab');
-        const occurrenceDescriptionInput = document.getElementById('occurrence-description');
-        const occurrencesList = document.getElementById('occurrences-list');
-        const occurrencesEmptyState = document.getElementById('occurrences-empty-state');
-        const filterStatusSelect = document.getElementById('filter-status');
-        const exportPdfBtn = document.getElementById('export-pdf');
-        const exportExcelBtn = document.getElementById('export-excel');
+    // DOM Elements
+    const loginScreen = document.getElementById('login-screen');
+    const mainSystem = document.getElementById('main-system');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const syncButton = document.getElementById('sync-button');
+    
+    const userNameDisplay = document.getElementById('user-name');
+    const userAvatarDisplay = document.getElementById('user-avatar');
+    const userRoleDisplay = document.getElementById('user-role');
+    
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const addActivityBtn = document.getElementById('add-activity');
+    const addOccurrenceBtn = document.getElementById('add-occurrence');
+    const activityModal = document.getElementById('activity-modal');
+    const occurrenceModal = document.getElementById('occurrence-modal');
+    const occurrenceDetailModal = document.getElementById('occurrence-detail-modal');
+    const detailModal = document.getElementById('detail-modal');
+    const closeBtns = document.querySelectorAll('.close-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const cancelOccurrenceBtn = document.getElementById('cancel-occurrence-btn');
+    const saveActivityBtn = document.getElementById('save-activity');
+    const saveOccurrenceBtn = document.getElementById('save-occurrence');
+    const saveSolutionBtn = document.getElementById('save-solution');
+    const activitiesTableBody = document.getElementById('activities-table');
+    const activitiesEmptyState = document.getElementById('activities-empty-state');
+    const occurrencesList = document.getElementById('occurrences-list');
+    const occurrencesEmptyState = document.getElementById('occurrences-empty-state');
+    
+    const assignBtn = document.getElementById('assign-btn');
+    const practiceSelect = document.getElementById('practice');
+    const technicianSelect = document.getElementById('technician'); 
+    const instructionsInput = document.getElementById('instructions');
 
-        const viewOccurrenceModal = document.getElementById('view-occurrence-modal');
-        const viewOccurrenceTitle = document.getElementById('view-occurrence-title');
-        const viewOccurrenceLab = document.getElementById('view-occurrence-lab');
-        const viewOccurrenceStatus = document.getElementById('view-occurrence-status');
-        const viewOccurrenceDescription = document.getElementById('view-occurrence-description');
-        const viewOccurrenceAuthor = document.getElementById('view-occurrence-author');
-        const viewOccurrenceCreatedAt = document.getElementById('view-occurrence-createdAt');
-        const occurrenceSolutionSection = document.getElementById('occurrence-solution-section');
-        const viewOccurrenceSolutionDescription = document.getElementById('view-occurrence-solution-description');
-        const viewOccurrenceSolutionAuthor = document.getElementById('view-occurrence-solution-author');
-        const viewOccurrenceSolutionDate = document.getElementById('view-occurrence-solution-date');
-        const occurrenceTechActionsSection = document.getElementById('occurrence-tech-actions-section');
-        const occurrenceSolutionTextarea = document.getElementById('occurrence-solution-text');
-        const resolveOccurrenceBtn = document.getElementById('resolve-occurrence-btn');
-        const setOccurrenceInProgressBtn = document.getElementById('set-occurrence-inprogress-btn');
-        const deleteOccurrenceBtn = document.getElementById('delete-occurrence-btn');
+    const filterReportsBtn = document.getElementById('filter-reports');
+    const reportsTableBody = document.getElementById('reports-table');
+    const reportsEmptyState = document.getElementById('reports-empty-state');
 
-        const startDateInput = document.getElementById('start-date');
-        const endDateInput = document.getElementById('end-date');
-        const filterReportsBtn = document.getElementById('filter-reports');
-        const filterTechnicianSelect = document.getElementById('filter-technician');
-        const reportsTable = document.getElementById('reports-table');
-        const reportsEmptyState = document.getElementById('reports-empty-state');
+    const exportBtn = document.getElementById('export-data');
+    const resetBtn = document.getElementById('reset-data');
 
-        const clearAllDataBtn = document.getElementById('clear-all-data');
-        const exportAllJsonBtn = document.getElementById('export-all-json');
-        const importAllJsonBtn = document.getElementById('import-all-json');
-        const importJsonFile = document.getElementById('import-json-file');
+    const modalTitleActivity = document.getElementById('modal-title-activity');
+    const newPracticeInput = document.getElementById('new-practice');
+    const professorInput = document.getElementById('professor');
+    const activityLabInput = document.getElementById('activity-lab');
+    const deadlineInput = document.getElementById('deadline');
+    const requirementsInput = document.getElementById('requirements');
 
-        const acknowledgmentModal = document.getElementById('acknowledgment-modal');
-        const acknowledgmentMessage = document.getElementById('acknowledgment-message');
-        const cancelAcknowledgmentBtn = document.getElementById('cancel-acknowledgment');
-        const confirmAcknowledgmentBtn = document.getElementById('confirm-acknowledgment');
+    const occurrenceLabInput = document.getElementById('occurrence-lab');
+    const occurrenceTitleInput = document.getElementById('occurrence-title');
+    const occurrenceDescriptionInput = document.getElementById('occurrence-description');
 
-        const syncButton = document.getElementById('sync-button');
+    const solutionStatusInput = document.getElementById('solution-status');
+    const solutionDescriptionInput = document.getElementById('solution-description');
+    const solutionForm = document.getElementById('solution-form');
+    const solutionView = document.getElementById('solution-view');
+    const solutionActions = document.getElementById('solution-actions');
 
-        let currentActivityId = null;
-        let currentOccurrenceId = null;
-        let currentUploadedFile = null;
-        let currentUserRole = 'professor'; // Default role
-        let currentUserEmail = null;
+    const activityDetailsDiv = document.getElementById('activity-details');
+    const techActionsSection = document.getElementById('tech-actions-section');
+    const activityStatusUpdateSelect = document.getElementById('activity-status-update');
+    const updateStatusBtn = document.getElementById('update-status-btn');
+    const observationInput = document.getElementById('observation');
+    const saveObservationBtn = document.getElementById('save-observation');
+    const observationsListDiv = document.getElementById('observations-list');
 
-        // --- Utility Functions ---
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.classList.add('notification', `notification-${type}`);
-            let iconClass = 'fas fa-info-circle';
-            if (type === 'success') iconClass = 'fas fa-check-circle';
-            if (type === 'error') iconClass = 'fas fa-exclamation-circle';
-            if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+    // Event Listeners
+    syncButton.addEventListener('click', forceSync);
+    
+    // Autenticação
+    auth.onAuthStateChanged(async user => {
+        if (user) {
+            fbCurrentUser = user;
+            loginScreen.style.display = 'none';
+            mainSystem.style.display = 'block';
+            userNameDisplay.textContent = fbCurrentUser.displayName || fbCurrentUser.email;
+            userAvatarDisplay.innerHTML = '<i class="fas fa-user"></i>';
             
-            notification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // --- Date and Business Hours Calculation ---
-        function isBusinessDay(date) {
-            const day = date.getDay();
-            // Monday to Friday are business days (1 = Monday, 5 = Friday)
-            return day >= 1 && day <= 5;
-        }
-
-        function calculateBusinessHours(startDate, hoursToAdd) {
-            let currentDate = new Date(startDate);
-            let remainingHours = hoursToAdd;
-
-            // Set to start of current business day if it's a weekend or after hours
-            if (!isBusinessDay(currentDate) || currentDate.getHours() >= 18 || currentDate.getHours() < 8) {
-                currentDate.setDate(currentDate.getDate() + 1); // Move to next day
-                while (!isBusinessDay(currentDate)) {
-                    currentDate.setDate(currentDate.getDate() + 1); // Skip weekends
-                }
-                currentDate.setHours(8, 0, 0, 0); // Start at 8 AM
-            }
-
-            while (remainingHours > 0) {
-                if (isBusinessDay(currentDate)) {
-                    const currentHour = currentDate.getHours();
-                    if (currentHour >= 8 && currentHour < 18) {
-                        currentDate.setHours(currentHour + 1); // Add an hour
-                        remainingHours--;
-                    } else if (currentHour >= 18) {
-                        currentDate.setDate(currentDate.getDate() + 1); // Move to next day
-                        while (!isBusinessDay(currentDate)) {
-                            currentDate.setDate(currentDate.getDate() + 1); // Skip weekends
-                        }
-                        currentDate.setHours(8, 0, 0, 0); // Start at 8 AM
-                    } else if (currentHour < 8) {
-                         currentDate.setHours(8, 0, 0, 0); // Start at 8 AM
-                    }
-                } else {
-                    currentDate.setDate(currentDate.getDate() + 1); // Move to next day
-                }
-            }
-            return currentDate;
-        }
-
-        function formatDateToLocaleString(date) {
-            return date.toLocaleString('pt-BR', { 
-                year: 'numeric', 
-                month: '2-digit', 
-                day: '2-digit', 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            }).replace(', ', ' às ');
-        }
-
-        // --- Authentication ---
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                // User is signed in.
-                loginScreen.style.display = 'none';
-                mainSystem.style.display = 'block';
-                userNameSpan.textContent = user.email;
-                userEmailInput.value = ''; // Clear email input
-                userPasswordInput.value = ''; // Clear password input
-
-                try {
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    if (userDoc.exists) {
-                        currentUserRole = userDoc.data().role;
-                        currentUserEmail = user.email;
-                        userRoleSpan.textContent = currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1);
-                        userRoleSpan.className = `role-tag role-${currentUserRole}`;
-                        userAvatar.innerHTML = `<i class="fas fa-${getUserIcon(currentUserRole)}"></i>`;
-                        userStatusSpan.classList.remove('offline');
-                        userStatusSpan.classList.add('online');
-                    } else {
-                        // If user document doesn't exist, assign a default role (e.g., professor)
-                        currentUserRole = 'professor';
-                        currentUserEmail = user.email;
-                        await db.collection('users').doc(user.uid).set({
-                            email: user.email,
-                            role: 'professor'
-                        });
-                        userRoleSpan.textContent = 'Professor';
-                        userRoleSpan.className = `role-tag role-professor`;
-                        userAvatar.innerHTML = `<i class="fas fa-user-tie"></i>`;
-                        userStatusSpan.classList.remove('offline');
-                        userStatusSpan.classList.add('online');
-                        showNotification('Novo usuário registrado como Professor.', 'info');
-                    }
-                    displayContentForRole(currentUserRole);
-                    loadActivities();
-                    loadTechnicians();
-                    loadOccurrences();
-                    loadReports();
-                } catch (error) {
-                    console.error("Error fetching user role:", error);
-                    showNotification('Erro ao carregar perfil do usuário: ' + error.message, 'error');
-                }
+            // Determinar papel do usuário
+            const emailLowerCase = fbCurrentUser.email.toLowerCase();
+            if (emailLowerCase.includes('admin@') || emailLowerCase === 'admin@lab.com') {
+                userRoleType = 'Administrador';
+            } else if (emailLowerCase === 'sergio@lab.com' || 
+                      emailLowerCase === 'lucileide@lab.com' || 
+                      emailLowerCase === 'jobim@lab.com') {
+                userRoleType = 'Técnico';
+            } else if (emailLowerCase === 'professores@lab.com') { // ETAPA 2: Perfil Professor
+                userRoleType = 'Professor';
             } else {
-                // User is signed out.
-                loginScreen.style.display = 'flex';
-                mainSystem.style.display = 'none';
-                userNameSpan.textContent = 'Visitante';
-                userRoleSpan.textContent = 'Visitante';
-                userRoleSpan.className = `role-tag`;
-                userAvatar.innerHTML = `<i class="fas fa-user"></i>`;
-                userStatusSpan.classList.remove('online');
-                userStatusSpan.classList.add('offline');
-                currentUserRole = 'professor'; // Reset role on logout
-                currentUserEmail = null;
+                userRoleType = 'Visitante'; 
             }
-        });
+            
+            updateUIVisibilityBasedOnRole();
+            monitorConnection();
+            loadActivitiesFromFirestore();
+            loadOccurrencesFromFirestore();
 
-        function getUserIcon(role) {
-            switch (role) {
-                case 'admin': return 'user-shield';
-                case 'tech': return 'user-cog';
-                case 'professor': return 'user-tie';
-                default: return 'user';
+        } else {
+            fbCurrentUser = null;
+            userRoleType = 'Visitante';
+            loginScreen.style.display = 'flex';
+            mainSystem.style.display = 'none';
+            userNameDisplay.textContent = 'Usuário';
+            userAvatarDisplay.innerHTML = '<i class="fas fa-user"></i>';
+            userRoleDisplay.textContent = 'Visitante';
+            userRoleDisplay.className = 'role-tag';
+            activities = [];
+            occurrences = [];
+            renderActivities();
+            renderOccurrences();
+            if (unsubscribeActivities) {
+                unsubscribeActivities(); 
+                unsubscribeActivities = null;
             }
-        }
-
-        loginBtn.addEventListener('click', async () => {
-            const email = userEmailInput.value;
-            const password = userPasswordInput.value;
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                showNotification('Login realizado com sucesso!', 'success');
-            } catch (error) {
-                showNotification('Erro no login: ' + error.message, 'error');
-                console.error("Login Error:", error);
-            }
-        });
-
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                await auth.signOut();
-                showNotification('Logout realizado com sucesso!', 'info');
-            } catch (error) {
-                showNotification('Erro ao fazer logout: ' + error.message, 'error');
-                console.error("Logout Error:", error);
-            }
-        });
-
-        // --- Tab Navigation ---
-        systemTabs.addEventListener('click', (event) => {
-            const clickedTab = event.target.closest('.tab');
-            if (!clickedTab) return;
-
-            const targetTab = clickedTab.dataset.tab;
-
-            // Restrict access based on role
-            if (currentUserRole === 'professor') {
-                if (targetTab === 'designar' || targetTab === 'tecnicos' || targetTab === 'relatorios') {
-                    showNotification('Acesso negado. Apenas administradores e técnicos podem acessar esta aba.', 'error');
-                    return;
-                }
-            } else if (currentUserRole === 'tech') {
-                if (targetTab === 'designar' || targetTab === 'tecnicos' || targetTab === 'relatorios') {
-                    // Tech can access designar, tecnicos, relatorios
-                }
-                if (targetTab === 'designar' && currentSelectedActivity) {
-                    updateDesignationForm(currentSelectedActivity.id, currentSelectedActivity.data());
-                }
-            }
-
-            // Remove active class from all tabs and contents
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-            // Add active class to the clicked tab and its content
-            clickedTab.classList.add('active');
-            document.getElementById(`${targetTab}-content`).classList.add('active');
-
-            // Update tab indicator position and width
-            const tabRect = clickedTab.getBoundingClientRect();
-            const tabsContainerRect = systemTabs.getBoundingClientRect();
-            tabIndicator.style.width = `${tabRect.width}px`;
-            tabIndicator.style.left = `${tabRect.left - tabsContainerRect.left}px`;
-        });
-
-        // Initial tab indicator position
-        document.addEventListener('DOMContentLoaded', () => {
-            const activeTab = document.querySelector('.tab.active');
-            if (activeTab) {
-                const tabRect = activeTab.getBoundingClientRect();
-                const tabsContainerRect = systemTabs.getBoundingClientRect();
-                tabIndicator.style.width = `${tabRect.width}px`;
-                tabIndicator.style.left = `${tabRect.left - tabsContainerRect.left}px`;
-            }
-        });
-
-        function displayContentForRole(role) {
-            // Hide all restricted elements by default
-            document.getElementById('designar-content').style.display = 'none';
-            document.querySelector('[data-tab="designar"]').style.display = 'none';
-            document.getElementById('tecnicos-content').style.display = 'none';
-            document.querySelector('[data-tab="tecnicos"]').style.display = 'none';
-            document.getElementById('relatorios-content').style.display = 'none';
-            document.querySelector('[data-tab="relatorios"]').style.display = 'none';
-            techActionsSection.style.display = 'none';
-            occurrenceTechActionsSection.style.display = 'none';
-            addOccurrenceBtn.style.display = 'block'; // Default: visible for professor/admin/tech
-            document.getElementById('clear-all-data').style.display = 'none'; // Admin only
-            document.getElementById('delete-activity-btn').style.display = 'none'; // Admin only
-            document.getElementById('delete-occurrence-btn').style.display = 'none'; // Admin only
-            document.getElementById('add-activity').style.display = 'none'; // Professor/Admin only
-
-            switch (role) {
-                case 'admin':
-                    document.getElementById('designar-content').style.display = 'block';
-                    document.querySelector('[data-tab="designar"]').style.display = 'flex';
-                    document.getElementById('tecnicos-content').style.display = 'block';
-                    document.querySelector('[data-tab="tecnicos"]').style.display = 'flex';
-                    document.getElementById('relatorios-content').style.display = 'block';
-                    document.querySelector('[data-tab="relatorios"]').style.display = 'flex';
-                    techActionsSection.style.display = 'block';
-                    occurrenceTechActionsSection.style.display = 'block';
-                    document.getElementById('clear-all-data').style.display = 'inline-flex';
-                    document.getElementById('delete-activity-btn').style.display = 'inline-flex';
-                    document.getElementById('delete-occurrence-btn').style.display = 'inline-flex';
-                    document.getElementById('add-activity').style.display = 'inline-flex';
-                    break;
-                case 'tech':
-                    document.getElementById('designar-content').style.display = 'block';
-                    document.querySelector('[data-tab="designar"]').style.display = 'flex';
-                    document.getElementById('tecnicos-content').style.display = 'block';
-                    document.querySelector('[data-tab="tecnicos"]').style.display = 'flex';
-                    document.getElementById('relatorios-content').style.display = 'block';
-                    document.querySelector('[data-tab="relatorios"]').style.display = 'flex';
-                    techActionsSection.style.display = 'block';
-                    occurrenceTechActionsSection.style.display = 'block';
-                    // Hide Add Activity for tech
-                    document.getElementById('add-activity').style.display = 'none'; 
-                    // Hide delete buttons for tech
-                    document.getElementById('delete-activity-btn').style.display = 'none'; 
-                    document.getElementById('delete-occurrence-btn').style.display = 'none'; 
-                    document.getElementById('clear-all-data').style.display = 'none';
-                    break;
-                case 'professor':
-                    // Professor can only see activities and occurrences
-                    document.getElementById('activities-content').style.display = 'block';
-                    document.querySelector('[data-tab="atividades"]').classList.add('active');
-                    document.getElementById('ocorrencias-content').style.display = 'block';
-                    document.querySelector('[data-tab="ocorrencias"]').style.display = 'flex'; // Ensure tab is visible
-                    document.getElementById('add-activity').style.display = 'inline-flex';
-                    // Hide designation, technicians, reports
-                    document.getElementById('designar-content').style.display = 'none';
-                    document.querySelector('[data-tab="designar"]').style.display = 'none';
-                    document.getElementById('tecnicos-content').style.display = 'none';
-                    document.querySelector('[data-tab="tecnicos"]').style.display = 'none';
-                    document.getElementById('relatorios-content').style.display = 'none';
-                    document.querySelector('[data-tab="relatorios"]').style.display = 'none';
-
-                    // Ensure professor doesn't see tech actions within modals
-                    techActionsSection.style.display = 'none';
-                    occurrenceTechActionsSection.style.display = 'none';
-                    document.getElementById('delete-activity-btn').style.display = 'none';
-                    document.getElementById('delete-occurrence-btn').style.display = 'none';
-                    document.getElementById('clear-all-data').style.display = 'none';
-                    
-                    // Set 'Atividades' as the active tab for professor
-                    const atividadesTab = document.querySelector('[data-tab="atividades"]');
-                    const atividadesContent = document.getElementById('atividades-content');
-                    if (atividadesTab && atividadesContent) {
-                        // Remove active from all others
-                        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                        
-                        atividadesTab.classList.add('active');
-                        atividadesContent.classList.add('active');
-                        // Update tab indicator
-                        const tabRect = atividadesTab.getBoundingClientRect();
-                        const tabsContainerRect = systemTabs.getBoundingClientRect();
-                        tabIndicator.style.width = `${tabRect.width}px`;
-                        tabIndicator.style.left = `${tabRect.left - tabsContainerRect.left}px`;
-                    }
-                    break;
+            if (unsubscribeOccurrences) {
+                unsubscribeOccurrences();
+                unsubscribeOccurrences = null;
             }
         }
+    });
 
-        // --- Modals General Logic ---
-        document.querySelectorAll('.close-btn, .close-modal-btn').forEach(btn => {
-            btn.addEventListener('click', (event) => {
-                event.target.closest('.modal').style.display = 'none';
-                clearActivityForm();
-                clearOccurrenceForm();
-                currentUploadedFile = null; // Clear any pending file upload
+    // ETAPA 3: Ajuste de visibilidade para perfil Professor
+    function updateUIVisibilityBasedOnRole() {
+        if (!fbCurrentUser) return;
+
+        userRoleDisplay.textContent = userRoleType;
+        if (userRoleType === 'Administrador') {
+            userRoleDisplay.className = 'role-tag role-admin';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'flex';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'flex'; 
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
+            addActivityBtn.style.display = 'inline-flex';
+            addOccurrenceBtn.style.display = 'inline-flex';
+            resetBtn.style.display = 'inline-flex';
+        } else if (userRoleType === 'Técnico') {
+            userRoleDisplay.className = 'role-tag role-tech';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none'; 
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
+            addActivityBtn.style.display = 'none';
+            addOccurrenceBtn.style.display = 'inline-flex';
+            resetBtn.style.display = 'none';
+        } else if (userRoleType === 'Professor') { // ETAPA 3: Configuração Professor
+            userRoleDisplay.className = 'role-tag role-professor';
+            
+            // Esconde todas as abas
+            document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+            // Mostra apenas as abas de Atividades e Ocorrências
+            document.querySelector('.tab[data-tab="atividades"]').style.display = 'flex';
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'flex';
+            
+            // Mostra botões de adicionar atividade e ocorrência
+            addActivityBtn.style.display = 'inline-flex';
+            addOccurrenceBtn.style.display = 'inline-flex';
+            
+            // Esconde as outras abas
+            document.querySelector('.tab[data-tab="relatorios"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
+            resetBtn.style.display = 'none';
+        } else { 
+            userRoleDisplay.className = 'role-tag';
+            document.querySelector('.tab[data-tab="designar"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="tecnicos"]').style.display = 'none';
+            document.querySelector('.tab[data-tab="ocorrencias"]').style.display = 'none';
+            addActivityBtn.style.display = 'none';
+            addOccurrenceBtn.style.display = 'none';
+            resetBtn.style.display = 'none';
+        }
+    }
+
+    loginBtn.addEventListener('click', () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        if (!email || !password) {
+            showNotification('Por favor, insira e-mail e senha.', 'error');
+            return;
+        }
+        auth.signInWithEmailAndPassword(email, password)
+            .catch(error => {
+                console.error("Erro de login:", error);
+                let friendlyMessage = "Erro ao fazer login. Verifique suas credenciais.";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    friendlyMessage = "E-mail ou senha inválidos.";
+                } else if (error.code === 'auth/invalid-email') {
+                    friendlyMessage = "Formato de e-mail inválido.";
+                }
+                showNotification(friendlyMessage, 'error');
             });
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        auth.signOut().catch(error => {
+            console.error("Erro no logout:", error);
+            showNotification(`Erro ao fazer logout: ${error.message}`, 'error');
         });
+    });
 
-        window.addEventListener('click', (event) => {
-            if (event.target === activityModal) {
-                activityModal.style.display = 'none';
-                clearActivityForm();
-                currentUploadedFile = null;
-            }
-            if (event.target === viewActivityModal) {
-                viewActivityModal.style.display = 'none';
-                clearActivityForm();
-                currentUploadedFile = null;
-            }
-            if (event.target === occurrenceModal) {
-                occurrenceModal.style.display = 'none';
-                clearOccurrenceForm();
-            }
-            if (event.target === viewOccurrenceModal) {
-                viewOccurrenceModal.style.display = 'none';
-            }
-            if (event.target === acknowledgmentModal) {
-                acknowledgmentModal.style.display = 'none';
-            }
-        });
-
-        // --- Activity Management ---
-        addActivityBtn.addEventListener('click', () => {
-            activityModal.style.display = 'flex';
-            activityModal.setAttribute('data-mode', 'add');
-            document.querySelector('.modal-title').innerHTML = '<i class="fas fa-plus-circle"></i> Nova Atividade';
-            saveActivityBtn.textContent = 'Salvar Atividade';
-            activityImagePreview.style.display = 'none';
-            activityImagePreview.src = '#';
-            removeActivityImageBtn.style.display = 'none';
-            clearActivityForm();
-        });
-
-        activityUploadArea.addEventListener('click', () => activityImageUpload.click());
-        activityImageUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                currentUploadedFile = file;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    activityImagePreview.src = e.target.result;
-                    activityImagePreview.style.display = 'block';
-                    removeActivityImageBtn.style.display = 'inline-flex';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        removeActivityImageBtn.addEventListener('click', () => {
-            currentUploadedFile = null;
-            activityImageUpload.value = '';
-            activityImagePreview.src = '#';
-            activityImagePreview.style.display = 'none';
-            removeActivityImageBtn.style.display = 'none';
-        });
-
-        saveActivityBtn.addEventListener('click', handleFormSubmit);
-
-        async function handleFormSubmit() {
-            const title = activityTitleInput.value;
-            const professor = activityProfessorInput.value;
-            const lab = activityLabSelect.value;
-            const date = activityDateInput.value;
-            const description = activityDescriptionInput.value;
-
-            if (!title || !professor || !lab || !date) {
-                showNotification('Por favor, preencha todos os campos obrigatórios para a atividade.', 'error');
-                return;
-            }
-
-            const activityDate = new Date(date + 'T08:00:00'); // Assume 8 AM for activity date
-            const dueDate = calculateBusinessHours(new Date(), 48); // Calculate 48 business hours from now
-
-            let imageUrl = null;
-            if (currentUploadedFile) {
-                try {
-                    const storageRef = storage.ref(`comprovantes/${Date.now()}_${currentUploadedFile.name}`);
-                    const snapshot = await storageRef.put(currentUploadedFile);
-                    imageUrl = await snapshot.ref.getDownloadURL();
-                    showNotification('Comprovante enviado com sucesso!', 'success');
-                } catch (error) {
-                    showNotification('Erro ao enviar comprovante: ' + error.message, 'error');
-                    console.error("Upload Error:", error);
-                    return; // Stop if upload fails
-                }
-            }
-
-            const activityData = {
-                title,
-                professor,
-                lab,
-                date: firebase.firestore.Timestamp.fromDate(activityDate),
-                description,
-                status: 'solicitada', // New status for professor created activities
-                authorEmail: currentUserEmail,
-                authorRole: currentUserRole,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                dueDate: firebase.firestore.Timestamp.fromDate(dueDate),
-                imageUrl: imageUrl,
-                technician: null,
-                instructions: null,
-                observations: []
-            };
-
-            const mode = activityModal.getAttribute('data-mode');
-
-            try {
-                if (mode === 'add') {
-                    await db.collection('activities').add(activityData);
-                    showNotification('Atividade registrada com sucesso!', 'success');
-                } else if (mode === 'edit' && currentActivityId) {
-                    await db.collection('activities').doc(currentActivityId).update(activityData);
-                    showNotification('Atividade atualizada com sucesso!', 'success');
-                }
-                activityModal.style.display = 'none';
-                clearActivityForm();
-                loadActivities();
-            } catch (error) {
-                showNotification('Erro ao salvar atividade: ' + error.message, 'error');
-                console.error("Save Activity Error:", error);
-            }
+    // Firestore Data Handling
+    function loadActivitiesFromFirestore() {
+        if (unsubscribeActivities) {
+            unsubscribeActivities(); 
         }
 
-        function clearActivityForm() {
-            activityForm.reset();
-            currentActivityId = null;
-            currentUploadedFile = null;
-            activityImagePreview.src = '#';
-            activityImagePreview.style.display = 'none';
-            removeActivityImageBtn.style.display = 'none';
-            // Also reset required field styling
-            Array.from(activityForm.elements).forEach(element => {
-                if (element.required) {
-                    element.classList.remove('filled');
-                }
-            });
-        }
-
-        // Listener for input/select changes to apply 'filled' class for styling
-        activityForm.querySelectorAll('input, select, textarea').forEach(input => {
-            input.addEventListener('input', () => {
-                if (input.value.trim() !== '') {
-                    input.classList.add('filled');
-                } else {
-                    input.classList.remove('filled');
-                }
-            });
-        });
-
-        async function loadActivities() {
-            activitiesTable.innerHTML = '';
-            activitiesEmptyState.style.display = 'none';
-            try {
-                let query = db.collection('activities').orderBy('createdAt', 'desc');
-
-                if (currentUserRole === 'professor') {
-                    query = query.where('authorEmail', '==', currentUserEmail);
-                } else if (currentUserRole === 'tech') {
-                    // Tech sees activities assigned to them or unassigned ones (status 'solicitada')
-                    query = query.where('status', 'in', ['solicitada', 'designada', 'em-andamento', 'concluida'])
-                                .where('technician', 'in', [currentUserEmail, null]); // Include null for unassigned
-                    // Refine query for tech to only show their assigned tasks or unassigned ones.
-                    // This is more complex and might require two queries or client-side filtering if Firebase rules are strict.
-                    // For now, assuming direct queries work, or a broader tech view.
-                    // For simplicity, let's assume tech can see all if they are 'designada' or 'solicitada' if no tech is assigned.
-                    // A better approach for 'tech' would be to fetch all pertinent tasks and filter client side.
-                    // For now, let's keep it broad for tech to see what they might need to assign or take on.
-                }
-
-                const snapshot = await query.get();
-                if (snapshot.empty) {
-                    activitiesEmptyState.style.display = 'block';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const activity = doc.data();
-                    const row = activitiesTable.insertRow();
-                    row.dataset.id = doc.id;
-
-                    let statusClass = '';
-                    let statusText = '';
-                    let statusIcon = '';
-
-                    switch (activity.status) {
-                        case 'solicitada':
-                            statusClass = 'status-solicitada';
-                            statusText = 'Solicitada';
-                            statusIcon = 'fas fa-hourglass-start';
-                            break;
-                        case 'designada':
-                            statusClass = 'status-designada';
-                            statusText = 'Designada';
-                            statusIcon = 'fas fa-user-tag';
-                            break;
-                        case 'em-andamento':
-                            statusClass = 'status-em-andamento';
-                            statusText = 'Em Andamento';
-                            statusIcon = 'fas fa-hourglass-half';
-                            break;
-                        case 'concluida':
-                            statusClass = 'status-concluida';
-                            statusText = 'Concluída';
-                            statusIcon = 'fas fa-check-circle';
-                            break;
-                        default:
-                            statusClass = 'status-pendente';
-                            statusText = 'Pendente';
-                            statusIcon = 'fas fa-exclamation-circle';
-                    }
-
-                    const activityDate = activity.date.toDate().toLocaleDateString('pt-BR');
-
-                    row.innerHTML = `
-                        <td>${activity.title}</td>
-                        <td>${activity.professor}</td>
-                        <td>${activity.lab}</td>
-                        <td>${activity.technician || 'N/A'}</td>
-                        <td><span class="status ${statusClass}"><i class="${statusIcon}"></i> ${statusText}</span></td>
-                        <td>${activityDate}</td>
-                        <td>
-                            ${activity.imageUrl ? `<a href="${activity.imageUrl}" target="_blank" class="comprovante-link"><i class="fas fa-external-link-alt"></i> Ver</a>` : 'N/A'}
-                        </td>
-                        <td>
-                            <button class="btn btn-info btn-sm view-activity-btn" data-id="${doc.id}"><i class="fas fa-eye"></i></button>
-                        </td>
-                    `;
-                });
-                attachActivityViewListeners();
-                populatePracticeSelect(); // Update practices for designation
-            } catch (error) {
-                showNotification('Erro ao carregar atividades: ' + error.message, 'error');
-                console.error("Load Activities Error:", error);
-            }
-        }
-
-        function attachActivityViewListeners() {
-            document.querySelectorAll('.view-activity-btn').forEach(button => {
-                button.removeEventListener('click', viewActivityDetails); // Prevent multiple listeners
-                button.addEventListener('click', viewActivityDetails);
-            });
-        }
-
-        async function viewActivityDetails(event) {
-            currentActivityId = event.currentTarget.dataset.id;
-            try {
-                const doc = await db.collection('activities').doc(currentActivityId).get();
-                if (doc.exists) {
-                    const activity = doc.data();
-                    viewActivityTitle.textContent = activity.title;
-                    viewActivityProfessor.textContent = activity.professor;
-                    viewActivityLab.textContent = activity.lab;
-                    viewActivityDate.textContent = activity.date.toDate().toLocaleDateString('pt-BR');
-                    viewActivityStatus.innerHTML = `<span class="status ${getStatusClass(activity.status)}"><i class="${getStatusIcon(activity.status)}"></i> ${getStatusText(activity.status)}</span>`;
-                    viewActivityTechnician.textContent = activity.technician || 'N/A';
-                    viewActivityInstructions.textContent = activity.instructions || 'N/A';
-                    viewActivityDescription.textContent = activity.description;
-                    viewActivityAuthor.textContent = activity.authorEmail;
-                    viewActivityCreatedAt.textContent = activity.createdAt ? formatDateToLocaleString(activity.createdAt.toDate()) : 'N/A';
-                    viewActivityDueDate.textContent = activity.dueDate ? formatDateToLocaleString(activity.dueDate.toDate()) : 'N/A';
-
-                    if (activity.imageUrl) {
-                        viewActivityImageLink.href = activity.imageUrl;
-                        viewActivityImageContainer.style.display = 'block';
-                    } else {
-                        viewActivityImageContainer.style.display = 'none';
-                    }
-
-                    // Show/Hide tech actions based on role and activity status
-                    if (currentUserRole === 'tech' && (activity.status === 'designada' || activity.status === 'em-andamento' || activity.status === 'concluida') && activity.technician === currentUserEmail) {
-                        techActionsSection.style.display = 'block';
-                        completeActivityBtn.style.display = activity.status !== 'concluida' ? 'inline-flex' : 'none';
-                        techObservationInput.value = ''; // Clear previous observation
-                    } else if (currentUserRole === 'admin') {
-                        techActionsSection.style.display = 'block';
-                        completeActivityBtn.style.display = activity.status !== 'concluida' ? 'inline-flex' : 'none';
-                        techObservationInput.value = '';
-                    } else {
-                        techActionsSection.style.display = 'none';
-                    }
-
-                    // Display delete button only for admin
-                    deleteActivityBtn.style.display = currentUserRole === 'admin' ? 'inline-flex' : 'none';
-
-                    loadActivityObservations(activity.observations || []);
-                    viewActivityModal.style.display = 'flex';
-                } else {
-                    showNotification('Atividade não encontrada.', 'error');
-                }
-            } catch (error) {
-                showNotification('Erro ao carregar detalhes da atividade: ' + error.message, 'error');
-                console.error("View Activity Details Error:", error);
-            }
-        }
-
-        function loadActivityObservations(observations) {
-            observationsList.innerHTML = '<h4>Histórico de Observações:</h4>';
-            if (observations.length === 0) {
-                noObservationsMessage.style.display = 'block';
-            } else {
-                noObservationsMessage.style.display = 'none';
-                observations.forEach(obs => {
-                    const obsDiv = document.createElement('div');
-                    obsDiv.classList.add('observation-item');
-                    obsDiv.innerHTML = `
-                        <div class="observation-author"><strong>${obs.authorEmail}</strong> em ${formatDateToLocaleString(obs.date.toDate())}:</div>
-                        <div>${obs.description}</div>
-                    `;
-                    observationsList.appendChild(obsDiv);
-                });
-            }
-        }
-
-        addObservationBtn.addEventListener('click', async () => {
-            const observationText = techObservationInput.value.trim();
-            if (!observationText) {
-                showNotification('Por favor, digite uma observação.', 'warning');
-                return;
-            }
-
-            if (!currentActivityId) {
-                showNotification('Nenhuma atividade selecionada para adicionar observação.', 'error');
-                return;
-            }
-
-            try {
-                await db.collection('activities').doc(currentActivityId).update({
-                    observations: firebase.firestore.FieldValue.arrayUnion({
-                        description: observationText,
-                        authorEmail: currentUserEmail,
-                        date: firebase.firestore.FieldValue.serverTimestamp()
-                    })
-                });
-                showNotification('Observação adicionada com sucesso!', 'success');
-                techObservationInput.value = '';
-                // Reload activity details to show new observation
-                const doc = await db.collection('activities').doc(currentActivityId).get();
-                if (doc.exists) {
-                    loadActivityObservations(doc.data().observations || []);
-                }
-            } catch (error) {
-                showNotification('Erro ao adicionar observação: ' + error.message, 'error');
-                console.error("Add Observation Error:", error);
-            }
-        });
-
-        completeActivityBtn.addEventListener('click', async () => {
-            if (!currentActivityId) {
-                showNotification('Nenhuma atividade selecionada para concluir.', 'error');
-                return;
-            }
-
-            acknowledgmentMessage.textContent = 'Tem certeza que deseja marcar esta atividade como CONCLUÍDA?';
-            acknowledgmentModal.style.display = 'flex';
-
-            confirmAcknowledgmentBtn.onclick = async () => {
-                acknowledgmentModal.style.display = 'none';
-                try {
-                    await db.collection('activities').doc(currentActivityId).update({
-                        status: 'concluida',
-                        completedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    showNotification('Atividade marcada como concluída!', 'success');
-                    viewActivityModal.style.display = 'none';
-                    loadActivities();
-                } catch (error) {
-                    showNotification('Erro ao concluir atividade: ' + error.message, 'error');
-                    console.error("Complete Activity Error:", error);
-                }
-            };
-        });
-
-        deleteActivityBtn.addEventListener('click', async () => {
-            if (!currentActivityId) {
-                showNotification('Nenhuma atividade selecionada para exclusão.', 'error');
-                return;
-            }
-
-            acknowledgmentMessage.textContent = 'Tem certeza que deseja EXCLUIR esta atividade? Esta ação é irreversível.';
-            acknowledgmentModal.style.display = 'flex';
-
-            confirmAcknowledgmentBtn.onclick = async () => {
-                acknowledgmentModal.style.display = 'none';
-                try {
-                    // If there's an image, delete it from storage first
-                    const doc = await db.collection('activities').doc(currentActivityId).get();
-                    if (doc.exists && doc.data().imageUrl) {
-                        const fileRef = storage.refFromURL(doc.data().imageUrl);
-                        await fileRef.delete();
-                        showNotification('Comprovante excluído do armazenamento.', 'info');
-                    }
-                    await db.collection('activities').doc(currentActivityId).delete();
-                    showNotification('Atividade excluída com sucesso!', 'success');
-                    viewActivityModal.style.display = 'none';
-                    loadActivities();
-                } catch (error) {
-                    showNotification('Erro ao excluir atividade: ' + error.message, 'error');
-                    console.error("Delete Activity Error:", error);
-                }
-            };
-        });
-
-        // --- Designation Management ---
-        async function populatePracticeSelect() {
-            practiceSelect.innerHTML = '<option value="">-- Selecione uma prática --</option>';
-            try {
-                // Fetch activities that are 'solicitada' and have no technician assigned
-                const snapshot = await db.collection('activities')
-                    .where('status', '==', 'solicitada')
-                    .where('technician', '==', null)
-                    .orderBy('createdAt', 'asc')
-                    .get();
-
-                if (snapshot.empty) {
-                    practiceSelect.innerHTML = '<option value="">Nenhuma prática disponível para designação</option>';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const activity = doc.data();
-                    const option = document.createElement('option');
-                    option.value = doc.id;
-                    option.textContent = `${activity.title} (${activity.lab} - ${activity.professor})`;
-                    practiceSelect.appendChild(option);
-                });
-            } catch (error) {
-                showNotification('Erro ao carregar práticas para designação: ' + error.message, 'error');
-                console.error("Populate Practice Select Error:", error);
-            }
-        }
-
-        assignBtn.addEventListener('click', async () => {
-            const activityId = practiceSelect.value;
-            const technicianEmail = technicianSelect.value;
-            const instructions = instructionsTextarea.value.trim();
-
-            if (!activityId || !technicianEmail) {
-                showNotification('Por favor, selecione uma prática e um técnico.', 'warning');
-                return;
-            }
-
-            try {
-                await db.collection('activities').doc(activityId).update({
-                    technician: technicianEmail,
-                    instructions: instructions || 'Nenhuma instrução adicional.',
-                    status: 'designada'
-                });
-                showNotification('Atividade designada com sucesso!', 'success');
-                practiceSelect.value = '';
-                technicianSelect.value = '';
-                instructionsTextarea.value = '';
-                loadActivities(); // Reload activities to update status
-                loadTechnicians(); // Update technician counts
-                populatePracticeSelect(); // Refresh practice list
-            } catch (error) {
-                showNotification('Erro ao designar atividade: ' + error.message, 'error');
-                console.error("Assign Activity Error:", error);
-            }
-        });
-
-        // --- Technician Management ---
-        async function loadTechnicians() {
-            const technicianEmails = ['sergio@lab.com', 'lucileide@lab.com', 'jobim@lab.com'];
-            const counts = { 'sergio@lab.com': 0, 'lucileide@lab.com': 0, 'jobim@lab.com': 0 };
-
-            try {
-                const snapshot = await db.collection('activities')
-                    .where('status', 'in', ['designada', 'em-andamento']) // Count only active assignments
-                    .get();
-
-                snapshot.forEach(doc => {
-                    const activity = doc.data();
-                    if (activity.technician && counts.hasOwnProperty(activity.technician)) {
-                        counts[activity.technician]++;
-                    }
-                });
-
-                techSergioCount.textContent = counts['sergio@lab.com'];
-                techLucileideCount.textContent = counts['lucileide@lab.com'];
-                techJobimCount.textContent = counts['jobim@lab.com'];
-            } catch (error) {
-                showNotification('Erro ao carregar dados dos técnicos: ' + error.message, 'error');
-                console.error("Load Technicians Error:", error);
-            }
-        }
-
-        // --- Occurrence Management ---
-        addOccurrenceBtn.addEventListener('click', () => {
-            occurrenceModal.style.display = 'flex';
-            occurrenceModal.setAttribute('data-mode', 'add');
-            document.querySelector('#occurrence-modal .modal-title').innerHTML = '<i class="fas fa-exclamation-circle"></i> Registrar Ocorrência';
-            saveOccurrenceBtn.textContent = 'Registrar Ocorrência';
-            clearOccurrenceForm();
-        });
-
-        saveOccurrenceBtn.addEventListener('click', async () => {
-            const title = occurrenceTitleInput.value;
-            const lab = occurrenceLabSelect.value;
-            const description = occurrenceDescriptionInput.value;
-
-            if (!title || !lab || !description) {
-                showNotification('Por favor, preencha todos os campos obrigatórios para a ocorrência.', 'error');
-                return;
-            }
-
-            const occurrenceData = {
-                title,
-                lab,
-                description,
-                status: 'pendente',
-                authorEmail: currentUserEmail,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                solution: null
-            };
-
-            const mode = occurrenceModal.getAttribute('data-mode');
-
-            try {
-                if (mode === 'add') {
-                    await db.collection('occurrences').add(occurrenceData);
-                    showNotification('Ocorrência registrada com sucesso!', 'success');
-                } else if (mode === 'edit' && currentOccurrenceId) {
-                    await db.collection('occurrences').doc(currentOccurrenceId).update(occurrenceData);
-                    showNotification('Ocorrência atualizada com sucesso!', 'success');
-                }
-                occurrenceModal.style.display = 'none';
-                clearOccurrenceForm();
-                loadOccurrences();
-            } catch (error) {
-                showNotification('Erro ao salvar ocorrência: ' + error.message, 'error');
-                console.error("Save Occurrence Error:", error);
-            }
-        });
-
-        function clearOccurrenceForm() {
-            occurrenceForm.reset();
-            currentOccurrenceId = null;
-            // Also reset required field styling
-            Array.from(occurrenceForm.elements).forEach(element => {
-                if (element.required) {
-                    element.classList.remove('filled');
-                }
-            });
-        }
-
-        occurrenceForm.querySelectorAll('input, select, textarea').forEach(input => {
-            input.addEventListener('input', () => {
-                if (input.value.trim() !== '') {
-                    input.classList.add('filled');
-                } else {
-                    input.classList.remove('filled');
-                }
-            });
-        });
-
-        async function loadOccurrences() {
-            occurrencesList.innerHTML = '';
-            occurrencesEmptyState.style.display = 'none';
-            try {
-                let query = db.collection('occurrences').orderBy('createdAt', 'desc');
-
-                const filterStatus = filterStatusSelect.value;
-                if (filterStatus !== 'all') {
-                    query = query.where('status', '==', filterStatus);
-                }
-
-                const snapshot = await query.get();
-                if (snapshot.empty) {
-                    occurrencesEmptyState.style.display = 'block';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const occurrence = doc.data();
-                    const occDiv = document.createElement('div');
-                    occDiv.classList.add('occurrence-item');
-                    occDiv.dataset.id = doc.id;
-
-                    const statusClass = getStatusClass(occurrence.status);
-                    const statusText = getStatusText(occurrence.status);
-                    const statusIcon = getStatusIcon(occurrence.status);
-
-                    occDiv.innerHTML = `
-                        <div class="occurrence-header">
-                            <h3 class="occurrence-title">${occurrence.title}</h3>
-                            <span class="occurrence-date">${occurrence.createdAt.toDate().toLocaleDateString('pt-BR')}</span>
-                        </div>
-                        <span class="occurrence-lab">${occurrence.lab}</span>
-                        <p class="occurrence-content">${occurrence.description.substring(0, 100)}...</p>
-                        <div class="occurrence-footer">
-                            <span class="occurrence-author">Registrado por: ${occurrence.authorEmail}</span>
-                            <span class="status ${statusClass}"><i class="${statusIcon}"></i> ${statusText}</span>
-                        </div>
-                    `;
-                    occurrencesList.appendChild(occDiv);
-                });
-                attachOccurrenceViewListeners();
-            } catch (error) {
-                showNotification('Erro ao carregar ocorrências: ' + error.message, 'error');
-                console.error("Load Occurrences Error:", error);
-            }
-        }
-
-        function attachOccurrenceViewListeners() {
-            document.querySelectorAll('.occurrence-item').forEach(item => {
-                item.removeEventListener('click', viewOccurrenceDetails); // Prevent multiple listeners
-                item.addEventListener('click', viewOccurrenceDetails);
-            });
-        }
-
-        async function viewOccurrenceDetails(event) {
-            currentOccurrenceId = event.currentTarget.dataset.id;
-            try {
-                const doc = await db.collection('occurrences').doc(currentOccurrenceId).get();
-                if (doc.exists) {
-                    const occurrence = doc.data();
-                    viewOccurrenceTitle.textContent = occurrence.title;
-                    viewOccurrenceLab.textContent = occurrence.lab;
-                    viewOccurrenceStatus.innerHTML = `<span class="status ${getStatusClass(occurrence.status)}"><i class="${getStatusIcon(occurrence.status)}"></i> ${getStatusText(occurrence.status)}</span>`;
-                    viewOccurrenceDescription.textContent = occurrence.description;
-                    viewOccurrenceAuthor.textContent = occurrence.authorEmail;
-                    viewOccurrenceCreatedAt.textContent = occurrence.createdAt ? formatDateToLocaleString(occurrence.createdAt.toDate()) : 'N/A';
-
-                    if (occurrence.solution) {
-                        occurrenceSolutionSection.style.display = 'block';
-                        viewOccurrenceSolutionDescription.textContent = occurrence.solution.description;
-                        viewOccurrenceSolutionAuthor.textContent = occurrence.solution.authorEmail;
-                        viewOccurrenceSolutionDate.textContent = occurrence.solution.date ? formatDateToLocaleString(occurrence.solution.date.toDate()) : 'N/A';
-                    } else {
-                        occurrenceSolutionSection.style.display = 'none';
-                    }
-
-                    // Show/Hide tech actions based on role and occurrence status
-                    if (currentUserRole === 'tech' || currentUserRole === 'admin') {
-                        occurrenceTechActionsSection.style.display = 'block';
-                        resolveOccurrenceBtn.style.display = occurrence.status !== 'resolvido' ? 'inline-flex' : 'none';
-                        setOccurrenceInProgressBtn.style.display = (occurrence.status === 'pendente' || occurrence.status === 'designada') ? 'inline-flex' : 'none';
-                        occurrenceSolutionTextarea.value = occurrence.solution ? occurrence.solution.description : '';
-                    } else {
-                        occurrenceTechActionsSection.style.display = 'none';
-                    }
-
-                    // Display delete button only for admin
-                    deleteOccurrenceBtn.style.display = currentUserRole === 'admin' ? 'inline-flex' : 'none';
-
-                    viewOccurrenceModal.style.display = 'flex';
-                } else {
-                    showNotification('Ocorrência não encontrada.', 'error');
-                }
-            } catch (error) {
-                showNotification('Erro ao carregar detalhes da ocorrência: ' + error.message, 'error');
-                console.error("View Occurrence Details Error:", error);
-            }
-        }
-
-        resolveOccurrenceBtn.addEventListener('click', async () => {
-            const solutionText = occurrenceSolutionTextarea.value.trim();
-            if (!solutionText) {
-                showNotification('Por favor, descreva a solução.', 'warning');
-                return;
-            }
-
-            if (!currentOccurrenceId) {
-                showNotification('Nenhuma ocorrência selecionada para resolver.', 'error');
-                return;
-            }
-
-            acknowledgmentMessage.textContent = 'Tem certeza que deseja marcar esta ocorrência como RESOLVIDA?';
-            acknowledgmentModal.style.display = 'flex';
-
-            confirmAcknowledgmentBtn.onclick = async () => {
-                acknowledgmentModal.style.display = 'none';
-                try {
-                    await db.collection('occurrences').doc(currentOccurrenceId).update({
-                        status: 'resolvido',
-                        solution: {
-                            description: solutionText,
-                            authorEmail: currentUserEmail,
-                            date: firebase.firestore.FieldValue.serverTimestamp()
-                        }
-                    });
-                    showNotification('Ocorrência marcada como resolvida!', 'success');
-                    viewOccurrenceModal.style.display = 'none';
-                    loadOccurrences();
-                } catch (error) {
-                    showNotification('Erro ao resolver ocorrência: ' + error.message, 'error');
-                    console.error("Resolve Occurrence Error:", error);
-                }
-            };
-        });
-
-        setOccurrenceInProgressBtn.addEventListener('click', async () => {
-            if (!currentOccurrenceId) {
-                showNotification('Nenhuma ocorrência selecionada.', 'error');
-                return;
-            }
-            try {
-                await db.collection('occurrences').doc(currentOccurrenceId).update({
-                    status: 'em-andamento',
-                });
-                showNotification('Ocorrência marcada como "Em Andamento"!', 'info');
-                viewOccurrenceModal.style.display = 'none';
-                loadOccurrences();
-            } catch (error) {
-                showNotification('Erro ao atualizar status da ocorrência: ' + error.message, 'error');
-                console.error("Set In Progress Error:", error);
-            }
-        });
-
-        deleteOccurrenceBtn.addEventListener('click', async () => {
-            if (!currentOccurrenceId) {
-                showNotification('Nenhuma ocorrência selecionada para exclusão.', 'error');
-                return;
-            }
-
-            acknowledgmentMessage.textContent = 'Tem certeza que deseja EXCLUIR esta ocorrência? Esta ação é irreversível.';
-            acknowledgmentModal.style.display = 'flex';
-
-            confirmAcknowledgmentBtn.onclick = async () => {
-                acknowledgmentModal.style.display = 'none';
-                try {
-                    await db.collection('occurrences').doc(currentOccurrenceId).delete();
-                    showNotification('Ocorrência excluída com sucesso!', 'success');
-                    viewOccurrenceModal.style.display = 'none';
-                    loadOccurrences();
-                } catch (error) {
-                    showNotification('Erro ao excluir ocorrência: ' + error.message, 'error');
-                    console.error("Delete Occurrence Error:", error);
-                }
-            };
-        });
-
-        filterStatusSelect.addEventListener('change', loadOccurrences);
-
-        // --- Export Functions for Occurrences ---
-        exportPdfBtn.addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            doc.setFontSize(18);
-            doc.text("Relatório de Ocorrências", 14, 22);
-
-            const data = [];
-            const headers = ["Título", "Laboratório", "Status", "Descrição", "Registrado por", "Data registro", "Solução", "Resolvido por", "Data solução"];
-
-            try {
-                const snapshot = await db.collection('occurrences').orderBy('createdAt', 'desc').get();
-                snapshot.forEach(occDoc => {
-                    const occ = occDoc.data();
-                    data.push([
-                        occ.title,
-                        occ.lab,
-                        getStatusText(occ.status),
-                        occ.description,
-                        occ.authorEmail,
-                        occ.createdAt ? occ.createdAt.toDate().toLocaleString('pt-BR') : 'N/A',
-                        occ.solution ? occ.solution.description : 'N/A',
-                        occ.solution ? occ.solution.authorEmail : 'N/A',
-                        occ.solution && occ.solution.date ? occ.solution.date.toDate().toLocaleString('pt-BR') : 'N/A'
-                    ]);
-                });
-
-                doc.autoTable({
-                    startY: 30,
-                    head: [headers],
-                    body: data,
-                    theme: 'striped',
-                    styles: {
-                        font: 'helvetica',
-                        fontSize: 8,
-                        cellPadding: 3,
-                        valign: 'middle',
-                        halign: 'left'
-                    },
-                    headStyles: {
-                        fillColor: [52, 152, 219], // Primary color
-                        textColor: 255,
-                        fontStyle: 'bold'
-                    },
-                    alternateRowStyles: {
-                        fillColor: [240, 240, 240]
-                    },
-                    didDrawPage: function (data) {
-                        doc.text("Página " + doc.internal.getNumberOfPages(), doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
-                    }
-                });
-                doc.save(`ocorrencias_${new Date().toISOString().slice(0,10)}.pdf`);
-                showNotification('Relatório PDF gerado com sucesso!', 'success');
-            } catch (error) {
-                showNotification('Erro ao gerar PDF: ' + error.message, 'error');
-                console.error("PDF Export Error:", error);
-            }
-        });
-
-        exportExcelBtn.addEventListener('click', async () => {
-            try {
-                const snapshot = await db.collection('occurrences').orderBy('createdAt', 'desc').get();
-                const data = snapshot.docs.map(occDoc => {
-                    const occ = occDoc.data();
-                    return {
-                        "Título": occ.title,
-                        "Laboratório": occ.lab,
-                        "Status": getStatusText(occ.status),
-                        "Descrição": occ.description,
-                        "Registrado por": occ.authorEmail,
-                        "Data registro": occ.createdAt ? occ.createdAt.toDate().toLocaleString('pt-BR') : 'N/A',
-                        "Solução": occ.solution ? occ.solution.description : 'N/A',
-                        "Resolvido por": occ.solution ? occ.solution.authorEmail : 'N/A',
-                        "Data solução": occ.solution && occ.solution.date ? occ.solution.date.toDate().toLocaleString('pt-BR') : 'N/A'
+        unsubscribeActivities = db.collection('activities')
+            .orderBy('createdAt', 'desc')
+            .onSnapshot({
+                includeMetadataChanges: true
+            }, snapshot => {
+                const source = snapshot.metadata.fromCache ? "cache local" : "servidor";
+                console.log(`Dados carregados do: ${source}`);
+                
+                activities = snapshot.docs.map(doc => {
+                    return { 
+                        id: doc.id, 
+                        ...doc.data(),
+                        _fromCache: doc.metadata.fromCache
                     };
                 });
+                
+                renderActivities();
+                populatePracticeSelect();
+                updateTechnicianCounts();
+                
+                if (snapshot.metadata.hasPendingWrites) {
+                    showNotification('Sincronizando alterações locais...', 'info');
+                }
+            }, error => {
+                console.error("Erro ao carregar atividades:", error);
+                showNotification('Erro ao carregar atividades', 'error');
+            });
+    }
 
-                const ws = XLSX.utils.json_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Ocorrências");
-                XLSX.writeFile(wb, `ocorrencias_${new Date().toISOString().slice(0,10)}.xlsx`);
-                showNotification('Relatório Excel gerado com sucesso!', 'success');
-            } catch (error) {
-                showNotification('Erro ao gerar Excel: ' + error.message, 'error');
-                console.error("Excel Export Error:", error);
+    function loadOccurrencesFromFirestore() {
+        if (unsubscribeOccurrences) {
+            unsubscribeOccurrences();
+        }
+
+        unsubscribeOccurrences = db.collection('occurrences')
+            .orderBy('createdAt', 'desc')
+            .onSnapshot({
+                includeMetadataChanges: true
+            }, snapshot => {
+                const source = snapshot.metadata.fromCache ? "cache local" : "servidor";
+                console.log(`Ocorrências carregadas do: ${source}`);
+                
+                occurrences = snapshot.docs.map(doc => {
+                    return {
+                        id: doc.id,
+                        ...doc.data(),
+                        _fromCache: doc.metadata.fromCache
+                    };
+                });
+                
+                renderOccurrences();
+                
+                if (snapshot.metadata.hasPendingWrites) {
+                    showNotification('Sincronizando ocorrências...', 'info');
+                }
+            }, error => {
+                console.error("Erro ao carregar ocorrências:", error);
+                showNotification('Erro ao carregar ocorrências', 'error');
+            });
+    }
+    
+    function renderActivities() {
+        activitiesTableBody.innerHTML = '';
+        let activitiesToRender = [...activities];
+
+        // Filtra atividades para Técnicos
+        if (userRoleType === 'Técnico' && fbCurrentUser) {
+            activitiesToRender = activities.filter(act => 
+                act.technicianUid === fbCurrentUser.email || act.status === 'pendente'
+            );
+        }
+
+        if (activitiesToRender.length === 0) {
+            activitiesEmptyState.style.display = 'block';
+            activitiesTableBody.parentElement.style.display = 'none';
+            return;
+        }
+        
+        activitiesEmptyState.style.display = 'none';
+        activitiesTableBody.parentElement.style.display = 'table';
+
+        activitiesToRender.forEach(activity => {
+            const displayDate = activity.date && activity.date.toDate 
+                              ? activity.date.toDate().toLocaleDateString('pt-BR') 
+                              : (activity.date || 'N/A');
+
+            const row = activitiesTableBody.insertRow();
+            
+            // ETAPA 5: Botão de aprovação para admin
+            let actionButtons = '';
+            if (userRoleType === 'Administrador') {
+                if (activity.status === 'solicitada') {
+                    actionButtons += `
+                        <button class="btn btn-success btn-sm approve-activity" data-id="${activity.id}">
+                            <i class="fas fa-check"></i> Aprovar
+                        </button>
+                    `;
+                }
+                actionButtons += `
+                    <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm delete-activity" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
+                `;
+            } else if (userRoleType === 'Professor') { // ETAPA 6: Professor só edita suas atividades
+                if (activity.createdByUid === fbCurrentUser.uid) {
+                    actionButtons += `
+                        <button class="btn btn-warning btn-sm edit-activity" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
+                    `;
+                }
+            }
+            
+            row.innerHTML = `
+                <td>${activity.name}</td>
+                <td>${activity.professor}</td>
+                <td>${activity.lab || 'Não definido'}</td>
+                <td>${activity.technicianName || 'Não designado'}</td>
+                <td><span class="status status-${activity.status}">${getStatusIcon(activity.status)} ${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
+                <td>${displayDate}</td>
+                <td>
+                    ${activity.imageUrl ? `
+                        <a href="${activity.imageUrl}" target="_blank" class="comprovante-link">
+                            <i class="fas fa-image"></i> Ver
+                        </a>
+                    ` : 'Nenhum'}
+                </td>
+                <td>${actionButtons}</td>
+            `;
+        });
+        addActivityEventListeners();
+    }
+
+    function renderOccurrences(filterStatus = 'all') {
+        const occurrencesList = document.getElementById('occurrences-list');
+        occurrencesList.innerHTML = '';
+        let filteredOccurrences = occurrences;
+        
+        if (filterStatus !== 'all') {
+            filteredOccurrences = occurrences.filter(occ => 
+                (occ.status || 'pendente') === filterStatus
+            );
+        }
+
+        if (filteredOccurrences.length === 0) {
+            document.getElementById('occurrences-empty-state').style.display = 'block';
+            return;
+        }
+        
+        document.getElementById('occurrences-empty-state').style.display = 'none';
+
+        filteredOccurrences.forEach(occurrence => {
+            const occurrenceDate = occurrence.createdAt && occurrence.createdAt.toDate 
+                                ? occurrence.createdAt.toDate().toLocaleString('pt-BR')
+                                : 'Data inválida';
+            
+            const occurrenceDiv = document.createElement('div');
+            occurrenceDiv.className = 'occurrence-item';
+            occurrenceDiv.innerHTML = `
+                <div class="occurrence-header">
+                    <div class="occurrence-title">${occurrence.title}</div>
+                    <div class="occurrence-date">${occurrenceDate}</div>
+                </div>
+                <div class="occurrence-lab">${occurrence.lab}</div>
+                <div class="occurrence-content">${occurrence.description}</div>
+                <div class="occurrence-footer">
+                    <div class="occurrence-author">Registrado por: ${occurrence.authorEmail}</div>
+                    <span class="status status-${occurrence.status || 'pendente'}">
+                        ${getOccurrenceStatusIcon(occurrence.status || 'pendente')} 
+                        ${(occurrence.status || 'pendente').charAt(0).toUpperCase() + (occurrence.status || 'pendente').slice(1)}
+                    </span>
+                </div>
+            `;
+            
+            if (occurrence.solution) {
+                const solutionDiv = document.createElement('div');
+                solutionDiv.className = 'occurrence-solution';
+                solutionDiv.innerHTML = `
+                    <div class="solution-header">
+                        <div class="solution-title">Solução</div>
+                        <div class="solution-date">${occurrence.solution.date && occurrence.solution.date.toDate 
+                            ? occurrence.solution.date.toDate().toLocaleString('pt-BR') 
+                            : 'Data inválida'}</div>
+                    </div>
+                    <div class="solution-content">${occurrence.solution.description}</div>
+                    <div class="solution-author">Resolvido por: ${occurrence.solution.authorEmail}</div>
+                `;
+                occurrenceDiv.appendChild(solutionDiv);
+            }
+            
+            occurrenceDiv.addEventListener('click', () => {
+                showOccurrenceDetailModal(occurrence.id);
+            });
+            
+            occurrencesList.appendChild(occurrenceDiv);
+        });
+    }
+
+    function getStatusIcon(status) {
+        switch(status) {
+            case 'solicitada': return '<i class="fas fa-hourglass-half"></i>'; // Novo ícone para solicitada
+            case 'pendente': return '<i class="fas fa-clock"></i>';
+            case 'designada': return '<i class="fas fa-user-check"></i>';
+            case 'concluida': return '<i class="fas fa-check-circle"></i>';
+            default: return '<i class="fas fa-info-circle"></i>';
+        }
+    }
+
+    function getOccurrenceStatusIcon(status) {
+        switch(status) {
+            case 'pendente': return '<i class="fas fa-clock"></i>';
+            case 'em-andamento': return '<i class="fas fa-tools"></i>';
+            case 'resolvido': return '<i class="fas fa-check-circle"></i>';
+            default: return '<i class="fas fa-info-circle"></i>';
+        }
+    }
+
+    function updateTechnicianCounts() {
+        const counts = {
+            'sergio@lab.com': 0,
+            'lucileide@lab.com': 0,
+            'jobim@lab.com': 0
+        };
+
+        activities.forEach(activity => {
+            if (activity.technicianUid && counts.hasOwnProperty(activity.technicianUid)) {
+                counts[activity.technicianUid]++;
             }
         });
 
+        document.getElementById('tech-sergio-count').textContent = counts['sergio@lab.com'];
+        document.getElementById('tech-lucileide-count').textContent = counts['lucileide@lab.com'];
+        document.getElementById('tech-jobim-count').textContent = counts['jobim@lab.com'];
+    }
 
-        // --- Report Management ---
-        async function loadReports() {
-            reportsTable.innerHTML = '';
-            reportsEmptyState.style.display = 'none';
+    function populatePracticeSelect() {
+        practiceSelect.innerHTML = '<option value="">-- Selecione uma prática --</option>';
+        activities.filter(act => act.status === 'pendente' || !act.technicianUid).forEach(act => {
+            const option = document.createElement('option');
+            option.value = act.id;
+            option.textContent = `${act.name} (ID: ...${act.id.slice(-4)})`;
+            practiceSelect.appendChild(option);
+        });
+    }
 
-            let query = db.collection('activities');
+    function addActivityEventListeners() {
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', (e) => showDetailModal(e.currentTarget.dataset.id));
+        });
+        
+        document.querySelectorAll('.edit-activity').forEach(button => {
+            button.addEventListener('click', (e) => openActivityModal(e.currentTarget.dataset.id));
+        });
+        
+        document.querySelectorAll('.delete-activity').forEach(button => {
+            button.addEventListener('click', (e) => deleteActivity(e.currentTarget.dataset.id));
+        });
+        
+        // ETAPA 5: Evento para botão de aprovação
+        document.querySelectorAll('.approve-activity').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const activityId = e.currentTarget.dataset.id;
+                db.collection('activities').doc(activityId).update({
+                    status: 'pendente',
+                    approvedAt: firebase.firestore.Timestamp.now()
+                }).then(() => {
+                    showNotification("Atividade aprovada!", 'success');
+                }).catch(err => {
+                    showNotification("Erro ao aprovar atividade.", 'error');
+                    console.error(err);
+                });
+            });
+        });
+    }
 
-            // Apply date filters
-            const startDate = startDateInput.value ? new Date(startDateInput.value + 'T00:00:00') : null;
-            const endDate = endDateInput.value ? new Date(endDateInput.value + 'T23:59:59') : null;
+    function updateTabIndicator() {
+        const activeTab = document.querySelector('.tab.active');
+        const indicator = document.querySelector('.tab-indicator');
+        
+        if (activeTab && indicator) {
+            indicator.style.width = `${activeTab.offsetWidth}px`;
+            indicator.style.left = `${activeTab.offsetLeft}px`;
+        }
+    }
 
-            if (startDate) {
-                query = query.where('createdAt', '>=', firebase.firestore.Timestamp.fromDate(startDate));
-            }
-            if (endDate) {
-                query = query.where('createdAt', '<=', firebase.firestore.Timestamp.fromDate(endDate));
-            }
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tab.dataset.tab + '-content').classList.add('active');
+            updateTabIndicator();
+        });
+    });
 
-            // Apply technician filter
-            const filterTechnician = filterTechnicianSelect.value;
-            if (filterTechnician !== 'all') {
-                query = query.where('technician', '==', filterTechnician);
+    window.addEventListener('resize', updateTabIndicator);
+    updateTabIndicator(); // Inicializar
+    
+    function openActivityModal(activityIdToEdit = null) {
+        currentEditingActivityId = activityIdToEdit; 
+        if (activityIdToEdit) {
+            const activity = activities.find(act => act.id === activityIdToEdit);
+            if (activity) {
+                modalTitleActivity.innerHTML = '<i class="fas fa-edit"></i> Editar Atividade';
+                newPracticeInput.value = activity.name;
+                professorInput.value = activity.professor;
+                activityLabInput.value = activity.lab || '';
+                let deadlineValue = '';
+                if (activity.date && activity.date.toDate) {
+                    deadlineValue = activity.date.toDate().toISOString().split('T')[0];
+                } else if (activity.date) {
+                     const parts = activity.date.split('/');
+                     if(parts.length === 3) deadlineValue = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+                deadlineInput.value = deadlineValue;
+                requirementsInput.value = activity.requirements || '';
             } else {
-                 // To include activities with null technician, we might need a composite query or client-side filtering
-                 // For simplicity, for 'all' we'll just query all activities.
+                showNotification('Atividade não encontrada para edição.', 'error'); return;
             }
-            
-            // Order by date for reports
-            query = query.orderBy('createdAt', 'desc');
+        } else {
+            modalTitleActivity.innerHTML = '<i class="fas fa-plus"></i> Nova Atividade';
+            newPracticeInput.value = '';
+            professorInput.value = '';
+            activityLabInput.value = '';
+            deadlineInput.value = '';
+            requirementsInput.value = '';
+        }
+        activityModal.style.display = 'flex';
+    }
 
+    function openOccurrenceModal() {
+        occurrenceLabInput.value = '';
+        occurrenceTitleInput.value = '';
+        occurrenceDescriptionInput.value = '';
+        occurrenceModal.style.display = 'flex';
+    }
+
+    function closeModals() {
+        activityModal.style.display = 'none';
+        occurrenceModal.style.display = 'none';
+        occurrenceDetailModal.style.display = 'none';
+        detailModal.style.display = 'none';
+        currentEditingActivityId = null; 
+        currentEditingOccurrenceId = null;
+    }
+
+    addActivityBtn.addEventListener('click', () => openActivityModal());
+    addOccurrenceBtn.addEventListener('click', () => openOccurrenceModal());
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
+    cancelBtn.addEventListener('click', closeModals);
+    cancelOccurrenceBtn.addEventListener('click', closeModals);
+    window.addEventListener('click', (event) => {
+        if (event.target === activityModal || 
+            event.target === occurrenceModal || 
+            event.target === occurrenceDetailModal || 
+            event.target === detailModal) {
+            closeModals();
+        }
+    });
+
+    // ETAPA 4: Professor cadastra como 'solicitada'
+    saveActivityBtn.addEventListener('click', async () => {
+        const practiceName = newPracticeInput.value.trim();
+        const professorName = professorInput.value.trim();
+        const lab = activityLabInput.value;
+        const deadlineValue = deadlineInput.value;
+        const requirementsText = requirementsInput.value.trim();
+
+        if (!practiceName || !professorName || !deadlineValue || !lab) {
+            showNotification('Preencha todos os campos obrigatórios (Prática, Professor, Laboratório, Prazo).', 'warning');
+            return;
+        }
+
+        const activityData = {
+            name: practiceName,
+            professor: professorName,
+            lab: lab,
+            date: firebase.firestore.Timestamp.fromDate(new Date(deadlineValue + "T00:00:00")),
+            requirements: requirementsText,
+            // ETAPA 4: Status 'solicitada' para professores
+            status: userRoleType === 'Professor' ? 'solicitada' : 'pendente',
+            technicianName: null,
+            technicianUid: null,
+            instructions: null,
+            observations: [],
+            createdAt: firebase.firestore.Timestamp.now(),
+            createdByUid: fbCurrentUser.uid,
+            createdByEmail: fbCurrentUser.email,
+            imageUrl: null
+        };
+
+        try {
+            if (currentEditingActivityId) { 
+                const existingActivity = activities.find(a => a.id === currentEditingActivityId);
+                activityData.observations = existingActivity.observations || [];
+                activityData.status = existingActivity.status;
+                activityData.technicianName = existingActivity.technicianName;
+                activityData.technicianUid = existingActivity.technicianUid;
+                activityData.instructions = existingActivity.instructions;
+                activityData.createdAt = existingActivity.createdAt;
+                activityData.imageUrl = existingActivity.imageUrl || null;
+
+                await db.collection('activities').doc(currentEditingActivityId).update(activityData);
+                showNotification('Atividade atualizada com sucesso!', 'success');
+            } else { 
+                const docRef = await db.collection('activities').add(activityData);
+                console.log("Documento criado com ID:", docRef.id);
+                
+                // Verificar sincronização
+                const doc = await db.collection('activities').doc(docRef.id).get({ source: 'server' });
+                if (doc.exists) {
+                    showNotification('Atividade criada e sincronizada!', 'success');
+                } else {
+                    showNotification('Atividade salva localmente (sincronização pendente)', 'warning');
+                }
+            }
+            closeModals();
+        } catch (error) {
+            console.error("Erro ao salvar atividade:", error);
+            showNotification(`Erro ao salvar atividade: ${error.message}`, 'error');
+        }
+    });
+
+    saveOccurrenceBtn.addEventListener('click', async () => {
+        const lab = occurrenceLabInput.value;
+        const title = occurrenceTitleInput.value.trim();
+        const description = occurrenceDescriptionInput.value.trim();
+
+        if (!lab || !title || !description) {
+            showNotification('Preencha todos os campos obrigatórios.', 'warning');
+            return;
+        }
+
+        const occurrenceData = {
+            lab: lab,
+            title: title,
+            description: description,
+            status: 'pendente',
+            authorEmail: fbCurrentUser.email,
+            authorUid: fbCurrentUser.uid,
+            createdAt: firebase.firestore.Timestamp.now()
+        };
+
+        try {
+            await db.collection('occurrences').add(occurrenceData);
+            showNotification('Ocorrência registrada com sucesso!', 'success');
+            closeModals();
+        } catch (error) {
+            console.error("Erro ao salvar ocorrência:", error);
+            showNotification(`Erro ao registrar ocorrência: ${error.message}`, 'error');
+        }
+    });
+
+    async function deleteActivity(activityId) {
+        if (confirm('Tem certeza que deseja excluir esta atividade? Esta ação é irreversível.')) {
             try {
-                const snapshot = await query.get();
-                if (snapshot.empty) {
-                    reportsEmptyState.style.display = 'block';
+                await db.collection('activities').doc(activityId).delete();
+                showNotification('Atividade excluída com sucesso.', 'info');
+            } catch (error) {
+                console.error("Erro ao excluir atividade:", error);
+                showNotification(`Erro ao excluir: ${error.message}`, 'error');
+            }
+        }
+    }
+    
+    assignBtn.addEventListener('click', async () => {
+        const practiceId = practiceSelect.value;
+        const technicianUidValue = technicianSelect.value;
+        const technicianName = technicianSelect.options[technicianSelect.selectedIndex].text;
+        const currentInstructions = instructionsInput.value.trim();
+
+        if (!practiceId || !technicianUidValue) {
+            showNotification('Selecione uma prática e um técnico.', 'warning');
+            return;
+        }
+
+        try {
+            const docRef = db.collection('activities').doc(practiceId);
+            await docRef.update({
+                technicianName: technicianName,
+                technicianUid: technicianUidValue,
+                status: 'designada',
+                instructions: currentInstructions,
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            
+            // Verificar sincronização
+            const doc = await docRef.get({ source: 'server' });
+            if (doc.exists) {
+                showNotification(`Técnico ${technicianName} designado e sincronizado!`, 'success');
+                practiceSelect.value = '';
+                technicianSelect.value = '';
+                instructionsInput.value = '';
+            } else {
+                showNotification('Designação salva localmente (sincronização pendente)', 'warning');
+            }
+        } catch (error) {
+            console.error("Erro ao designar técnico:", error);
+            showNotification(`Erro ao designar: ${error.message}`, 'error');
+        }
+    });
+
+    function showDetailModal(activityId) {
+        currentEditingActivityId = activityId; 
+        const activity = activities.find(act => act.id === activityId);
+        if (!activity) {
+            showNotification('Atividade não encontrada.', 'error'); return;
+        }
+
+        const displayDate = activity.date && activity.date.toDate 
+                            ? activity.date.toDate().toLocaleDateString('pt-BR') 
+                            : (activity.date || 'N/A');
+
+        activityDetailsDiv.innerHTML = `
+            <p><strong>ID:</strong> ...${activity.id.slice(-6)}</p>
+            <p><strong>Prática:</strong> ${activity.name}</p>
+            <p><strong>Professor:</strong> ${activity.professor}</p>
+            <p><strong>Laboratório:</strong> ${activity.lab || 'Não definido'}</p>
+            <p><strong>Data Limite:</strong> ${displayDate}</p>
+            <p><strong>Técnico:</strong> ${activity.technicianName || 'Não designado'}</p>
+            <p><strong>Status:</strong> <span class="status status-${activity.status}">${getStatusIcon(activity.status)} ${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></p>
+            <p><strong>Requisitos:</strong> ${activity.requirements || 'Nenhum'}</p>
+            ${activity.instructions ? `<p><strong>Instruções:</strong> ${activity.instructions}</p>` : ''}
+        `;
+        
+        // Adicionar seção de comprovante
+        activityDetailsDiv.innerHTML += `
+            <div class="image-upload-container">
+                <h4><i class="fas fa-camera"></i> Comprovante da Prática</h4>
+                ${activity.imageUrl ? `
+                    <p>Imagem enviada: 
+                        <a href="${activity.imageUrl}" target="_blank" class="comprovante-link">
+                            <i class="fas fa-external-link-alt"></i> Ver imagem
+                        </a>
+                    </p>
+                    <img src="${activity.imageUrl}" class="image-preview" style="display:block;">
+                ` : `
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p>Arraste ou clique para selecionar uma imagem</p>
+                        <p class="small">(Formatos: JPG, PNG, GIF - Máx: 10MB)</p>
+                        <input type="file" id="image-upload" accept="image/*" style="display:none;">
+                    </div>
+                    <img id="image-preview" class="image-preview">
+                    <button class="btn btn-primary upload-btn" id="upload-btn" style="display:none;">
+                        <i class="fas fa-upload"></i> Enviar Imagem
+                    </button>
+                `}
+            </div>
+        `;
+
+        techActionsSection.style.display = 'none';
+        if (userRoleType === 'Administrador' || (userRoleType === 'Técnico' && activity.technicianUid === fbCurrentUser.email)) {
+            techActionsSection.style.display = 'block';
+            activityStatusUpdateSelect.value = activity.status;
+        }
+        
+        renderObservations(activity);
+        detailModal.style.display = 'flex';
+
+        // Configurar funcionalidade de upload se não houver imagem
+        if (!activity.imageUrl) {
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('image-upload');
+            const imagePreview = document.getElementById('image-preview');
+            const uploadBtn = document.getElementById('upload-btn');
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    
+                    // Verificar tamanho do arquivo
+                    if (file.size > 10 * 1024 * 1024) {
+                        showNotification('O arquivo é muito grande (máximo 10MB)', 'error');
+                        return;
+                    }
+                    
+                    // Exibir preview
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imagePreview.src = event.target.result;
+                        imagePreview.style.display = 'block';
+                        uploadBtn.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            uploadBtn.addEventListener('click', async () => {
+                if (!fileInput.files[0]) {
+                    showNotification('Selecione uma imagem primeiro', 'warning');
                     return;
                 }
 
-                snapshot.forEach(doc => {
-                    const activity = doc.data();
-                    if (activity.observations && activity.observations.length > 0) {
-                        activity.observations.forEach(obs => {
-                            const row = reportsTable.insertRow();
-                            row.innerHTML = `
-                                <td>${obs.date ? formatDateToLocaleString(obs.date.toDate()) : 'N/A'}</td>
-                                <td>${doc.id} (${activity.title})</td>
-                                <td>${obs.authorEmail}</td>
-                                <td>${obs.description}</td>
-                            `;
-                        });
-                    }
+                try {
+                    uploadBtn.disabled = true;
+                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                    
+                    const imageUrl = await uploadImageToImgur(fileInput.files[0]);
+                    
+                    // Atualizar a atividade com a URL da imagem
+                    await db.collection('activities').doc(activityId).update({
+                        imageUrl: imageUrl,
+                        updatedAt: firebase.firestore.Timestamp.now()
+                    });
+                    
+                    showNotification('Imagem enviada com sucesso!', 'success');
+                    
+                    // Atualizar a visualização
+                    const updatedActivity = activities.find(act => act.id === activityId);
+                    if (updatedActivity) showDetailModal(activityId);
+                } catch (error) {
+                    console.error('Erro:', error);
+                    showNotification(`Erro ao enviar imagem: ${error.message}`, 'error');
+                } finally {
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Enviar Imagem';
+                }
+            });
+        }
+    }
+
+    function showOccurrenceDetailModal(occurrenceId) {
+        currentEditingOccurrenceId = occurrenceId;
+        const occurrence = occurrences.find(occ => occ.id === occurrenceId);
+        if (!occurrence) {
+            showNotification('Ocorrência não encontrada.', 'error');
+            return;
+        }
+
+        const occurrenceDate = occurrence.createdAt && occurrence.createdAt.toDate 
+                            ? occurrence.createdAt.toDate().toLocaleString('pt-BR')
+                            : 'Data inválida';
+
+        let detailsHTML = `
+            <div class="occurrence-header">
+                <div class="occurrence-title">${occurrence.title}</div>
+                <div class="occurrence-date">${occurrenceDate}</div>
+            </div>
+            <div class="occurrence-lab">${occurrence.lab}</div>
+            <div class="occurrence-content">${occurrence.description}</div>
+            <div class="occurrence-footer">
+                <div class="occurrence-author">Registrado por: ${occurrence.authorEmail}</div>
+                <span class="status status-${occurrence.status || 'pendente'}">
+                    ${getOccurrenceStatusIcon(occurrence.status || 'pendente')} 
+                    ${(occurrence.status || 'pendente').charAt(0).toUpperCase() + (occurrence.status || 'pendente').slice(1)}
+                </span>
+            </div>
+        `;
+
+        document.getElementById('occurrence-details').innerHTML = detailsHTML;
+
+        // Limpar e configurar a seção de solução
+        solutionView.innerHTML = '';
+        solutionForm.style.display = 'none';
+        solutionActions.innerHTML = '';
+
+        if (occurrence.solution) {
+            const solutionDate = occurrence.solution.date && occurrence.solution.date.toDate 
+                              ? occurrence.solution.date.toDate().toLocaleString('pt-BR')
+                              : 'Data inválida';
+            
+            solutionView.innerHTML = `
+                <div class="occurrence-solution">
+                    <div class="solution-header">
+                        <div class="solution-title">Solução</div>
+                        <div class="solution-date">${solutionDate}</div>
+                    </div>
+                    <div class="solution-content">${occurrence.solution.description}</div>
+                    <div class="solution-author">Resolvido por: ${occurrence.solution.authorEmail}</div>
+                </div>
+            `;
+        }
+
+        // Mostrar botões de ação para administradores
+        if (userRoleType === 'Administrador') {
+            if (!occurrence.solution) {
+                solutionActions.innerHTML = `
+                    <button class="btn btn-success" id="add-solution-btn">
+                        <i class="fas fa-plus"></i> Adicionar Solução
+                    </button>
+                    <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                        <i class="fas fa-trash"></i> Excluir Ocorrência
+                    </button>
+                `;
+                
+                document.getElementById('add-solution-btn').addEventListener('click', () => {
+                    solutionView.style.display = 'none';
+                    solutionForm.style.display = 'block';
+                    solutionStatusInput.value = 'resolvido';
+                    solutionDescriptionInput.value = '';
+                    solutionActions.innerHTML = `
+                        <button class="btn" id="cancel-solution-btn">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    `;
+                    document.getElementById('cancel-solution-btn').addEventListener('click', () => {
+                        solutionView.style.display = 'block';
+                        solutionForm.style.display = 'none';
+                        solutionActions.innerHTML = `
+                            <button class="btn btn-success" id="add-solution-btn">
+                                <i class="fas fa-plus"></i> Adicionar Solução
+                            </button>
+                            <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                                <i class="fas fa-trash"></i> Excluir Ocorrência
+                            </button>
+                        `;
+                    });
                 });
-            } catch (error) {
-                showNotification('Erro ao carregar relatórios: ' + error.message, 'error');
-                console.error("Load Reports Error:", error);
+            } else {
+                solutionActions.innerHTML = `
+                    <button class="btn btn-warning" id="edit-solution-btn">
+                        <i class="fas fa-edit"></i> Editar Solução
+                    </button>
+                    <button class="btn btn-danger" id="delete-occurrence-btn" style="margin-left: 10px;">
+                        <i class="fas fa-trash"></i> Excluir Ocorrência
+                    </button>
+                `;
+                
+                document.getElementById('edit-solution-btn').addEventListener('click', () => {
+                    solutionView.style.display = 'none';
+                    solutionForm.style.display = 'block';
+                    solutionStatusInput.value = occurrence.status || 'resolvido';
+                    solutionDescriptionInput.value = occurrence.solution.description;
+                    solutionActions.innerHTML = `
+                        <button class="btn" id="cancel-solution-btn">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    `;
+                });
             }
         }
 
-        filterReportsBtn.addEventListener('click', loadReports);
-        filterTechnicianSelect.addEventListener('change', loadReports);
-
-
-        // --- Data Management (Admin Only) ---
-        clearAllDataBtn.addEventListener('click', () => {
-            acknowledgmentMessage.textContent = 'Tem certeza que deseja LIMPAR TODOS OS DADOS do sistema? Esta ação é irreversível e excluirá todas as atividades, ocorrências e usuários (exceto admins).';
-            acknowledgmentModal.style.display = 'flex';
-
-            confirmAcknowledgmentBtn.onclick = async () => {
-                acknowledgmentModal.style.display = 'none';
+        // Adicionar evento para deletar ocorrência
+        document.getElementById('delete-occurrence-btn')?.addEventListener('click', async () => {
+            if (confirm('Tem certeza que deseja excluir esta ocorrência permanentemente?')) {
                 try {
-                    await deleteAllCollections();
-                    showNotification('Todos os dados foram limpos!', 'success');
-                    loadActivities();
-                    loadOccurrences();
-                    loadTechnicians();
-                    loadReports();
+                    await db.collection('occurrences').doc(currentEditingOccurrenceId).delete();
+                    showNotification('Ocorrência excluída com sucesso!', 'success');
+                    closeModals();
+                    loadOccurrencesFromFirestore();
                 } catch (error) {
-                    showNotification('Erro ao limpar dados: ' + error.message, 'error');
-                    console.error("Clear All Data Error:", error);
+                    console.error("Erro ao excluir ocorrência:", error);
+                    showNotification(`Erro ao excluir ocorrência: ${error.message}`, 'error');
                 }
-            };
+            }
         });
 
-        async function deleteAllCollections() {
-            const collections = ['activities', 'occurrences', 'users']; // Add other collections if any
+        saveSolutionBtn.addEventListener('click', async () => {
+            const status = solutionStatusInput.value;
+            const description = solutionDescriptionInput.value.trim();
 
-            for (const collectionName of collections) {
-                // For 'users', only delete non-admin users
-                let query = db.collection(collectionName);
-                if (collectionName === 'users') {
-                    query = query.where('role', '!=', 'admin');
+            if (!status || !description) {
+                showNotification('Preencha todos os campos obrigatórios.', 'warning');
+                return;
+            }
+
+            const solutionData = {
+                status: status,
+                solution: {
+                    description: description,
+                    authorEmail: fbCurrentUser.email,
+                    authorUid: fbCurrentUser.uid,
+                    date: firebase.firestore.Timestamp.now()
                 }
+            };
 
-                const snapshot = await query.get();
+            try {
+                await db.collection('occurrences').doc(currentEditingOccurrenceId).update(solutionData);
+                showNotification('Solução registrada com sucesso!', 'success');
+                loadOccurrencesFromFirestore();
+                closeModals();
+            } catch (error) {
+                console.error("Erro ao salvar solução:", error);
+                showNotification(`Erro ao registrar solução: ${error.message}`, 'error');
+            }
+        });
+
+        occurrenceDetailModal.style.display = 'flex';
+    }
+    
+    updateStatusBtn.addEventListener('click', async () => {
+        if (!currentEditingActivityId) return;
+        const newStatus = activityStatusUpdateSelect.value;
+        
+        try {
+            updateStatusBtn.disabled = true;
+            updateStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            
+            const updateData = {
+                status: newStatus,
+                updatedAt: firebase.firestore.Timestamp.now()
+            };
+            
+            await db.collection('activities').doc(currentEditingActivityId).update(updateData);
+            showNotification('Status da atividade atualizado.', 'success');
+            const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
+            if(updatedActivity) showDetailModal(currentEditingActivityId); 
+        } catch (error) {
+            console.error("Erro ao atualizar status:", error);
+            showNotification(`Erro ao atualizar status: ${error.message}`, 'error');
+        } finally {
+            updateStatusBtn.disabled = false;
+            updateStatusBtn.innerHTML = 'Atualizar Status';
+        }
+    });
+
+    saveObservationBtn.addEventListener('click', async () => {
+        if (!currentEditingActivityId) return;
+        const observationText = observationInput.value.trim();
+        if (!observationText) {
+            showNotification('Digite uma observação.', 'warning'); return;
+        }
+
+        const newObservation = {
+            text: observationText,
+            authorEmail: fbCurrentUser.email,
+            authorUid: fbCurrentUser.uid,
+            timestamp: firebase.firestore.Timestamp.now()
+        };
+
+        try {
+            await db.collection('activities').doc(currentEditingActivityId).update({
+                observations: firebase.firestore.FieldValue.arrayUnion(newObservation),
+                updatedAt: firebase.firestore.Timestamp.now()
+            });
+            showNotification('Observação salva com sucesso!', 'success');
+            observationInput.value = '';
+            const updatedActivity = activities.find(act => act.id === currentEditingActivityId);
+            if(updatedActivity) renderObservations(updatedActivity); 
+        } catch (error) {
+            console.error("Erro ao salvar observação:", error);
+            showNotification(`Erro ao salvar observação: ${error.message}`, 'error');
+        }
+    });
+
+    function renderObservations(activity) { 
+        observationsListDiv.innerHTML = '<h4><i class="fas fa-comments"></i> Observações:</h4>';
+        if (activity && activity.observations && activity.observations.length > 0) {
+            const sortedObservations = [...activity.observations].sort((a, b) => {
+                const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
+                const timeB = b.timestamp && b.timestamp.toMillis ? b.timestamp.toMillis() : 0;
+                return timeB - timeA;
+            });
+            
+            sortedObservations.forEach(obs => {
+                const obsDate = obs.timestamp && obs.timestamp.toDate 
+                                ? obs.timestamp.toDate().toLocaleString('pt-BR') 
+                                : 'Data inválida';
+                const obsDiv = document.createElement('div');
+                obsDiv.classList.add('observation-item');
+                obsDiv.innerHTML = `
+                    <p class="observation-author">${obs.authorEmail} (${obsDate}):</p>
+                    <p>${obs.text}</p>
+                `;
+                observationsListDiv.appendChild(obsDiv);
+            });
+        } else {
+            observationsListDiv.innerHTML += '<p>Nenhuma observação registrada.</p>';
+        }
+    }
+
+    filterReportsBtn.addEventListener('click', () => {
+        const startDateValue = document.getElementById('start-date').value;
+        const endDateValue = document.getElementById('end-date').value;
+        const techFilterUid = document.getElementById('filter-technician').value; 
+
+        reportsTableBody.innerHTML = '';
+        let filteredReportActivities = activities.filter(activity => {
+            let dateMatch = true;
+            if (startDateValue && endDateValue && activity.date && activity.date.toDate) {
+                const actDate = activity.date.toDate();
+                const startDate = new Date(startDateValue + "T00:00:00");
+                const endDate = new Date(endDateValue + "T23:59:59");
+                dateMatch = actDate >= startDate && actDate <= endDate;
+            }
+            
+            let techMatch = true;
+            if (techFilterUid !== 'all') {
+                techMatch = activity.technicianUid === techFilterUid; 
+            }
+            return dateMatch && techMatch && activity.observations && activity.observations.length > 0;
+        });
+
+        if (filteredReportActivities.length === 0) {
+            reportsEmptyState.style.display = 'block';
+            reportsTableBody.parentElement.style.display = 'none';
+            return;
+        }
+        
+        reportsEmptyState.style.display = 'none';
+        reportsTableBody.parentElement.style.display = 'table';
+
+        filteredReportActivities.forEach(activity => {
+            activity.observations.forEach(obs => {
+                const obsDate = obs.timestamp && obs.timestamp.toDate 
+                                ? obs.timestamp.toDate().toLocaleString('pt-BR')
+                                : 'Data inválida';
+                const row = reportsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${obsDate}</td>
+                    <td>${activity.name} (...${activity.id.slice(-4)})</td>
+                    <td>${obs.authorEmail}</td>
+                    <td>${obs.text}</td>
+                `;
+            });
+        });
+    });
+
+    exportBtn.addEventListener('click', () => {
+        if (activities.length === 0) {
+            showNotification('Não há dados para exportar.', 'info'); return;
+        }
+        const dataToExport = activities.map(act => {
+            const newAct = {...act};
+            // Converte Timestamps para string ISO para serialização JSON
+            Object.keys(newAct).forEach(key => {
+                if (newAct[key] instanceof firebase.firestore.Timestamp) {
+                    newAct[key] = newAct[key].toDate().toISOString();
+                }
+            });
+            if (newAct.observations) {
+                newAct.observations = newAct.observations.map(obs => {
+                    const newObs = {...obs};
+                    if (newObs.timestamp instanceof firebase.firestore.Timestamp) {
+                        newObs.timestamp = newObs.timestamp.toDate().toISOString();
+                    }
+                    return newObs;
+                });
+            }
+            return newAct;
+        });
+
+        const dataStr = JSON.stringify(dataToExport, null, 2); 
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        const exportFileDefaultName = `lab_data_firestore_${new Date().toISOString().slice(0,10)}.json`;
+        
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        linkElement.remove();
+        showNotification('Dados exportados para arquivo JSON.', 'success');
+    });
+    
+    resetBtn.addEventListener('click', async () => {
+        if (confirm('ATENÇÃO: Isso tentará limpar TODAS as atividades do Firestore. Esta ação é IRREVERSÍVEL e pode demorar. Deseja continuar?')) {
+            showNotification('Iniciando limpeza de dados... Isso pode levar um tempo.', 'warning');
+            try {
+                const snapshot = await db.collection('activities').limit(400).get();
+                if (snapshot.empty) {
+                     showNotification('Nenhuma atividade encontrada para limpar.', 'info');
+                     return;
+                }
                 const batch = db.batch();
                 snapshot.docs.forEach(doc => {
                     batch.delete(doc.ref);
                 });
                 await batch.commit();
-            }
-
-            // Also delete all files from Firebase Storage (comprovantes)
-            const storageRef = storage.ref('comprovantes');
-            const listResult = await storageRef.listAll();
-            for (const itemRef of listResult.items) {
-                await itemRef.delete();
-            }
-            showNotification('Arquivos do Storage também foram limpos.', 'info');
-        }
-
-        exportAllJsonBtn.addEventListener('click', async () => {
-            try {
-                const data = {};
-                const collections = ['activities', 'occurrences', 'users']; // Collections to export
-
-                for (const collectionName of collections) {
-                    data[collectionName] = [];
-                    const snapshot = await db.collection(collectionName).get();
-                    snapshot.forEach(doc => {
-                        const docData = doc.data();
-                        // Convert Timestamps to ISO strings for JSON readability
-                        for (const key in docData) {
-                            if (docData[key] && typeof docData[key].toDate === 'function') {
-                                docData[key] = docData[key].toDate().toISOString();
-                            }
-                            if (Array.isArray(docData[key])) {
-                                docData[key] = docData[key].map(item => {
-                                    if (item && typeof item.date === 'object' && typeof item.date.toDate === 'function') {
-                                        return { ...item, date: item.date.toDate().toISOString() };
-                                    }
-                                    return item;
-                                });
-                            }
-                        }
-                        data[collectionName].push({ id: doc.id, ...docData });
-                    });
+                
+                if (snapshot.size === 400) {
+                    showNotification(`${snapshot.size} atividades foram limpas. Se houver mais, repita a operação.`, 'info');
+                } else {
+                    showNotification('Todas as atividades foram limpas do Firestore.', 'success');
                 }
-
-                const filename = `firebase_backup_${new Date().toISOString().slice(0,10)}.json`;
-                const jsonStr = JSON.stringify(data, null, 2);
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showNotification('Dados exportados para JSON com sucesso!', 'success');
             } catch (error) {
-                showNotification('Erro ao exportar dados para JSON: ' + error.message, 'error');
-                console.error("Export JSON Error:", error);
-            }
-        });
-
-        importAllJsonBtn.addEventListener('click', () => {
-            importJsonFile.click();
-        });
-
-        importJsonFile.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    acknowledgmentMessage.textContent = 'Importar dados sobrescreverá os dados existentes. Deseja continuar?';
-                    acknowledgmentModal.style.display = 'flex';
-
-                    confirmAcknowledgmentBtn.onclick = async () => {
-                        acknowledgmentModal.style.display = 'none';
-                        try {
-                            const importedData = JSON.parse(e.target.result);
-                            await importDataToFirestore(importedData);
-                            showNotification('Dados importados com sucesso!', 'success');
-                            loadActivities();
-                            loadOccurrences();
-                            loadTechnicians();
-                            loadReports();
-                        } catch (error) {
-                            showNotification('Erro ao importar dados: ' + error.message, 'error');
-                            console.error("Import JSON Error:", error);
-                        }
-                    };
-                };
-                reader.readAsText(file);
-            }
-        });
-
-        async function importDataToFirestore(data) {
-            const collectionsToImport = ['users', 'activities', 'occurrences']; // Order matters for dependencies
-
-            for (const collectionName of collectionsToImport) {
-                if (data[collectionName]) {
-                    const batch = db.batch();
-                    data[collectionName].forEach(item => {
-                        const docRef = db.collection(collectionName).doc(item.id);
-                        const dataToSet = { ...item };
-                        delete dataToSet.id; // Remove the ID from the data itself
-
-                        // Convert ISO strings back to Timestamps
-                        for (const key in dataToSet) {
-                            if (typeof dataToSet[key] === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(dataToSet[key])) {
-                                dataToSet[key] = firebase.firestore.Timestamp.fromDate(new Date(dataToSet[key]));
-                            }
-                            if (Array.isArray(dataToSet[key])) {
-                                dataToSet[key] = dataToSet[key].map(arrItem => {
-                                    if (arrItem && typeof arrItem.date === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(arrItem.date)) {
-                                        return { ...arrItem, date: firebase.firestore.Timestamp.fromDate(new Date(arrItem.date)) };
-                                    }
-                                    return arrItem;
-                                });
-                            }
-                        }
-                        batch.set(docRef, dataToSet);
-                    });
-                    await batch.commit();
-                }
+                console.error("Erro ao limpar dados do Firestore:", error);
+                showNotification(`Erro ao limpar dados: ${error.message}.`, 'error');
             }
         }
+    });
 
-        // --- Global Status Helpers ---
-        function getStatusClass(status) {
-            switch (status) {
-                case 'pendente': return 'status-pendente';
-                case 'solicitada': return 'status-solicitada';
-                case 'designada': return 'status-designada';
-                case 'em-andamento': return 'status-em-andamento';
-                case 'concluida': return 'status-concluida';
-                case 'resolvido': return 'status-concluida'; // For occurrences, resolved is like completed
-                default: return '';
+    // Filtro por status de ocorrências
+    document.getElementById('filter-status').addEventListener('change', (e) => {
+        const status = e.target.value;
+        renderOccurrences(status);
+    });
+
+    // Exportar ocorrências para PDF
+    document.getElementById('export-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Cabeçalho
+        doc.setFontSize(18);
+        doc.text("Relatório de Ocorrências", 105, 15, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 105, 22, { align: 'center' });
+        
+        // Conteúdo
+        let yPos = 40;
+        occurrences.forEach((occ, index) => {
+            if (yPos > 280) {
+                doc.addPage();
+                yPos = 20;
             }
-        }
-
-        function getStatusText(status) {
-            switch (status) {
-                case 'pendente': return 'Pendente';
-                case 'solicitada': return 'Solicitada';
-                case 'designada': return 'Designada';
-                case 'em-andamento': return 'Em Andamento';
-                case 'concluida': return 'Concluída';
-                case 'resolvido': return 'Resolvida';
-                default: return 'Desconhecido';
+            
+            doc.setFontSize(14);
+            doc.text(`Ocorrência ${index + 1}: ${occ.title}`, 14, yPos);
+            doc.setFontSize(12);
+            yPos += 8;
+            doc.text(`Laboratório: ${occ.lab}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Status: ${occ.status || 'pendente'}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Registrada por: ${occ.authorEmail}`, 14, yPos);
+            yPos += 8;
+            doc.text(`Data: ${occ.createdAt.toDate().toLocaleString('pt-BR')}`, 14, yPos);
+            yPos += 8;
+            
+            // Descrição com quebra de linha
+            const splitDesc = doc.splitTextToSize(occ.description, 180);
+            doc.text('Descrição:', 14, yPos);
+            yPos += 8;
+            doc.text(splitDesc, 20, yPos);
+            yPos += splitDesc.length * 7;
+            
+            // Solução (se existir)
+            if (occ.solution) {
+                doc.text('Solução:', 14, yPos);
+                yPos += 8;
+                const splitSolution = doc.splitTextToSize(occ.solution.description, 180);
+                doc.text(splitSolution, 20, yPos);
+                yPos += splitSolution.length * 7;
+                doc.text(`Resolvido por: ${occ.solution.authorEmail}`, 14, yPos);
+                yPos += 8;
+                doc.text(`Data da solução: ${occ.solution.date.toDate().toLocaleString('pt-BR')}`, 14, yPos);
+                yPos += 8;
             }
-        }
-
-        function getStatusIcon(status) {
-            switch (status) {
-                case 'pendente': return 'fas fa-exclamation-circle';
-                case 'solicitada': return 'fas fa-hourglass-start';
-                case 'designada': return 'fas fa-user-tag';
-                case 'em-andamento': return 'fas fa-hourglass-half';
-                case 'concluida': return 'fas fa-check-circle';
-                case 'resolvido': return 'fas fa-check-circle';
-                default: return 'fas fa-question-circle';
-            }
-        }
-
-        // --- Sync Button (Placeholder for now) ---
-        syncButton.addEventListener('click', () => {
-            syncButton.classList.add('syncing');
-            showNotification('Sincronizando dados...', 'info');
-            // Simulate a sync operation
-            setTimeout(() => {
-                syncButton.classList.remove('syncing');
-                showNotification('Dados sincronizados!', 'success');
-                // Reload data after sync
-                loadActivities();
-                loadOccurrences();
-                loadTechnicians();
-                loadReports();
-            }, 2000);
+            
+            yPos += 15;
+            doc.line(14, yPos, 196, yPos);
+            yPos += 10;
         });
+        
+        doc.save(`ocorrencias_${new Date().toISOString().slice(0,10)}.pdf`);
+    });
 
-        cancelAcknowledgmentBtn.addEventListener('click', () => {
-            acknowledgmentModal.style.display = 'none';
-        });
+    // Exportar ocorrências para Excel
+    document.getElementById('export-excel').addEventListener('click', () => {
+        const data = occurrences.map(occ => ({
+            "Laboratório": occ.lab,
+            "Título": occ.title,
+            "Status": occ.status || 'pendente',
+            "Descrição": occ.description,
+            "Registrado por": occ.authorEmail,
+            "Data registro": occ.createdAt.toDate().toLocaleString('pt-BR'),
+            "Solução": occ.solution ? occ.solution.description : 'N/A',
+            "Resolvido por": occ.solution ? occ.solution.authorEmail : 'N/A',
+            "Data solução": occ.solution ? occ.solution.date.toDate().toLocaleString('pt-BR') : 'N/A'
+        }));
 
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Ocorrências");
+        XLSX.writeFile(wb, `ocorrencias_${new Date().toISOString().slice(0,10)}.xlsx`);
+    });
+    
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.classList.add('notification', `notification-${type}`);
+        let iconClass = 'fas fa-info-circle';
+        if (type === 'success') iconClass = 'fas fa-check-circle';
+        if (type === 'error') iconClass = 'fas fa-exclamation-circle';
+        if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+        
+        notification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 4500); 
+    }
     </script>
 </body>
 </html>
