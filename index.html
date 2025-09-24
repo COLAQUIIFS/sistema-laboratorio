@@ -1362,30 +1362,42 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="new-practice">Prática:</label>
-                        <input type="text" id="new-practice" placeholder="Ex: Prática 4 - Eletroquímica">
-                    </div>
+    <label for="discipline">Disciplina:</label>
+    <select id="discipline" required>
+        <option value="">Selecione a disciplina</option>
+        <option value="tecnicas">Técnicas Básicas de Laboratório</option>
+        <option value="inorganica">Inorgânica Experimental</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="new-practice">Prática:</label>
+    <select id="new-practice" required>
+        <option value="">Selecione a prática</option>
+        <!-- Opções serão preenchidas via JS -->
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="professor">Professor Responsável:</label>
+    <input type="text" id="professor" placeholder="Nome do professor">
+</div>
+
+<div class="form-group">
+    <label for="activity-lab">Laboratório*</label>
+    <select id="activity-lab" required>
+        <option value="">Selecione o laboratório</option>
+        <option value="Laboratório 36">Laboratório 36</option>
+        <option value="Laboratório 35">Laboratório 35</option>
+        <option value="Laboratório 35B">Laboratório 35B</option>
+        <option value="Laboratório 35C">Laboratório 35C</option>
+        <option value="Laboratório 35D">Laboratório 35D</option>
+        <option value="Laboratório 35E">Laboratório 35E</option>
+    </select>
+</div>
                     
                     <div class="form-group">
-                        <label for="professor">Professor Responsável:</label>
-                        <input type="text" id="professor" placeholder="Nome do professor">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="activity-lab">Laboratório*</label>
-                        <select id="activity-lab" required>
-                            <option value="">Selecione o laboratório</option>
-                            <option value="Laboratório 36">Laboratório 36</option>
-                            <option value="Laboratório 35">Laboratório 35</option>
-                            <option value="Laboratório 35B">Laboratório 35B</option>
-                            <option value="Laboratório 35C">Laboratório 35C</option>
-                            <option value="Laboratório 35D">Laboratório 35D</option>
-                            <option value="Laboratório 35E">Laboratório 35E</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="deadline">Prazo:</label>
+                        <label for="deadline">Data da Aula:</label>
                         <input type="date" id="deadline">
                     </div>
                     
@@ -1399,7 +1411,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="requirements">Requisitos/Materiais:</label>
+                        <label for="requirements">Observações adicionais (quantidade de grupos, vidrarias/reagentes/equipamentos, dentre outros):</label>
                         <textarea id="requirements" placeholder="Liste os materiais necessários..."></textarea>
                     </div>
                 </div>
@@ -2935,6 +2947,35 @@
             notification.remove();
         }, 4500); 
     }
+
+        // ==================== Disciplina -> Práticas ====================
+const disciplinePractices = {
+    tecnicas: [
+        { value: "destilacao-fracionada", text: "Destilação Fracionada" },
+        { value: "destilacao-soxlet", text: "Destilação Soxlet" }
+    ],
+    inorganica: [
+        { value: "teste-da-chama", text: "Teste da Chama" },
+        { value: "producao-co2", text: "Produção de CO2" }
+    ]
+};
+
+const disciplineSelect = document.getElementById('discipline');
+const practiceSelect = document.getElementById('new-practice');
+
+disciplineSelect.addEventListener('change', () => {
+    const selected = disciplineSelect.value;
+    practiceSelect.innerHTML = '<option value="">Selecione a prática</option>';
+    if (disciplinePractices[selected]) {
+        disciplinePractices[selected].forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.value;
+            opt.textContent = p.text;
+            practiceSelect.appendChild(opt);
+        });
+    }
+});
     </script>
 </body>
 </html>
+
